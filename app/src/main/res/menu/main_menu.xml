@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:icon="@drawable/icon_home"
+            android:id="@+id/nav_home"
+            android:title="Home" />
+        <item
+            android:icon="@drawable/icon_attendance"
+            android:id="@+id/nav_attendance"
+            android:title="Attendance" />
+        <item
+            android:icon="@drawable/icon_customer"
+            android:id="@+id/nav_customer"
+            android:title="Customers" />
+        <item
+            android:icon="@drawable/icon_warehouse"
+            android:id="@+id/nav_warehouse"
+            android:title="Warehouse" />
+        <item
+            android:icon="@drawable/icon_products"
+            android:id="@+id/nav_products"
+            android:title="Products" />
+        <item
+            android:icon="@drawable/icon_orders"
+            android:id="@+id/nav_orders"
+            android:title="Orders" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:icon="@drawable/icon_logout"
+            android:id="@+id/nav_logout"
+            android:title="LogOut" />
+    </group>
+    <!--    <item android:title="User">-->
+    <!--        <menu>-->
+    <!--            <item-->
+    <!--                android:id="@+id/nav_home1"-->
+    <!--                android:title="Home1"/>-->
+    <!--            <item-->
+    <!--                android:id="@+id/nav_home2"-->
+    <!--                android:title="Home2"/>-->
+    <!--        </menu>-->
+    <!--    </item>-->
+</menu>

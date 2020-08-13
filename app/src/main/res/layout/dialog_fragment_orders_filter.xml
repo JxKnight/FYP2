@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#2b2b2b">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Orders Filter"
+        android:textColor="#FFFFFF"
+        android:textAlignment="center"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:src="@drawable/icon_location"
+                android:layout_width="30dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:text="Location"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:layout_width="80dp"
+                android:layout_height="match_parent" />
+
+            <Spinner
+                android:id="@+id/location_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:layout_weight="70" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:src="@drawable/icon_calendar"
+                android:layout_width="30dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:text="Date"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:layout_width="80dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/DayPicker_orders"
+                android:hint="DD"
+                android:textColorHint="#FFFFFF"
+                android:textColor="#FFFFFF"
+                android:layout_width="40dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/MonthPicker_orders"
+                android:hint="MM"
+                android:textColorHint="#FFFFFF"
+                android:textColor="#FFFFFF"
+                android:layout_width="40dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/YearPicker_orders"
+                android:hint="YEAR"
+                android:textColorHint="#FFFFFF"
+                android:textColor="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/Orders_Spinner"
+                android:text="Filter"
+                android:layout_weight="30" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
