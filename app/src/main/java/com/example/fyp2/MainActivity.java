@@ -39,10 +39,8 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(e -> {
             //User user = new User("951219015471","1234");
             //User user = new User("940528014566","1234");
-//            User user = new User(useric.getText().toString(),password.getText().toString());
-//            login(user);
-            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            startActivity(intent);
+            User user = new User(password.getText().toString(), useric.getText().toString());
+            login(user);
         });
         register.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
             registerbutton.setOnClickListener(u -> {
                 User registerUser = new User(registerpassword.getText().toString(), registercontact.getText().toString(), registeric.getText().toString());
-                Toast.makeText(getApplicationContext(), registercontact.getText().toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), registercontact.getText().toString(), Toast.LENGTH_SHORT).show();
                 registerProfile(registerUser);
             });
         });
@@ -117,15 +115,14 @@ public class MainActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     tv.append("Invalid User IC and Password");
                 } else {
-                    //tv.append("valid");
                     User user = response.body();
-//                    Intent intent = new Intent(MainActivity.this,MenuActivity.class);
-//                    intent.putExtra("userIc",user.getIC());
-//                    intent.putExtra("userRole", user.getRole());
-//                    startActivity(intent);
+                    Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                    intent.putExtra("userIc", useric.getText().toString());
+                    intent.putExtra("userFirstName", user.getFirstName().toString());
+                    startActivity(intent);
+                    finish();
                 }
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
 
