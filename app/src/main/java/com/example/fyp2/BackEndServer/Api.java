@@ -23,7 +23,7 @@ public interface Api {
     @POST("/currentUser")
     Call<User> searchCurrentUser(@Body User user);
 
-    @POST("/createUser")
+    @POST("/registerUser")
     Call<User> createUser(@Body User user);
 
     @POST("/updateUser")
