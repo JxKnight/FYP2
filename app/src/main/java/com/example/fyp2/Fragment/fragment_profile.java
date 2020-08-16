@@ -53,7 +53,7 @@ public class fragment_profile extends Fragment {
     Boolean firstEntry = false;
     User currentUser;
     CircleImageView ProfilePic;
-    ImageView resetPassword;
+    ImageView resetPassword, selectPic;
     String userIc;
     private FloatingActionButton btnEditProfileEnable, getBtnEditProfileCancel;
     static final int IMAGE_PICK_CODE = 1000;
@@ -82,6 +82,7 @@ public class fragment_profile extends Fragment {
         btnEditProfileEnable = (FloatingActionButton) v.findViewById(R.id.BtnEditProfileEnable);
         getBtnEditProfileCancel = (FloatingActionButton) v.findViewById(R.id.BtnEditProfileCancel);
         resetPassword = (ImageView) v.findViewById(R.id.ResetPassword);
+        selectPic = (ImageView) v.findViewById(R.id.SelectProfilePic);
         FName.setEnabled(false);
         LName.setEnabled(false);
         Ic.setEnabled(false);
@@ -139,7 +140,7 @@ public class fragment_profile extends Fragment {
             ProfilePic.buildDrawingCache();
             Bitmap bmap = ProfilePic.getDrawingCache();
             String x = getEncodeImage(bmap);
-            Toast.makeText(getActivity(), x, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), x, Toast.LENGTH_LONG).show();
             String Roles = null;
             if (State.getSelectedItem().toString().equals("Select Location")) {
                 User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), null, Roles, x);
@@ -163,7 +164,7 @@ public class fragment_profile extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         State.setAdapter(adapter);
 
-        ProfilePic.setOnClickListener(e -> {
+        selectPic.setOnClickListener(e -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                     //permission not granted,request it.
@@ -261,7 +262,6 @@ public class fragment_profile extends Fragment {
                     Toast.makeText(context, "Update Fail", Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(getActivity(), "Fail to connect to server", Toast.LENGTH_LONG).show();

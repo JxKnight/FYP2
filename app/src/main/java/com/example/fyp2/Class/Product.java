@@ -13,12 +13,6 @@ public class Product {
     @SerializedName("productsDescription")
     @Expose
     private String productsDescription;
-    @SerializedName("productsPack")
-    @Expose
-    private String productsPack;
-    @SerializedName("productsQuantity")
-    @Expose
-    private String productsQuantity;
     @SerializedName("productsPrice")
     @Expose
     private String productsPrice;
@@ -31,12 +25,9 @@ public class Product {
     }
 
 
-    public String getProductsPack() {
-        return productsPack;
-    }
-
-    public void setProductsPack(String productsPack) {
-        this.productsPack = productsPack;
+    public Product(String productsId, String productsDescription) {
+        this.productsId = productsId;
+        this.productsDescription = productsDescription;
     }
 
     public String getProductsId() {
@@ -61,14 +52,6 @@ public class Product {
 
     public void setProductsDescription(String productsDescription) {
         this.productsDescription = productsDescription;
-    }
-
-    public String getProductsQuantity() {
-        return productsQuantity;
-    }
-
-    public void setProductsQuantity(String productsQuantity) {
-        this.productsQuantity = productsQuantity;
     }
 
     public String getProductsPrice() {

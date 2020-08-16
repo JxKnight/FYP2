@@ -38,7 +38,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:orientation="horizontal"
@@ -48,10 +48,16 @@
                     android:id="@+id/ProfilePic"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/icon_addphoto"
                     app:civ_border_width="1dp"
                     app:civ_border_color="#FFFFFF" />
-            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/SelectProfilePic"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@+id/ProfilePic"
+                    android:layout_alignParentBottom="true" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
