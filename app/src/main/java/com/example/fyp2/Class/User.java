@@ -31,8 +31,11 @@ public class User {
     @SerializedName("userRole")
     @Expose
     private String role;
+    @SerializedName("userPic")
+    @Expose
+    private String picture;
 
-    public User(String password, String contact, String userIc, String firstName, String lastName, String address, String postCode, Integer state, String role) {
+    public User(String password, String contact, String userIc, String firstName, String lastName, String address, String postCode, Integer state, String role, String picture) {
         this.password = password;
         this.contact = contact;
         this.userIc = userIc;
@@ -42,6 +45,7 @@ public class User {
         this.postCode = postCode;
         this.state = state;
         this.role = role;
+        this.picture = picture;
     }
 
     public User(String password, String userIc) {
@@ -129,5 +133,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

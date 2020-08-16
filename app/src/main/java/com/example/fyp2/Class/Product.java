@@ -30,26 +30,6 @@ public class Product {
         this.productsId = productsId;
     }
 
-    public Product(String productsName, String productsCategory) {
-        this.productsName = productsName;
-        this.productsCategory = productsCategory;
-    }
-
-    public Product(String productsId, String productsName, String productsCategory) {
-        this.productsId = productsId;
-        this.productsName = productsName;
-        this.productsCategory = productsCategory;
-    }
-
-    public Product(String productsId, String productsName, String productsDescription, String productsPack, String productsQuantity, String productsPrice, String productsCategory) {
-        this.productsId = productsId;
-        this.productsName = productsName;
-        this.productsDescription = productsDescription;
-        this.productsPack = productsPack;
-        this.productsQuantity = productsQuantity;
-        this.productsPrice = productsPrice;
-        this.productsCategory = productsCategory;
-    }
 
     public String getProductsPack() {
         return productsPack;
