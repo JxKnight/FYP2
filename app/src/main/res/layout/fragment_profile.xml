@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/BtnEditProfileEnable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:layout_margin="16dp"
+        android:onClick="handleEditProfile"
+        android:src="@drawable/icon_edit" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/BtnEditProfileCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:layout_margin="16dp"
+        android:onClick="handleEditProfile"
+        android:src="@drawable/icon_remove" />
+
     <!--    android:orientation="vertical">-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +49,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:src="@drawable/icon_addphoto"
+                    app:civ_border_width="1dp"
                     app:civ_border_color="#FFFFFF" />
             </LinearLayout>
 
@@ -127,12 +147,12 @@
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
-                    <Button
+                    <ImageView
                         android:id="@+id/ResetPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:textSize="10sp"
-                        android:text="Change Password" />
+                        android:layout_width="70dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_height="70dp"
+                        android:background="@drawable/change_password" />
 
                 </LinearLayout>
 
@@ -144,59 +164,74 @@
                     <EditText
                         android:id="@+id/FName"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="40dp"
+                        android:textColor="#000000" />
 
                     <EditText
                         android:id="@+id/LName"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textColor="#000000" />
 
                     <EditText
                         android:id="@+id/Ic"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="40dp"
+                        android:textColor="#000000" />
 
                     <EditText
                         android:id="@+id/Contact"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="40dp"
+                        android:textColor="#000000" />
 
                     <EditText
                         android:id="@+id/Address"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp" />
+                        android:layout_height="80dp"
+                        android:textColor="#000000" />
 
                     <EditText
                         android:id="@+id/PostCode"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="40dp"
+                        android:textColor="#000000" />
 
                     <Spinner
                         android:id="@+id/State"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="40dp"
+                        android:textColor="#000000" />
 
                     <EditText
                         android:id="@+id/Password"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:ems="10"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:textColor="#000000" />
 
                     <EditText
                         android:id="@+id/CPassword"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp" />
+                        android:layout_height="40dp"
+                        android:textColor="#000000" />
 
                     <Button
                         android:id="@+id/profile_save"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:text="@string/save" />
+                        android:text="@string/save"
+                        android:textSize="25dp"
+                        android:background="@drawable/button_profile_save"
+                        android:shadowColor="#FFFFFF"
+                        android:shadowDx="0"
+                        android:shadowDy="0"
+                        android:shadowRadius="5" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
+</FrameLayout>

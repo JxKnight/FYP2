@@ -3,6 +3,7 @@ package com.example.fyp2;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.User;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 import retrofit2.Call;
@@ -22,7 +24,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     private EditText useric, password, phone, registeric, registerpassword, registercontact;
     private TextView tv;
-    private Button login, register, registerbutton;
+    private Button login, register, registerButton;
 
     // private CheckBox rmbMe;
     @Override
@@ -37,27 +39,27 @@ public class MainActivity extends AppCompatActivity {
         //rmbMe = (CheckBox)findViewById(R.id.checkBox);
 
         login.setOnClickListener(e -> {
-            //User user = new User("951219015471","1234");
-            //User user = new User("940528014566","1234");
-            User user = new User(password.getText().toString(), useric.getText().toString());
-            login(user);
+            User user = new User("123456", "951219015471");
+            //User user = new User(password.getText().toString(), useric.getText().toString());
+            login(user, this);
         });
         register.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
             View mView = getLayoutInflater().inflate(R.layout.dialog_register, null);
-
             registeric = (EditText) mView.findViewById(R.id.register_ic);
             registerpassword = (EditText) mView.findViewById(R.id.register_password);
             registercontact = (EditText) mView.findViewById(R.id.register_contact);
-            registerbutton = (Button) mView.findViewById(R.id.register_button);
+            registerButton = (Button) mView.findViewById(R.id.register_button);
             mBuilder.setView(mView);
             AlertDialog dialog = mBuilder.create();
             dialog.show();
 
-            registerbutton.setOnClickListener(u -> {
+            registerButton.setOnClickListener(u -> {
                 User registerUser = new User(registerpassword.getText().toString(), registercontact.getText().toString(), registeric.getText().toString());
                 //Toast.makeText(getApplicationContext(), registercontact.getText().toString(), Toast.LENGTH_SHORT).show();
-                registerProfile(registerUser);
+                registerProfile(registerUser, this);
+                dialog.dismiss();
+                //finish();
             });
         });
     }
@@ -87,45 +89,42 @@ public class MainActivity extends AppCompatActivity {
 //
 //    }
 
-    public void registerProfile(User user) {
+    public void registerProfile(User user, Context context) {
         Call<User> call = RetrofitClient.getInstance().getApi().createUser(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (!response.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Register UnSuccessful, \nDuplicate Name Exist", Toast.LENGTH_LONG).show();
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Register Successful", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Register Successful", Toast.LENGTH_LONG).show();
-                    finish();
+                    Toast.makeText(context, "Register Fail", Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Unable to connect server", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void login(User user) {
+    private void login(User user, Context context) {
         Call<User> call = RetrofitClient.getInstance().getApi().searchUser(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
-                    tv.append("Invalid User IC and Password");
+                    Toast.makeText(context, "Login Fail\nInvalid Ic or Password", Toast.LENGTH_LONG).show();
                 } else {
                     User user = response.body();
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                    intent.putExtra("userIc", useric.getText().toString());
-                    intent.putExtra("userFirstName", user.getFirstName().toString());
+                    intent.putExtra("userIc", user.getUserIc());
+                    intent.putExtra("userFirstName", user.getFirstName());
                     startActivity(intent);
-                    finish();
                 }
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                Toast.makeText(context, "Unable to connect server", Toast.LENGTH_LONG).show();
             }
         });
     }

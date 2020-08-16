@@ -27,12 +27,12 @@ public class User {
     private String postCode;
     @SerializedName("userState")
     @Expose
-    private String state;
+    private Integer state;
     @SerializedName("userRole")
     @Expose
     private String role;
 
-    public User(String password, String contact, String userIc, String firstName, String lastName, String address, String postCode, String state, String role) {
+    public User(String password, String contact, String userIc, String firstName, String lastName, String address, String postCode, Integer state, String role) {
         this.password = password;
         this.contact = contact;
         this.userIc = userIc;
@@ -115,11 +115,11 @@ public class User {
         this.postCode = postCode;
     }
 
-    public String getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 

@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.example.fyp2.Adapter.OrderListAdapter;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,8 +34,7 @@ import java.util.Calendar;
 public class fragment_orders extends Fragment {
     View v;
     Spinner State;
-    ImageView filter;
-    ;
+    FloatingActionButton floatfilterbtn;
     ArrayList<Order> orderList = new ArrayList<>();
     ListView listView;
 
@@ -43,8 +43,8 @@ public class fragment_orders extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_orders, container, false);
-        filter = (ImageView) v.findViewById(R.id.filter_orders);
-        filter.setOnClickListener(e -> {
+        floatfilterbtn = (FloatingActionButton) v.findViewById(R.id.filter_orders);
+        floatfilterbtn.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
             View mView = getLayoutInflater().inflate(R.layout.dialog_fragment_orders_filter, null);
             State = (Spinner) mView.findViewById(R.id.location_spinner);

@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,14 +27,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    String x, userIc;
-    Intent getData;
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        Bundle bundle = new Bundle();
+
+        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        fragment_profile fragmentProfile = new fragment_profile();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
@@ -42,15 +46,23 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        x = getIntent().getStringExtra("userFirstName");
-        if (x.equals(null)) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
+//        x = getIntent().getStringExtra("userFirstName");
+        if (null == getIntent().getStringExtra("userFirstName")) {
             drawerLayout.closeDrawer(GravityCompat.START);
+            bundle.putBoolean("firstEntry", true);
+            bundle.putString("userIc", getIntent().getStringExtra("userIc"));
+            fragmentProfile.setArguments(bundle);
+            t.replace(R.id.fragment_container, fragmentProfile);
+            t.commit();
         }
         View v = navigationView.getHeaderView(0);
         ImageView profile = v.findViewById(R.id.HeaderProfilePic);
         profile.setOnClickListener(u -> {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
+            bundle.putBoolean("firstEntry", false);
+            bundle.putString("userIc", getIntent().getStringExtra("userIc"));
+            fragmentProfile.setArguments(bundle);
+            t.replace(R.id.fragment_container, fragmentProfile);
+            t.commit();
             drawerLayout.closeDrawer(GravityCompat.START);
         });
     }
