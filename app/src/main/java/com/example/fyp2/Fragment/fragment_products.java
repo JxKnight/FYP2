@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -78,9 +79,21 @@ public class fragment_products extends Fragment {
                 AlertDialog dialog = mBuilder.create();
                 dialog.show();
                 order2Cart.setOnClickListener(e -> {
-                    OrderCartSession order = new OrderCartSession(productList.get(i).getProductsId(), productList.get(i).getProductsDescription());
-                    cartList.add(order);
                     dialog.dismiss();
+                    AlertDialog.Builder mmBuilder = new AlertDialog.Builder(getActivity());
+                    View mmView = getLayoutInflater().inflate(R.layout.dialog_product_order_cart_quantity, null);
+                    EditText quantity = (EditText) mmView.findViewById(R.id.product_order_quantity);
+                    Button btn = (Button) mmView.findViewById(R.id.Order_2_list);
+
+
+                    mmBuilder.setView(mmView);
+                    AlertDialog dialogg = mmBuilder.create();
+                    dialogg.show();
+                    btn.setOnClickListener(f -> {
+                        OrderCartSession order = new OrderCartSession(productList.get(i).getProductsId(), quantity.getText().toString());
+                        cartList.add(order);
+                        dialogg.dismiss();
+                    });
                 });
             }
         });
@@ -90,7 +103,7 @@ public class fragment_products extends Fragment {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
             View mView = getLayoutInflater().inflate(R.layout.dialog_product_order_cart, null);
             ListView orderCartList = mView.findViewById(R.id.Product_Order_Cart_ListView);
-
+            Button saveOrderCart = mView.findViewById(R.id.SaveOrderCart);
             final ProductOrderListAdapter orderListAdapter = new ProductOrderListAdapter(getActivity(), R.layout.adapter_view_product_order_list, cartList);
             orderListAdapter.notifyDataSetChanged();
             orderCartList.setAdapter(orderListAdapter);

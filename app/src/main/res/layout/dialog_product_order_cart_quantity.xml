@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="270dp"
-    android:layout_height="350dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="#2b2b2b">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="Order Cart"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
-        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,15 +16,30 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="265dp"
+            android:layout_height="40dp"
             android:orientation="horizontal">
 
-            <ListView
-                android:id="@+id/Product_Order_Cart_ListView"
-                android:layout_width="match_parent"
+            <ImageView
+                android:src="@drawable/icon_quantity"
+                android:layout_width="30dp"
                 android:layout_height="match_parent" />
-        </LinearLayout>
 
+            <TextView
+                android:text="Quantity"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:layout_width="85dp"
+                android:layout_height="match_parent" />
+
+            <EditText
+                android:id="@+id/product_order_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:layout_weight="70" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,16 +49,8 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/SaveOrderCart"
-                android:text="Save Without Submit"
-                android:textSize="10dp"
-                android:layout_weight="30" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/Orders_Spinner"
-                android:text="Submit"
+                android:id="@+id/Order_2_list"
+                android:text="Add to cart"
                 android:layout_weight="30" />
         </LinearLayout>
 
