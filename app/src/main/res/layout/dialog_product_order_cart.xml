@@ -39,18 +39,11 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/SaveOrderCart"
-                android:text="Save Without Submit"
-                android:textSize="10dp"
-                android:layout_weight="30" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/Orders_Spinner"
+                android:id="@+id/CompleteOrderCart"
                 android:text="Submit"
                 android:layout_weight="30" />
         </LinearLayout>

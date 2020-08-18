@@ -32,39 +32,11 @@ public class Buyer {
     @Expose
     private String userCheck;
 
-    public Buyer(String buyerId, String buyerName, String buyerContact, String buyerLocation, String buyerAddress1, String buyerAddress2, String buyerRate, String userCheck) {
-        this.buyerId = buyerId;
+    public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress1) {
         this.buyerName = buyerName;
         this.buyerContact = buyerContact;
         this.buyerLocation = buyerLocation;
         this.buyerAddress1 = buyerAddress1;
-        this.buyerAddress2 = buyerAddress2;
-        this.buyerRate = buyerRate;
-        this.userCheck = userCheck;
-    }
-
-    public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress1, String buyerAddress2, String userIc) {
-        this.buyerName = buyerName;
-        this.buyerContact = buyerContact;
-        this.buyerLocation = buyerLocation;
-        this.buyerAddress1 = buyerAddress1;
-        this.buyerAddress2 = buyerAddress2;
-        this.userIc = userIc;
-    }
-
-    public Buyer(String buyerId, String buyerName, String buyerContact, String buyerLocation, String userCheck) {
-        this.buyerId = buyerId;
-        this.buyerName = buyerName;
-        this.buyerContact = buyerContact;
-        this.buyerLocation = buyerLocation;
-        this.userCheck = userCheck;
-    }
-
-    public Buyer(String buyerId, String buyerName, String buyerContact, String buyerLocation) {
-        this.buyerId = buyerId;
-        this.buyerName = buyerName;
-        this.buyerContact = buyerContact;
-        this.buyerLocation = buyerLocation;
     }
 
     public String getBuyerId() {

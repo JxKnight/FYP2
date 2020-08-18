@@ -38,6 +38,8 @@ public class fragment_customers extends Fragment {
             AlertDialog dialog = mBuilder.create();
             dialog.show();
         });
+
+
         return v;
     }
 }
