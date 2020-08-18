@@ -16,27 +16,24 @@ public class Buyer {
     @SerializedName("buyerLocation")
     @Expose
     private String buyerLocation;
-    @SerializedName("buyerAddress1")
+    @SerializedName("buyerAddress")
     @Expose
-    private String buyerAddress1;
-    @SerializedName("buyerAddress2")
-    @Expose
-    private String buyerAddress2;
+    private String buyerAddress;
     @SerializedName("buyerRate")
     @Expose
     private String buyerRate;
     @SerializedName("userIc")
     @Expose
     private String userIc;
-    @SerializedName("userCheck")
+    @SerializedName("adminCheck")
     @Expose
-    private String userCheck;
+    private String adminCheck;
 
-    public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress1) {
+    public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress) {
         this.buyerName = buyerName;
         this.buyerContact = buyerContact;
         this.buyerLocation = buyerLocation;
-        this.buyerAddress1 = buyerAddress1;
+        this.buyerAddress = buyerAddress;
     }
 
     public String getBuyerId() {
@@ -71,20 +68,12 @@ public class Buyer {
         this.buyerLocation = buyerLocation;
     }
 
-    public String getBuyerAddress1() {
-        return buyerAddress1;
+    public String getBuyerAddress() {
+        return buyerAddress;
     }
 
-    public void setBuyerAddress1(String buyerAddress1) {
-        this.buyerAddress1 = buyerAddress1;
-    }
-
-    public String getBuyerAddress2() {
-        return buyerAddress2;
-    }
-
-    public void setBuyerAddress2(String buyerAddress2) {
-        this.buyerAddress2 = buyerAddress2;
+    public void setBuyerAddress(String buyerAddress) {
+        this.buyerAddress = buyerAddress;
     }
 
     public String getBuyerRate() {
@@ -103,11 +92,11 @@ public class Buyer {
         this.userIc = userIc;
     }
 
-    public String getUserCheck() {
-        return userCheck;
+    public String getAdminCheck() {
+        return adminCheck;
     }
 
-    public void setUserCheck(String userCheck) {
-        this.userCheck = userCheck;
+    public void setAdminCheck(String adminCheck) {
+        this.adminCheck = adminCheck;
     }
 }

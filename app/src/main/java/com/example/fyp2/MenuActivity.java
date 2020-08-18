@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.fyp2.Fragment.fragment_attendance;
-import com.example.fyp2.Fragment.fragment_customers;
+import com.example.fyp2.Fragment.fragment_buyers;
 import com.example.fyp2.Fragment.fragment_orders;
 import com.example.fyp2.Fragment.fragment_products;
 import com.example.fyp2.Fragment.fragment_profile;
@@ -83,7 +83,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_attendance()).commit();
                 break;
             case R.id.nav_customer:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_customers()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_buyers()).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
