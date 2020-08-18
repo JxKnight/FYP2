@@ -43,17 +43,13 @@ public class BuyerListAdapter extends ArrayAdapter<Buyer> {
 
         TextView name = (TextView) convertView.findViewById(R.id.Buyer_list_View_Name);
         TextView contact = (TextView) convertView.findViewById(R.id.Buyer_List_View_Contact);
-        Spinner location = (Spinner) convertView.findViewById(R.id.Buyer_List_View_Location_Spinner);
+        TextView location = (TextView) convertView.findViewById(R.id.Buyer_List_View_Location);
         TextView address = (TextView) convertView.findViewById(R.id.Buyer_List_View_Address);
 
         //productsID.append(productID);
         name.append(buyerName);
         contact.append(buyerContact);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.locations, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        location.setAdapter(adapter);
-        location.setSelection(Integer.parseInt(buyerLocation));
-        location.setEnabled(false);
+        location.append(buyerLocation);
         address.append(buyerAddress);
 
         return convertView;

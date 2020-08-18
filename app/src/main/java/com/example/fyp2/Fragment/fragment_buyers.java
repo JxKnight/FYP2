@@ -50,7 +50,7 @@ public class fragment_buyers extends Fragment {
             dialog.show();
         });
         for (int i = 0; i < 50; i++) {
-            Buyer buyers = new Buyer("00" + i, "01" + i, "1", "address" + i);
+            Buyer buyers = new Buyer("00" + i, "01" + i, "Johor", "address" + i);
             buyerList.add(buyers);
         }
         buyerListView = (ListView) v.findViewById(R.id.buyersList);
@@ -58,39 +58,25 @@ public class fragment_buyers extends Fragment {
         adapter.notifyDataSetChanged();
         buyerListView.setAdapter(adapter);
 
-        String xxx = "111";
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Toast.makeText(getActivity(),buyerList.get(i).getBuyerName(),Toast.LENGTH_SHORT).show();
-//                String abc="111";
-//                Toast.makeText(getActivity(),abc,Toast.LENGTH_SHORT).show();
-//                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-//                View mView = getLayoutInflater().inflate(R.layout.dialog_fragment_buyer_detail, null);
-//                TextView name = (TextView) mView.findViewById(R.id.fragment_buyer_detail_name);
-//                TextView contact = (TextView) mView.findViewById(R.id.fragment_buyer_detail_contact);
-//                Spinner location = (Spinner) mView.findViewById(R.id.fragment_buyer_detail_location_spinner);
-//                TextView address = (TextView) mView.findViewById(R.id.fragment_buyer_detail_address);
-//                name.setText(buyerList.get(i).getBuyerName());
-//                contact.setText(buyerList.get(i).getBuyerContact());
-//                location.setSelection(Integer.parseInt(buyerList.get(i).getBuyerLocation()));
-//                address.setText(buyerList.get(i).getBuyerAddress());
-//                Spinner State = (Spinner) mView.findViewById(R.id.customer_category_spinner);
-//                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
-//                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                State.setAdapter(adapter);
-//                mBuilder.setView(mView);
-//                AlertDialog dialog = mBuilder.create();
-//                dialog.show();
-//            }
-//        });
-
-        String x = "AAA";
+//
+//        String xxx = "111";
         buyerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String abc = "111";
-                Toast.makeText(getActivity(), abc, Toast.LENGTH_LONG).show();
+                // Toast.makeText(getActivity(),buyerList.get(i).getBuyerName(),Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder mmBuilder = new AlertDialog.Builder(getActivity());
+                View mmView = getLayoutInflater().inflate(R.layout.dialog_fragment_buyer_detail, null);
+                TextView name = (TextView) mmView.findViewById(R.id.fragment_buyer_detail_name);
+                TextView contact = (TextView) mmView.findViewById(R.id.fragment_buyer_detail_contact);
+                TextView location = (TextView) mmView.findViewById(R.id.fragment_buyer_detail_location);
+                TextView address = (TextView) mmView.findViewById(R.id.fragment_buyer_detail_address);
+                name.setText(buyerList.get(i).getBuyerName());
+                contact.setText(buyerList.get(i).getBuyerContact());
+                location.setText(buyerList.get(i).getBuyerLocation());
+                address.setText(buyerList.get(i).getBuyerAddress());
+                mmBuilder.setView(mmView);
+                AlertDialog dialog = mmBuilder.create();
+                dialog.show();
             }
         });
         return v;

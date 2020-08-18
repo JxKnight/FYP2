@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
             User user = new User("123456", "951219025471");
             //User user = new User(password.getText().toString(), useric.getText().toString());
             login(user, this);
+//            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+//            intent.putExtra("userIc", user.getUserIc());
+//            intent.putExtra("userFirstName", user.getFirstName());
+//            startActivity(intent);
         });
         register.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);

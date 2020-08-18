@@ -80,8 +80,8 @@
                                     android:layout_height="25dp"
                                     android:text="Location:" />
 
-                                <Spinner
-                                    android:id="@+id/Buyer_List_View_Location_Spinner"
+                                <TextView
+                                    android:id="@+id/Buyer_List_View_Location"
                                     android:layout_width="120dp"
                                     android:layout_height="25dp" />
                             </LinearLayout>
