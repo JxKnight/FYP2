@@ -22,11 +22,12 @@
         android:onClick="handleEditProfile"
         android:src="@drawable/icon_order_cart" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/fragment_orders_relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -41,12 +42,12 @@
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="30sp" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <ListView
             android:id="@+id/productsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/fragment_orders_relativeLayout" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </FrameLayout>

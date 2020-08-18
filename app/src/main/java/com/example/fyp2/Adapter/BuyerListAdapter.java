@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class BuyerListAdapter extends ArrayAdapter<Buyer> {
 
-    private static final String TAG = "ProductListAdapter";
+    private static final String TAG = "BuyerListAdapter";
 
     private Context mContext;
     int mResource;

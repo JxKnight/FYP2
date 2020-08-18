@@ -37,18 +37,12 @@
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="30sp" />
-
         </LinearLayout>
 
-        <LinearLayout
+        <ListView
+            android:id="@+id/buyersList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/fragment_buyers_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+            android:clickable="true" />
     </LinearLayout>
 </FrameLayout>
