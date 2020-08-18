@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -19,12 +20,13 @@ import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 
 public class fragment_buyers extends Fragment {
     View v;
-    Spinner State;
     FloatingActionButton filter;
     ArrayList<Buyer> buyerList = new ArrayList<>();
     ListView listView;
@@ -38,7 +40,7 @@ public class fragment_buyers extends Fragment {
         filter.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
             View mView = getLayoutInflater().inflate(R.layout.dialog_fragment_customer_filter, null);
-            State = (Spinner) mView.findViewById(R.id.customer_category_spinner);
+            Spinner State = (Spinner) mView.findViewById(R.id.customer_category_spinner);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             State.setAdapter(adapter);
@@ -58,7 +60,24 @@ public class fragment_buyers extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                View mView = getLayoutInflater().inflate(R.layout.dialog_product_detail, null);
+                TextView name = (TextView) mView.findViewById(R.id.fragment_buyer_detail_name);
+                TextView contact = (TextView) mView.findViewById(R.id.fragment_buyer_detail_contact);
+                TextView location = (TextView) mView.findViewById(R.id.fragment_buyer_detail_location);
+                TextView address = (TextView) mView.findViewById(R.id.fragment_buyer_detail_address);
+                name.setText(buyerList.get(i).getBuyerName());
+                contact.setText(buyerList.get(i).getBuyerContact());
+                location.setText(buyerList.get(i).getBuyerLocation());
+                address.setText(buyerList.get(i).getBuyerAddress());
+                Spinner State = (Spinner) mView.findViewById(R.id.customer_category_spinner);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+                State.setAdapter(adapter);
+                mBuilder.setView(mView);
+                AlertDialog dialog = mBuilder.create();
+                dialog.show();
             }
         });
         return v;

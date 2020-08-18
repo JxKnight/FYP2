@@ -20,7 +20,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/Buyer_List_Buyer_Pic"
+                android:id="@+id/Product_Detail_Picture"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="100dp"
@@ -45,7 +45,7 @@
                 android:layout_height="match_parent" />
 
             <TextView
-                android:id="@+id/fragment_buyer_add_buyer_name"
+                android:id="@+id/fragment_buyer_detail_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="70" />
@@ -66,7 +66,7 @@
                 android:layout_height="match_parent" />
 
             <TextView
-                android:id="@+id/fragment_buyer_add_buyer_contact"
+                android:id="@+id/fragment_buyer_detail_contact"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="70" />
@@ -86,8 +86,8 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent" />
 
-            <TextView
-                android:id="@+id/fragment_buyer_add_buyer_location"
+            <Spinner
+                android:id="@+id/fragment_buyer_detail_location"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="50" />
@@ -108,7 +108,7 @@
                 android:layout_height="match_parent" />
 
             <TextView
-                android:id="@+id/fragment_buyer_add_buyer_address"
+                android:id="@+id/fragment_buyer_detail_address"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="50" />
