@@ -33,8 +33,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private Bundle bundle;
     private FragmentTransaction t;
-    public String userIc;
-    private Switch switch1;
 
     public static final String SHARED_PREFS = "111";
     public static final String TEXT = "text";
@@ -44,20 +42,22 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
         bundle = new Bundle();
-        //bundle.putString("userIc", getIntent().getStringExtra("userIc"));
+        bundle.putString("userIc", getIntent().getStringExtra("userIc"));
         t = getSupportFragmentManager().beginTransaction();
         fragment_profile fragmentProfile = new fragment_profile();
+
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
-        saveData(getIntent().getStringExtra("userIc"));
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close);
         navigationView.bringToFront(); // light up effect
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-//        x = getIntent().getStringExtra("userFirstName");
+
         if (null == getIntent().getStringExtra("userFirstName")) {
             drawerLayout.closeDrawer(GravityCompat.START);
             bundle.putBoolean("firstEntry", true);
@@ -75,17 +75,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
         });
     }
-
-    public void saveData(String userIc) {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(TEXT, userIc);
-        editor.putBoolean(SWITCH1, switch1.isChecked());
-
-    }
-//    public void loadData() {
-//        SharedPreferences sharedPreferences = getSharedPreferences()
-//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

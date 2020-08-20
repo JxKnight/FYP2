@@ -99,7 +99,8 @@ public class fragment_profile extends Fragment {
         firstEntry = b3.getBoolean("firstEntry");
         userIc = b3.getString("userIc");
         currentUser = new User(userIc);
-        ViewProfile(currentUser);
+        //ViewProfile(currentUser);
+        Toast.makeText(getActivity(), userIc, Toast.LENGTH_LONG).show();
         if (firstEntry.equals(true)) {
             FName.setEnabled(true);
             LName.setEnabled(true);
@@ -147,7 +148,7 @@ public class fragment_profile extends Fragment {
                 updateProfile(newUser, getContext());
                 //Toast.makeText(getContext(),State.getSelectedItem().toString(),Toast.LENGTH_SHORT).show();
             } else {
-                User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), State.getSelectedItemPosition(), Roles, x);
+                User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), State.getSelectedItem().toString(), Roles, x);
                 updateProfile(newUser, getContext());
             }
             ViewProfile(currentUser);
@@ -224,24 +225,31 @@ public class fragment_profile extends Fragment {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User postResponse = response.body();
-                FName.setText(postResponse.getFirstName());
-                LName.setText(postResponse.getLastName());
-                Ic.setText(postResponse.getUserIc());
-                Contact.setText(postResponse.getContact());
-                Address.setText(postResponse.getAddress());
-                PostCode.setText(postResponse.getPostCode());
-                Password.setText(postResponse.getPassword());
-                if (null == postResponse.getState()) {
-                    State.setSelection(0);
-                } else {
-                    State.setSelection(postResponse.getState());
-                }
-                if (null == postResponse.getPicture()) {
+                if (null == postResponse.getFirstName()) {
 
                 } else {
-                    byte[] decodeString = Base64.decode(postResponse.getPicture().getBytes(), Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
-                    ProfilePic.setImageBitmap(decodedByte);
+                    FName.setText(postResponse.getFirstName());
+//                LName.setText(postResponse.getLastName());
+//                Ic.setText(postResponse.getUserIc());
+//                Contact.setText(postResponse.getContact());
+//                Address.setText(postResponse.getAddress());
+//                PostCode.setText(postResponse.getPostCode());
+//                Password.setText(postResponse.getPassword());
+//                String state [] =getResources().getStringArray(R.array.locations);
+//                for(int i=0;i<state.length;i++){
+//                    if(state[i]==postResponse.getState()){
+//                        State.setSelection(i);
+//                    }else if(null==postResponse.getState()){
+//
+//                    }
+//                }
+//                if (null == postResponse.getPicture()) {
+//
+//                } else {
+//                    byte[] decodeString = Base64.decode(postResponse.getPicture().getBytes(), Base64.DEFAULT);
+//                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
+//                    ProfilePic.setImageBitmap(decodedByte);
+//                }
                 }
             }
             @Override
