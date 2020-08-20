@@ -264,7 +264,7 @@ public class fragment_profile extends Fragment {
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getActivity(), "Fail to connect to server", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });
     }

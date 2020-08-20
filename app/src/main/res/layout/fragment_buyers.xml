@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fragment_customers_add_buyer"
+        android:id="@+id/fragment_buyers_add_buyer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
@@ -13,7 +13,7 @@
         android:src="@drawable/icon_add" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fragment_customers_filter_btn"
+        android:id="@+id/fragment_buyers_filter_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"

@@ -10,10 +10,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 import com.example.fyp2.Fragment.fragment_attendance;
 import com.example.fyp2.Fragment.fragment_buyers;
@@ -25,22 +28,30 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    private Bundle bundle;
+    private FragmentTransaction t;
+    public String userIc;
+    private Switch switch1;
+
+    public static final String SHARED_PREFS = "111";
+    public static final String TEXT = "text";
+    public static final String SWITCH1 = "switch1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        Bundle bundle = new Bundle();
-
-        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        bundle = new Bundle();
+        //bundle.putString("userIc", getIntent().getStringExtra("userIc"));
+        t = getSupportFragmentManager().beginTransaction();
         fragment_profile fragmentProfile = new fragment_profile();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
-
+        saveData(getIntent().getStringExtra("userIc"));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close);
         navigationView.bringToFront(); // light up effect
         drawerLayout.addDrawerListener(toggle);
@@ -50,7 +61,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         if (null == getIntent().getStringExtra("userFirstName")) {
             drawerLayout.closeDrawer(GravityCompat.START);
             bundle.putBoolean("firstEntry", true);
-            bundle.putString("userIc", getIntent().getStringExtra("userIc"));
             fragmentProfile.setArguments(bundle);
             t.replace(R.id.fragment_container, fragmentProfile);
             t.commit();
@@ -59,13 +69,23 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         ImageView profile = v.findViewById(R.id.HeaderProfilePic);
         profile.setOnClickListener(u -> {
             bundle.putBoolean("firstEntry", false);
-            bundle.putString("userIc", getIntent().getStringExtra("userIc"));
             fragmentProfile.setArguments(bundle);
             t.replace(R.id.fragment_container, fragmentProfile);
             t.commit();
             drawerLayout.closeDrawer(GravityCompat.START);
         });
     }
+
+    public void saveData(String userIc) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(TEXT, userIc);
+        editor.putBoolean(SWITCH1, switch1.isChecked());
+
+    }
+//    public void loadData() {
+//        SharedPreferences sharedPreferences = getSharedPreferences()
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -83,10 +103,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_attendance()).commit();
                 break;
             case R.id.nav_customer:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_buyers()).commit();
+                //bundle.putString("userIc", getIntent().getStringExtra("userIc"));
+                fragment_buyers fragmentBuyers = new fragment_buyers();
+                fragmentBuyers.setArguments(bundle);
+                t.replace(R.id.fragment_container, fragmentBuyers);
+                t.commit();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_buyers()).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
+
 }

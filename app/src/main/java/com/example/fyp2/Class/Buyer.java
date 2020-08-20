@@ -19,9 +19,6 @@ public class Buyer {
     @SerializedName("buyerAddress")
     @Expose
     private String buyerAddress;
-    @SerializedName("buyerRate")
-    @Expose
-    private String buyerRate;
     @SerializedName("userIc")
     @Expose
     private String userIc;
@@ -34,6 +31,14 @@ public class Buyer {
         this.buyerContact = buyerContact;
         this.buyerLocation = buyerLocation;
         this.buyerAddress = buyerAddress;
+    }
+
+    public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress, String userIc) {
+        this.buyerName = buyerName;
+        this.buyerContact = buyerContact;
+        this.buyerLocation = buyerLocation;
+        this.buyerAddress = buyerAddress;
+        this.userIc = userIc;
     }
 
     public String getBuyerId() {
@@ -76,14 +81,6 @@ public class Buyer {
         this.buyerAddress = buyerAddress;
     }
 
-    public String getBuyerRate() {
-        return buyerRate;
-    }
-
-    public void setBuyerRate(String buyerRate) {
-        this.buyerRate = buyerRate;
-    }
-
     public String getUserIc() {
         return userIc;
     }
@@ -99,4 +96,5 @@ public class Buyer {
     public void setAdminCheck(String adminCheck) {
         this.adminCheck = adminCheck;
     }
+
 }

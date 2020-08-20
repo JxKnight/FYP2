@@ -17,9 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.fyp2.Adapter.BuyerListAdapter;
 import com.example.fyp2.Adapter.ProductListAdapter;
 import com.example.fyp2.Adapter.ProductOrderBuyerListAdapter;
 import com.example.fyp2.Adapter.ProductOrderListAdapter;
+import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.OrderCartSession;
 import com.example.fyp2.Class.Product;
@@ -27,6 +29,11 @@ import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class fragment_products extends Fragment {
@@ -58,27 +65,19 @@ public class fragment_products extends Fragment {
             dialog.show();
         });
 
-        for (int i = 0; i < 50; i++) {
-            Product products = new Product("00" + i, "00" + i + "A" + "\n" + "colorA");
-            productList.add(products);
-        }
         listView = (ListView) v.findViewById(R.id.productsList);
-        final ProductListAdapter adapter = new ProductListAdapter(getActivity(), R.layout.adapter_view_products, productList);
-        adapter.notifyDataSetChanged();
-        listView.setAdapter(adapter);
+        getProductList();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(getActivity(), productList.get(i).getProductsId(), Toast.LENGTH_LONG).show();
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                 View mView = getLayoutInflater().inflate(R.layout.dialog_product_detail, null);
-                Spinner productDetailCategorySpinner = mView.findViewById(R.id.Product_Detail_Category_Spinner);
+                TextView productDetailCategory = mView.findViewById(R.id.Product_Detail_Category);
                 TextView productDetailID = (TextView) mView.findViewById(R.id.Product_Detail_ID);
                 TextView productDescription = (TextView) mView.findViewById(R.id.Product_Detail_Description);
                 Button order2Cart = (Button) mView.findViewById(R.id.Product_Detail_Add_2_Cart);
-                ArrayAdapter<CharSequence> addapter = ArrayAdapter.createFromResource(getActivity(), R.array.category, android.R.layout.simple_spinner_item);
-                addapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                productDetailCategorySpinner.setAdapter(addapter);
+                productDetailCategory.setText(productList.get(i).getProductsCategory());
                 productDetailID.setText(productList.get(i).getProductsId());
                 productDescription.setText(productList.get(i).getProductsDescription());
                 mBuilder.setView(mView);
@@ -145,5 +144,31 @@ public class fragment_products extends Fragment {
             });
         });
         return v;
+    }
+
+    public void getProductList() {
+        Call<List<Product>> call = RetrofitClient.getInstance().getApi().findAllProduct();
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (!response.isSuccessful()) {
+                    //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    List<Product> products = response.body();
+                    for (Product currentProduct : products) {
+                        productList.add(currentProduct);
+                    }
+                    final ProductListAdapter adapter = new ProductListAdapter(getActivity(), R.layout.adapter_buyer_list, productList);
+                    adapter.notifyDataSetChanged();
+                    listView.setAdapter(adapter);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                //Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

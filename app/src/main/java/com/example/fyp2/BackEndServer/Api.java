@@ -17,6 +17,9 @@ import retrofit2.http.POST;
 
 public interface Api {
 
+    @GET("/users")
+    Call<List<User>> findAllUser();
+
     @POST("/searchUser")
     Call<User> searchUser(@Body User user);
 
@@ -36,7 +39,12 @@ public interface Api {
 //    @POST("/searchUser")
 //    Call<User> searchUserr(@Field("uID") String uid,@Field("uPassword") String password);
 
-    @GET("/users")
-    Call<List<User>> findAllUser();
+    @GET("/buyers")
+    Call<List<Buyer>> findAllBuyer();
 
+    @POST("/createBuyer")
+    Call<Void> addBuyer(@Body Buyer buyer);
+
+    @GET("/products")
+    Call<List<Product>> findAllProduct();
 }

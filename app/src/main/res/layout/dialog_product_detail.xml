@@ -54,8 +54,8 @@
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/Product_Detail_Category_Spinner"
+            <TextView
+                android:id="@+id/Product_Detail_Category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#FFFFFF"

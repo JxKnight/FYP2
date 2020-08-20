@@ -49,7 +49,7 @@ public class BuyerListAdapter extends ArrayAdapter<Buyer> {
         //productsID.append(productID);
         name.append(buyerName);
         contact.append(buyerContact);
-        location.append(buyerLocation);
+        location.append(buyerLocation.toString());
         address.append(buyerAddress);
 
         return convertView;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="270dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -28,11 +29,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/buyer_add_buyer_camera"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_white_camera"
+                app:layout_constraintBottom_toTopOf="@+id/buyer_add_buyer_gallery"
+                app:layout_constraintStart_toEndOf="@+id/Buyer_List_Buyer_Pic" />
+
+            <ImageView
+                android:id="@+id/buyer_add_buyer_gallery"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_gallery"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/Buyer_List_Buyer_Pic" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:orientation="horizontal">
 
             <TextView
@@ -44,16 +61,17 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent" />
 
-            <TextView
+            <EditText
                 android:id="@+id/fragment_buyer_add_buyer_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="70" />
+                android:layout_weight="70"
+                android:textColor="#FFFF00" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:orientation="horizontal">
 
             <TextView
@@ -65,16 +83,17 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent" />
 
-            <TextView
+            <EditText
                 android:id="@+id/fragment_buyer_add_buyer_contact"
                 android:layout_width="match_parent"
+                android:textColor="#FFFF00"
                 android:layout_height="match_parent"
                 android:layout_weight="70" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:orientation="horizontal">
 
             <TextView
@@ -86,11 +105,13 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent" />
 
-            <TextView
-                android:id="@+id/fragment_buyer_add_buyer_location"
+            <Spinner
+                android:id="@+id/fragment_buyer_add_buyer_location_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="50" />
+                android:layout_weight="50"
+                android:textColor="#FFFF00"
+                android:background="#FFFFFF" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,11 +128,12 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent" />
 
-            <TextView
+            <EditText
                 android:id="@+id/fragment_buyer_add_buyer_address"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="50" />
+                android:layout_weight="50"
+                android:textColor="#FFFF00" />
         </LinearLayout>
 
         <LinearLayout
@@ -122,7 +144,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/Buyer_Order_List_History"
+                android:id="@+id/Buyer_Add_Buyer_Btn"
                 android:text="Order History"
                 android:layout_weight="30" />
         </LinearLayout>
