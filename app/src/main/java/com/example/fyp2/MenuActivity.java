@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.example.fyp2.Fragment.fragment_attendance;
 import com.example.fyp2.Fragment.fragment_buyers;
@@ -26,6 +27,9 @@ import com.example.fyp2.Fragment.fragment_profile;
 import com.example.fyp2.Fragment.fragment_warehouse;
 import com.google.android.material.navigation.NavigationView;
 
+import static com.example.fyp2.MainActivity.FIRSTENTRY;
+import static com.example.fyp2.MainActivity.USERIC;
+
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
@@ -33,18 +37,21 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private Bundle bundle;
     private FragmentTransaction t;
+    private String userIc, firstEntry;
 
-    public static final String SHARED_PREFS = "111";
-    public static final String TEXT = "text";
-    public static final String SWITCH1 = "switch1";
+    public static final String SHARED_PREFS = "BOM_PREFS";
+    public static final String USERIC = "";
+    public static final String FIRSTENTRY = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        bundle = new Bundle();
-        bundle.putString("userIc", getIntent().getStringExtra("userIc"));
+        SharedPreferences sharedPreferences = getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
+        userIc = sharedPreferences.getString("USERIC", "");
+        firstEntry = sharedPreferences.getString("FIRSTENTRY", "");
+
         t = getSupportFragmentManager().beginTransaction();
         fragment_profile fragmentProfile = new fragment_profile();
 
@@ -58,22 +65,18 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (null == getIntent().getStringExtra("userFirstName")) {
+        if (firstEntry.equals("true")) {
             drawerLayout.closeDrawer(GravityCompat.START);
-            bundle.putBoolean("firstEntry", true);
-            fragmentProfile.setArguments(bundle);
-            t.replace(R.id.fragment_container, fragmentProfile);
-            t.commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
         }
+
         View v = navigationView.getHeaderView(0);
         ImageView profile = v.findViewById(R.id.HeaderProfilePic);
         profile.setOnClickListener(u -> {
-            bundle.putBoolean("firstEntry", false);
-            fragmentProfile.setArguments(bundle);
-            t.replace(R.id.fragment_container, fragmentProfile);
-            t.commit();
             drawerLayout.closeDrawer(GravityCompat.START);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
         });
+
     }
 
     @Override
@@ -103,5 +106,4 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
-
 }

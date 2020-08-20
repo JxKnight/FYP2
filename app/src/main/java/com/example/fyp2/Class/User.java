@@ -34,6 +34,9 @@ public class User {
     @SerializedName("userPic")
     @Expose
     private String picture;
+    @SerializedName("userFirstEntry")
+    @Expose
+    private String firstEntry;
 
     public User(String password, String contact, String userIc, String firstName, String lastName, String address, String postCode, String state, String role, String picture) {
         this.password = password;
@@ -141,5 +144,13 @@ public class User {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getFirstEntry() {
+        return firstEntry;
+    }
+
+    public void setFirstEntry(String firstEntry) {
+        this.firstEntry = firstEntry;
     }
 }

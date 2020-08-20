@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +27,13 @@ public class MainActivity extends AppCompatActivity {
     private EditText useric, password, phone, registeric, registerpassword, registercontact;
     private TextView tv;
     private Button login, register, registerButton;
+    private Switch aSwitch;
     // private CheckBox rmbMe;
+    public static final String SHARED_PREFS = "BOM_PREFS";
+    public static final String USERIC = "text";
+    public static final String FIRSTENTRY = "text";
+    public static final String SWITCH = "switch1";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +46,14 @@ public class MainActivity extends AppCompatActivity {
         //rmbMe = (CheckBox)findViewById(R.id.checkBox);
 
         login.setOnClickListener(e -> {
-             User user = new User("123456", "951219025471");
+            User user = new User("0123456", "951219015471");
             //User user = new User(password.getText().toString(), useric.getText().toString());
             login(user, this);
-            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+            //Intent intent = new Intent(MainActivity.this, MenuActivity.class);
 //            intent.putExtra("userIc", user.getUserIc());
 //            intent.putExtra("userFirstName", user.getFirstName());
             //intent.putExtra("userFirstName", "test");
-            startActivity(intent);
+            // startActivity(intent);
         });
         register.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -121,15 +129,28 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     User user = response.body();
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                    intent.putExtra("userIc", user.getUserIc());
-                    intent.putExtra("userFirstName", user.getFirstName());
+                    saveData(user.getUserIc(), user.getFirstEntry());
+//                    intent.putExtra("userIc", user.getUserIc());
+//                    intent.putExtra("firstEntry",user.getFirstEntry());
                     startActivity(intent);
+                    //Toast.makeText(getApplicationContext(),user.getFirstEntry(),Toast.LENGTH_LONG).show();
                 }
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "Unable to connect server", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void saveData(String userIc, String firstEntry) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("USERIC", userIc);
+        editor.putString("FIRSTENTRY", firstEntry);
+        editor.commit();
+        //Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_LONG).show();
     }
 }

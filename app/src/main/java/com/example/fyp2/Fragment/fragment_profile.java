@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,6 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class fragment_profile extends Fragment {
@@ -50,11 +52,10 @@ public class fragment_profile extends Fragment {
     View v;
     EditText FName, LName, Ic, Contact, Address, PostCode, Password, CPassword;
     Spinner State;
-    Boolean firstEntry = false;
     User currentUser;
     CircleImageView ProfilePic;
     ImageView resetPassword, selectPic;
-    String userIc;
+    String userIc, firstEntry;
     private FloatingActionButton btnEditProfileEnable, getBtnEditProfileCancel;
     static final int IMAGE_PICK_CODE = 1000;
     static final int PERMISSION_CODE = 1001;
@@ -68,6 +69,11 @@ public class fragment_profile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
+        userIc = sharedPreferences.getString("USERIC", "");
+        firstEntry = sharedPreferences.getString("FIRSTENTRY", "");
+
         submit = (Button) v.findViewById(R.id.profile_save);
         FName = (EditText) v.findViewById(R.id.FName);
         LName = (EditText) v.findViewById(R.id.LName);
@@ -95,13 +101,10 @@ public class fragment_profile extends Fragment {
         btnEditProfileEnable.setVisibility(View.VISIBLE);
         getBtnEditProfileCancel.setVisibility(View.GONE);
         submit.setVisibility(View.GONE);
-        Bundle b3 = getArguments();
-        firstEntry = b3.getBoolean("firstEntry");
-        userIc = b3.getString("userIc");
         currentUser = new User(userIc);
-        //ViewProfile(currentUser);
-        Toast.makeText(getActivity(), userIc, Toast.LENGTH_LONG).show();
-        if (firstEntry.equals(true)) {
+        ViewProfile(currentUser);
+
+        if (firstEntry.equals("true")) {
             FName.setEnabled(true);
             LName.setEnabled(true);
             Contact.setEnabled(true);
@@ -225,31 +228,28 @@ public class fragment_profile extends Fragment {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User postResponse = response.body();
-                if (null == postResponse.getFirstName()) {
+
+                FName.setText(postResponse.getFirstName());
+                LName.setText(postResponse.getLastName());
+                Ic.setText(postResponse.getUserIc());
+                Contact.setText(postResponse.getContact());
+                Address.setText(postResponse.getAddress());
+                PostCode.setText(postResponse.getPostCode());
+                Password.setText(postResponse.getPassword());
+                String state[] = getResources().getStringArray(R.array.locations);
+                for (int i = 0; i < state.length; i++) {
+                    if (state[i] == postResponse.getState()) {
+                        State.setSelection(i);
+                    } else if (null == postResponse.getState()) {
+
+                    }
+                }
+                if (null == postResponse.getPicture()) {
 
                 } else {
-                    FName.setText(postResponse.getFirstName());
-//                LName.setText(postResponse.getLastName());
-//                Ic.setText(postResponse.getUserIc());
-//                Contact.setText(postResponse.getContact());
-//                Address.setText(postResponse.getAddress());
-//                PostCode.setText(postResponse.getPostCode());
-//                Password.setText(postResponse.getPassword());
-//                String state [] =getResources().getStringArray(R.array.locations);
-//                for(int i=0;i<state.length;i++){
-//                    if(state[i]==postResponse.getState()){
-//                        State.setSelection(i);
-//                    }else if(null==postResponse.getState()){
-//
-//                    }
-//                }
-//                if (null == postResponse.getPicture()) {
-//
-//                } else {
-//                    byte[] decodeString = Base64.decode(postResponse.getPicture().getBytes(), Base64.DEFAULT);
-//                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
-//                    ProfilePic.setImageBitmap(decodedByte);
-//                }
+                    byte[] decodeString = Base64.decode(postResponse.getPicture().getBytes(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
+                    ProfilePic.setImageBitmap(decodedByte);
                 }
             }
             @Override
