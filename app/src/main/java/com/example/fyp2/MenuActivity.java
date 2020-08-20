@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.fyp2.Fragment.fragment_attendance;
 import com.example.fyp2.Fragment.fragment_buyers;
+import com.example.fyp2.Fragment.fragment_home;
 import com.example.fyp2.Fragment.fragment_orders;
 import com.example.fyp2.Fragment.fragment_products;
 import com.example.fyp2.Fragment.fragment_profile;
@@ -65,10 +66,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (firstEntry.equals("true")) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
-        }
+//        if (firstEntry.equals("true")) {
+//            drawerLayout.closeDrawer(GravityCompat.START);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
+//        }
 
         View v = navigationView.getHeaderView(0);
         ImageView profile = v.findViewById(R.id.HeaderProfilePic);
@@ -95,12 +96,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_attendance()).commit();
                 break;
             case R.id.nav_customer:
-                //bundle.putString("userIc", getIntent().getStringExtra("userIc"));
-                fragment_buyers fragmentBuyers = new fragment_buyers();
-                fragmentBuyers.setArguments(bundle);
-                t.replace(R.id.fragment_container, fragmentBuyers);
-                t.commit();
-                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_buyers()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_buyers()).commit();
+                break;
+            case R.id.nav_home:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

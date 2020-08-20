@@ -32,27 +32,26 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.google.android.gms.flags.impl.SharedPreferencesFactory.getSharedPreferences;
-
 
 public class fragment_buyers extends Fragment {
     View v;
     FloatingActionButton filter, add;
     ArrayList<Buyer> buyerList;
     ListView buyerListView;
-    //Bundle b3 = getArguments();
-    public static final String SHARED_PREFS = "111";
-    public static final String TEXT = "text";
-    public static final String SWITCH1 = "switch1";
+    String userIc;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_buyers, container, false);
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
+        userIc = sharedPreferences.getString("USERIC", "");
+
         buyerList = new ArrayList<>();
         buyerListView = (ListView) v.findViewById(R.id.buyersList);
-        //getBuyerList();
+        getBuyerList();
 
         filter = (FloatingActionButton) v.findViewById(R.id.fragment_buyers_filter_btn);
         filter.setOnClickListener(e -> {
@@ -66,6 +65,7 @@ public class fragment_buyers extends Fragment {
             AlertDialog dialog = mBuilder.create();
             dialog.show();
         });
+
         add = (FloatingActionButton) v.findViewById(R.id.fragment_buyers_add_buyer);
         add.setOnClickListener(k -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
@@ -83,7 +83,7 @@ public class fragment_buyers extends Fragment {
             dialog.show();
             //b3.getString("userIc")
             submit.setOnClickListener(e -> {
-                Buyer addBuyer = new Buyer(name.getText().toString(), contact.getText().toString(), location.getSelectedItem().toString(), address.getText().toString(), "test");
+                Buyer addBuyer = new Buyer(name.getText().toString(), contact.getText().toString(), location.getSelectedItem().toString(), address.getText().toString(), userIc);
                 addBuyer(addBuyer, getContext());
                 dialog.dismiss();
             });
@@ -147,8 +147,9 @@ public class fragment_buyers extends Fragment {
                 } else {
                     Toast.makeText(context, "Add Buyer Fail", Toast.LENGTH_LONG).show();
                 }
+                buyerList.clear();
                 getBuyerList();
-                // getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_buyers.this.getId(), new fragment_buyers()).commit();
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_buyers.this.getId(), new fragment_buyers()).commit();
             }
 
             @Override

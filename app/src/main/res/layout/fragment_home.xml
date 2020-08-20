@@ -18,41 +18,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:text="Orders"
+                    android:text="HOME"
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textSize="30sp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-
-                <ImageView
-                    android:id="@+id/filter_orders"
-                    android:src="@drawable/icon_filter"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp" />
-
-                <!--                    <ImageView-->
-                <!--                        android:src="@drawable/icon_location"-->
-                <!--                        android:id="@+id/Location_Orders"-->
-                <!--                        android:layout_width="37dp"-->
-                <!--                        android:layout_height="match_parent"/>-->
-
-                <!--                    <Spinner-->
-                <!--                        android:id="@+id/LocationSpinner_Orders"-->
-                <!--                        android:layout_width="170dp"-->
-                <!--                        android:layout_height="match_parent"-->
-                <!--                        android:background="#FFFFFF" />-->
-                <!--                    <ImageView-->
-                <!--                        android:src="@drawable/icon_calendar"-->
-                <!--                        android:id="@+id/Date_Orders"-->
-                <!--                        android:layout_width="37dp"-->
-                <!--                        android:layout_height="37dp"/>-->
-                <!--                    <TextView-->
-                <!--                        android:id="@+id/ShowDate_Orders"-->
-                <!--                        android:layout_width="match_parent"-->
-                <!--                        android:layout_height="match_parent"/>-->
             </RelativeLayout>
 
             <LinearLayout
