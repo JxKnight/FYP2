@@ -26,11 +26,10 @@ public class Buyer {
     @Expose
     private String adminCheck;
 
-    public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress) {
-        this.buyerName = buyerName;
-        this.buyerContact = buyerContact;
-        this.buyerLocation = buyerLocation;
-        this.buyerAddress = buyerAddress;
+    public Buyer(String buyerId, String userIc, String adminCheck) {
+        this.buyerId = buyerId;
+        this.userIc = userIc;
+        this.adminCheck = adminCheck;
     }
 
     public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress, String userIc) {
@@ -39,6 +38,15 @@ public class Buyer {
         this.buyerLocation = buyerLocation;
         this.buyerAddress = buyerAddress;
         this.userIc = userIc;
+    }
+
+    public Buyer(String buyerLocation) {
+        this.buyerLocation = buyerLocation;
+    }
+
+    public Buyer(String buyerId, String buyerLocation) {
+        this.buyerId = buyerId;
+        this.buyerLocation = buyerLocation;
     }
 
     public String getBuyerId() {

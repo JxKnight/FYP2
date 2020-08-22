@@ -43,7 +43,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
         TextView productsDescription = (TextView) convertView.findViewById(R.id.ProductDescriptionAdapter);
 
         productsID.append(productID);
-        productsDescription.append(productDescription);
+        productsDescription.setText(productDescription);
 
         return convertView;
     }

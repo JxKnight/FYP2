@@ -1,5 +1,7 @@
 package com.example.fyp2.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import com.example.fyp2.Adapter.ProductOrderBuyerListAdapter;
 import com.example.fyp2.Adapter.ProductOrderListAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Buyer;
+import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.OrderCartSession;
 import com.example.fyp2.Class.Product;
 import com.example.fyp2.R;
@@ -35,25 +39,35 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class fragment_products extends Fragment {
     View v;
     Spinner CategoryFilter;
-    FloatingActionButton floatFilterBtn, floatCartBtn;
-    ArrayList<Product> productList = new ArrayList<>();
+    FloatingActionButton floatFilterBtn, floatCartBtn, floatAddProduct;
+    ArrayList<Product> productList;
     ArrayList<Buyer> buyerList = new ArrayList<>();
     ArrayList<OrderCartSession> cartList = new ArrayList<>();
-    ListView listView;
+    ListView productListView, orderBuyerList;
+    String userIc, roles;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_products, container, false);
+        productList = new ArrayList<>();
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
+        userIc = sharedPreferences.getString("USERIC", "");
+        roles = sharedPreferences.getString("ROLE", "");
+
+        floatAddProduct = (FloatingActionButton) v.findViewById(R.id.product_add_product);
         floatFilterBtn = (FloatingActionButton) v.findViewById(R.id.filter_products);
         floatFilterBtn.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-            View mView = getLayoutInflater().inflate(R.layout.dialog_fragment_product_filter, null);
+            View mView = getLayoutInflater().inflate(R.layout.dialog_product_filter, null);
             CategoryFilter = (Spinner) mView.findViewById(R.id.product_category_spinner);
 
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.category, android.R.layout.simple_spinner_item);
@@ -65,9 +79,9 @@ public class fragment_products extends Fragment {
             dialog.show();
         });
 
-        listView = (ListView) v.findViewById(R.id.productsList);
+        productListView = (ListView) v.findViewById(R.id.productsList);
         getProductList();
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(getActivity(), productList.get(i).getProductsId(), Toast.LENGTH_LONG).show();
@@ -76,10 +90,14 @@ public class fragment_products extends Fragment {
                 TextView productDetailCategory = mView.findViewById(R.id.Product_Detail_Category);
                 TextView productDetailID = (TextView) mView.findViewById(R.id.Product_Detail_ID);
                 TextView productDescription = (TextView) mView.findViewById(R.id.Product_Detail_Description);
+                TextView productName = (TextView) mView.findViewById(R.id.Product_Detail_Name);
+                TextView productPrice = (TextView) mView.findViewById(R.id.Product_Detail_Price);
                 Button order2Cart = (Button) mView.findViewById(R.id.Product_Detail_Add_2_Cart);
                 productDetailCategory.setText(productList.get(i).getProductsCategory());
                 productDetailID.setText(productList.get(i).getProductsId());
                 productDescription.setText(productList.get(i).getProductsDescription());
+                productName.setText(productList.get(i).getProductsName());
+                productPrice.setText(productList.get(i).getProductsPrice());
                 mBuilder.setView(mView);
 
                 AlertDialog diialog = mBuilder.create();
@@ -90,9 +108,7 @@ public class fragment_products extends Fragment {
                     View mmView = getLayoutInflater().inflate(R.layout.dialog_product_order_cart_quantity, null);
                     EditText quantity = (EditText) mmView.findViewById(R.id.product_order_quantity);
                     Button btn = (Button) mmView.findViewById(R.id.Order_2_list);
-
                     mmBuilder.setView(mmView);
-
                     AlertDialog dialogg = mmBuilder.create();
                     dialogg.show();
                     btn.setOnClickListener(f -> {
@@ -111,7 +127,7 @@ public class fragment_products extends Fragment {
             ListView orderCartList = mView.findViewById(R.id.Product_Order_Cart_ListView);
             Button saveOrderCart = mView.findViewById(R.id.CompleteOrderCart);
 
-            final ProductOrderListAdapter orderListAdapter = new ProductOrderListAdapter(getActivity(), R.layout.adapter_view_product_order_list, cartList);
+            final ProductOrderListAdapter orderListAdapter = new ProductOrderListAdapter(getActivity(), R.layout.adapter_product_order_list, cartList);
             orderListAdapter.notifyDataSetChanged();
             orderCartList.setAdapter(orderListAdapter);
 
@@ -123,24 +139,73 @@ public class fragment_products extends Fragment {
                 AlertDialog.Builder mBuilderr = new AlertDialog.Builder(getActivity());
                 View mVieww = getLayoutInflater().inflate(R.layout.dialog_product_order_cart_buyer_list, null);
 
-                ListView orderBuyerList = mVieww.findViewById(R.id.Product_Order_Cart_Buyer_List_View);
+                orderBuyerList = mVieww.findViewById(R.id.Product_Order_Cart_Buyer_List_View);
                 Spinner orderCartBuyerLocationSpinner = mVieww.findViewById(R.id.Product_Order_Cart_Buyer_List_Location_Spinner);
-                Button orderBuyerSubmitOrderBtn = mVieww.findViewById(R.id.CompleteOrderCart);
-
-                final ProductOrderBuyerListAdapter orderBuyerListAdapter = new ProductOrderBuyerListAdapter(getActivity(), R.layout.adapter_view_product_order_cart_buyer_list, buyerList);
-                orderBuyerListAdapter.notifyDataSetChanged();
-                orderBuyerList.setAdapter(orderBuyerListAdapter);
-
+//                final ProductOrderBuyerListAdapter orderBuyerListAdapter = new ProductOrderBuyerListAdapter(getActivity(), R.layout.adapter_product_order_cart_buyer_list, buyerList);
+//                orderBuyerListAdapter.notifyDataSetChanged();
+//                orderBuyerList.setAdapter(orderBuyerListAdapter);
+                getBuyerList(getContext());
                 ArrayAdapter<CharSequence> aadapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
                 aadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 orderCartBuyerLocationSpinner.setAdapter(aadapter);
-
+                EditText orderDescription = (EditText) mVieww.findViewById(R.id.Product_order_Cart_Buyer_Description);
+                ImageView filterBuyerList = (ImageView) mVieww.findViewById(R.id.product_order_cart_buyer_list_search);
                 mBuilderr.setView(mVieww);
                 AlertDialog diaalog = mBuilderr.create();
                 diaalog.show();
-                orderBuyerSubmitOrderBtn.setOnClickListener(l -> {
-                    Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
+                filterBuyerList.setOnClickListener(k -> {
+                    buyerList.clear();
+                    // orderCartBuyerLocationSpinner.getSelectedItem().toString();
+                    Buyer buyerByLocation = new Buyer(orderCartBuyerLocationSpinner.getSelectedItem().toString());
+                    getBuyerListInLocation(buyerByLocation, getContext());
                 });
+                orderBuyerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    String productId = "", productQuantity = "";
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        for (OrderCartSession product : cartList) {
+
+                            productId = productId + product.getProductId() + "/";
+                            productQuantity = productQuantity + product.getOrderQuantity() + "/";
+                        }
+                        //Toast.makeText(getActivity(),productId,Toast.LENGTH_LONG).show();
+                        Order order = new Order(orderDescription.getText().toString(), "DATE", buyerList.get(position).getBuyerId(), productId, productQuantity, userIc);
+                        createOrder(order, getContext());
+                        diaalog.dismiss();
+                    }
+                });
+            });
+        });
+        if (roles.equals("5")) {
+            floatAddProduct.show();
+        } else {
+            floatAddProduct.hide();
+        }
+
+        floatAddProduct.setOnClickListener(p -> {
+            AlertDialog.Builder mBuilderr = new AlertDialog.Builder(getActivity());
+            View mVieww = getLayoutInflater().inflate(R.layout.dialog_product_add_product, null);
+
+            Spinner AddProductCategorySpinner = mVieww.findViewById(R.id.Product_Add_Category);
+            EditText AddProductName = mVieww.findViewById(R.id.Product_Add_Name);
+            EditText AddProductDescription = mVieww.findViewById(R.id.Product_Add_Description);
+            EditText AddProductPrice = mVieww.findViewById(R.id.Product_Add_Price);
+            EditText AddProductId = mVieww.findViewById(R.id.Product_Add_ID);
+            Button AddProductBtn = mVieww.findViewById(R.id.Product_Add_Product_Btn);
+
+            ArrayAdapter<CharSequence> aadapter = ArrayAdapter.createFromResource(getActivity(), R.array.category, android.R.layout.simple_spinner_item);
+            aadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            AddProductCategorySpinner.setAdapter(aadapter);
+
+            mBuilderr.setView(mVieww);
+            AlertDialog diaalog = mBuilderr.create();
+            diaalog.show();
+
+            AddProductBtn.setOnClickListener(r -> {
+                Product newProduct = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString());
+                addProduct(newProduct, getContext());
+                diaalog.dismiss();
             });
         });
         return v;
@@ -158,9 +223,10 @@ public class fragment_products extends Fragment {
                     for (Product currentProduct : products) {
                         productList.add(currentProduct);
                     }
-                    final ProductListAdapter adapter = new ProductListAdapter(getActivity(), R.layout.adapter_buyer_list, productList);
-                    adapter.notifyDataSetChanged();
-                    listView.setAdapter(adapter);
+                    //Toast.makeText(getActivity(), productList.get(1).getProductsId(), Toast.LENGTH_SHORT).show();
+                    final ProductListAdapter ProductListAdapter = new ProductListAdapter(getActivity(), R.layout.adapter_products, productList);
+                    ProductListAdapter.notifyDataSetChanged();
+                    productListView.setAdapter(ProductListAdapter);
                 }
 
             }
@@ -168,6 +234,100 @@ public class fragment_products extends Fragment {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 //Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void addProduct(Product product, Context context) {
+        Call<Product> call = RetrofitClient.getInstance().getApi().createProduct(product);
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Add Product Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Add Product Successfully", Toast.LENGTH_LONG).show();
+                    productList.clear();
+                    getProductList();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Toast.makeText(context, "Fail To Connect To Server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void getBuyerList(Context context) {
+        buyerList.clear();
+        Call<List<Buyer>> call = RetrofitClient.getInstance().getApi().findAllBuyer();
+        call.enqueue(new Callback<List<Buyer>>() {
+            @Override
+            public void onResponse(Call<List<Buyer>> call, Response<List<Buyer>> response) {
+                if (!response.isSuccessful()) {
+                    //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    List<Buyer> buyers = response.body();
+                    for (Buyer currentBuyer : buyers) {
+                        buyerList.add(currentBuyer);
+                    }
+                    final BuyerListAdapter adapter = new BuyerListAdapter(getActivity(), R.layout.adapter_buyer_list, buyerList);
+                    adapter.notifyDataSetChanged();
+                    orderBuyerList.setAdapter(adapter);
+                    //Toast.makeText(context,buyerList.get(0).getBuyerId(),Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Buyer>> call, Throwable t) {
+                //Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void getBuyerListInLocation(Buyer buyer, Context context) {
+        Call<List<Buyer>> call = RetrofitClient.getInstance().getApi().findBuyersByLocation(buyer);
+        call.enqueue(new Callback<List<Buyer>>() {
+            @Override
+            public void onResponse(Call<List<Buyer>> call, Response<List<Buyer>> response) {
+                if (!response.isSuccessful()) {
+                    //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    List<Buyer> buyers = response.body();
+                    for (Buyer currentBuyer : buyers) {
+                        buyerList.add(currentBuyer);
+                    }
+                    final BuyerListAdapter adapter = new BuyerListAdapter(getActivity(), R.layout.adapter_buyer_list, buyerList);
+                    adapter.notifyDataSetChanged();
+                    orderBuyerList.setAdapter(adapter);
+                    //Toast.makeText(context,buyerList.get(0).getBuyerId(),Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Buyer>> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void createOrder(Order order, Context context) {
+        Call<Order> call = RetrofitClient.getInstance().getApi().createOrder(order);
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Place Order Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Place Order Success", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });
     }

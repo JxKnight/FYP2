@@ -45,6 +45,24 @@ public interface Api {
     @POST("/createBuyer")
     Call<Void> addBuyer(@Body Buyer buyer);
 
+    @POST("/getBuyerDetails")
+    Call<Buyer> getBuyerDetails(@Body Buyer buyer);
+
+    @POST("/buyerAdminCheck")
+    Call<Buyer> checkBuyer(@Body Buyer buyer);
+
+    @POST("/getBuyerByLocation")
+    Call<List<Buyer>> findBuyersByLocation(@Body Buyer buyer);
+
     @GET("/products")
     Call<List<Product>> findAllProduct();
+
+    @POST("/createProduct")
+    Call<Product> createProduct(@Body Product product);
+
+    @GET("/orders")
+    Call<List<Order>> findAllOrder();
+
+    @POST("/createOrder")
+    Call<Order> createOrder(@Body Order order);
 }

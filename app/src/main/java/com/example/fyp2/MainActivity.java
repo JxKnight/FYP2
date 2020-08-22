@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         editor.putString("USERIC", userIc);
         editor.putString("FIRSTENTRY", firstEntry);
+        editor.putString("ROLE", "1");
         editor.commit();
         //Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_LONG).show();
     }

@@ -32,6 +32,15 @@ public class Order {
         this.buyerId = buyerId;
     }
 
+    public Order(String ordersDescription, String ordersDate, String buyerId, String productsId, String productsQuantity, String userIc) {
+        this.ordersDescription = ordersDescription;
+        this.ordersDate = ordersDate;
+        this.buyerId = buyerId;
+        this.productsId = productsId;
+        this.productsQuantity = productsQuantity;
+        this.userIc = userIc;
+    }
+
     public String getOrdersId() {
         return ordersId;
     }

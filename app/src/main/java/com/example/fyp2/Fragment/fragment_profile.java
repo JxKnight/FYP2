@@ -267,12 +267,12 @@ public class fragment_profile extends Fragment {
                 if (response.code() == 200) {
                     Toast.makeText(context, "Update Successfully", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "Update Fail", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Update Fail", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_SHORT).show();
             }
         });
     }

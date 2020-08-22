@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="270dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -20,6 +21,13 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/buyer_detail_check_n_uncheck"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
                 android:id="@+id/Product_Detail_Picture"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
@@ -28,6 +36,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buyer_detail_confirm_check"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:text="confirm check"
+                android:textSize="5sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout

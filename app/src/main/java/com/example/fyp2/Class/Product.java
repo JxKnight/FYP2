@@ -25,6 +25,14 @@ public class Product {
     }
 
 
+    public Product(String productsId, String productsName, String productsDescription, String productsPrice, String productsCategory) {
+        this.productsId = productsId;
+        this.productsName = productsName;
+        this.productsDescription = productsDescription;
+        this.productsPrice = productsPrice;
+        this.productsCategory = productsCategory;
+    }
+
     public Product(String productsId, String productsDescription) {
         this.productsId = productsId;
         this.productsDescription = productsDescription;

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -45,12 +46,18 @@ public class BuyerListAdapter extends ArrayAdapter<Buyer> {
         TextView contact = (TextView) convertView.findViewById(R.id.Buyer_List_View_Contact);
         TextView location = (TextView) convertView.findViewById(R.id.Buyer_List_View_Location);
         TextView address = (TextView) convertView.findViewById(R.id.Buyer_List_View_Address);
+        ImageView check = (ImageView) convertView.findViewById(R.id.buyer_list_admin_check);
 
         //productsID.append(productID);
         name.append(buyerName);
         contact.append(buyerContact);
-        location.append(buyerLocation.toString());
+        location.append(buyerLocation);
         address.append(buyerAddress);
+        if (getItem(position).getAdminCheck().equals("true")) {
+            check.setImageResource(R.drawable.icon_check);
+        } else {
+            check.setImageResource(R.drawable.icon_uncheck);
+        }
 
         return convertView;
     }

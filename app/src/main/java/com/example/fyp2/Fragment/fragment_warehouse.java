@@ -29,7 +29,7 @@ public class fragment_warehouse extends Fragment {
         filter = (ImageView) v.findViewById(R.id.filter_warehouse);
         filter.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-            View mView = getLayoutInflater().inflate(R.layout.dialog_fragment_warehouse_filter, null);
+            View mView = getLayoutInflater().inflate(R.layout.dialog_warehouse_filter, null);
             State = (Spinner) mView.findViewById(R.id.warehouse_category_spinner);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.category, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
