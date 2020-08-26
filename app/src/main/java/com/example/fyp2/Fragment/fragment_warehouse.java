@@ -19,8 +19,6 @@ public class fragment_warehouse extends Fragment {
     View v;
     Spinner State;
     ImageView filter;
-    ;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

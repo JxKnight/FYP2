@@ -39,16 +39,16 @@
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/Product_Detail_Picture"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:id="@+id/Product_Add_Picture"
+                android:layout_width="170dp"
+                android:layout_height="200dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +61,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/Product_Detail_Picture" />
+                app:layout_constraintStart_toEndOf="@+id/Product_Add_Picture" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout

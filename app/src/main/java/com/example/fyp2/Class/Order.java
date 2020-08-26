@@ -32,6 +32,11 @@ public class Order {
         this.buyerId = buyerId;
     }
 
+    public Order(String productsId, String productsQuantity) {
+        this.productsId = productsId;
+        this.productsQuantity = productsQuantity;
+    }
+
     public Order(String ordersDescription, String ordersDate, String buyerId, String productsId, String productsQuantity, String userIc) {
         this.ordersDescription = ordersDescription;
         this.ordersDate = ordersDate;

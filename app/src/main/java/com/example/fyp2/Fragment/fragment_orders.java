@@ -9,13 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.example.fyp2.Adapter.BuyerListAdapter;
 import com.example.fyp2.Adapter.OrderListAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Buyer;
@@ -37,6 +37,8 @@ public class fragment_orders extends Fragment {
     FloatingActionButton floatfilterbtn;
     ArrayList<Order> orderList = new ArrayList<>();
     ListView listView;
+    String orderDetailsBuyerName;
+    TextView buyerName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -57,13 +59,33 @@ public class fragment_orders extends Fragment {
         });
         listView = (ListView) v.findViewById(R.id.ordersList);
         getOrderList(getContext());
-//        final OrderListAdapter adapter = new OrderListAdapter(getActivity(), R.layout.adapter_order_list, orderList);
-//        adapter.notifyDataSetChanged();
-//        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(), orderList.get(i).getBuyerId(), Toast.LENGTH_LONG).show();
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                View mView = getLayoutInflater().inflate(R.layout.dialog_order_detail, null);
+                TextView orderID = (TextView) mView.findViewById(R.id.order_detail_id);
+                buyerName = (TextView) mView.findViewById(R.id.order_detail_buyer_name);
+                TextView orderDescription = (TextView) mView.findViewById(R.id.order_detail_description);
+                TextView orderProductList = (TextView) mView.findViewById(R.id.order_list_productId);
+                TextView orderProductQuantity = (TextView) mView.findViewById(R.id.order_list_productQuantity);
+
+                //Toast.makeText(getActivity(),orderList.get(i).getOrdersId(),Toast.LENGTH_LONG).show();
+                orderID.setText(orderList.get(i).getOrdersId());
+                orderDescription.setText(orderList.get(i).getOrdersDescription());
+                getBuyerName(orderList.get(i).getBuyerId(), getContext());
+
+                String[] productList = orderList.get(i).getProductsId().split("/");
+                String[] quantityList = orderList.get(i).getProductsQuantity().split("/");
+                for (String a : productList) {
+                    orderProductList.append(a + "\n");
+                }
+                for (String b : quantityList) {
+                    orderProductQuantity.append(b + "\n");
+                }
+                mBuilder.setView(mView);
+                AlertDialog dialog = mBuilder.create();
+                dialog.show();
             }
         });
         return v;
@@ -93,6 +115,26 @@ public class fragment_orders extends Fragment {
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void getBuyerName(String buyerId, Context context) {
+        Call<Buyer> call = RetrofitClient.getInstance().getApi().getBuyerDetails(buyerId);
+        call.enqueue(new Callback<Buyer>() {
+            @Override
+            public void onResponse(Call<Buyer> call, Response<Buyer> response) {
+                if (!response.isSuccessful()) {
+                    //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    orderDetailsBuyerName = response.body().getBuyerName();
+                    buyerName.setText(orderDetailsBuyerName);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Buyer> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });

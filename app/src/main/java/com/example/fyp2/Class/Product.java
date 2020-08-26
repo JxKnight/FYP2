@@ -19,18 +19,22 @@ public class Product {
     @SerializedName("productsCategory")
     @Expose
     private String productsCategory;
+    @SerializedName("productsImage")
+    @Expose
+    private String productsImage;
 
     public Product(String productsId) {
         this.productsId = productsId;
     }
 
 
-    public Product(String productsId, String productsName, String productsDescription, String productsPrice, String productsCategory) {
+    public Product(String productsId, String productsName, String productsDescription, String productsPrice, String productsCategory, String productsImage) {
         this.productsId = productsId;
         this.productsName = productsName;
         this.productsDescription = productsDescription;
         this.productsPrice = productsPrice;
         this.productsCategory = productsCategory;
+        this.productsImage = productsImage;
     }
 
     public Product(String productsId, String productsDescription) {
@@ -76,5 +80,13 @@ public class Product {
 
     public void setProductsCategory(String productsCategory) {
         this.productsCategory = productsCategory;
+    }
+
+    public String getProductsImage() {
+        return productsImage;
+    }
+
+    public void setProductsImage(String productsImage) {
+        this.productsImage = productsImage;
     }
 }

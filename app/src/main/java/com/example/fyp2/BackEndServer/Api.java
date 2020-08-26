@@ -14,6 +14,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface Api {
 
@@ -53,6 +54,9 @@ public interface Api {
 
     @POST("/getBuyerByLocation")
     Call<List<Buyer>> findBuyersByLocation(@Body Buyer buyer);
+
+    @POST("/getBuyerDetails")
+    Call<Buyer> getBuyerDetails(@Query("buyerID") String buyerID);
 
     @GET("/products")
     Call<List<Product>> findAllProduct();
