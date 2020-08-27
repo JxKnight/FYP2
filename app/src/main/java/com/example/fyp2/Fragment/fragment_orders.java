@@ -102,9 +102,8 @@ public class fragment_orders extends Fragment {
                     List<Order> orders = response.body();
                     for (Order currentOrder : orders) {
                         orderList.add(currentOrder);
-                        Toast.makeText(getActivity(), currentOrder.getProductsId(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity(), currentOrder.getProductsId(), Toast.LENGTH_LONG).show();
                     }
-
                     final OrderListAdapter adapter = new OrderListAdapter(getActivity(), R.layout.adapter_order_list, orderList);
                     adapter.notifyDataSetChanged();
                     listView.setAdapter(adapter);

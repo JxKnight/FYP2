@@ -57,7 +57,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/Orders_Spinner"
+                android:id="@+id/ProductFilterBtn"
                 android:text="Filter"
                 android:layout_weight="30" />
         </LinearLayout>

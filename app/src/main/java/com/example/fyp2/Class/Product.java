@@ -23,10 +23,9 @@ public class Product {
     @Expose
     private String productsImage;
 
-    public Product(String productsId) {
-        this.productsId = productsId;
+    public Product(String productsCategory) {
+        this.productsCategory = productsCategory;
     }
-
 
     public Product(String productsId, String productsName, String productsDescription, String productsPrice, String productsCategory, String productsImage) {
         this.productsId = productsId;

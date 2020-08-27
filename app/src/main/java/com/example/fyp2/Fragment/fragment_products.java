@@ -39,6 +39,7 @@ import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.OrderCartSession;
 import com.example.fyp2.Class.Product;
+import com.example.fyp2.Class.Warehouse;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -99,13 +100,14 @@ public class fragment_products extends Fragment {
         roles = sharedPreferences.getString("ROLE", "");
 
         floatAddProduct = (FloatingActionButton) v.findViewById(R.id.product_add_product);
-        floatFilterBtn = (FloatingActionButton) v.findViewById(R.id.filter_products);
+        floatFilterBtn = (FloatingActionButton) v.findViewById(R.id.product_filter);
 
 
         floatFilterBtn.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
             View mView = getLayoutInflater().inflate(R.layout.dialog_product_filter, null);
             CategoryFilter = (Spinner) mView.findViewById(R.id.product_category_spinner);
+            Button productFilterBtn = (Button) mView.findViewById(R.id.ProductFilterBtn);
 
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.category, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -114,6 +116,12 @@ public class fragment_products extends Fragment {
             mBuilder.setView(mView);
             AlertDialog dialog = mBuilder.create();
             dialog.show();
+            productFilterBtn.setOnClickListener(o -> {
+                Product product = new Product(CategoryFilter.getSelectedItem().toString());
+                getProductListByCategory(product, getContext());
+                dialog.dismiss();
+            });
+
         });
 
         ProductListAdapter.setOnItemClickListener(new ProductListAdapter.OnItemClickListener() {
@@ -238,12 +246,18 @@ public class fragment_products extends Fragment {
             diaalog.show();
 
             AddProductBtn.setOnClickListener(r -> {
-                productAddImage.buildDrawingCache();
-                Bitmap bmap = productAddImage.getDrawingCache();
-                String x = getEncodeImage(bmap);
-                Product newProduct = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), x);
-                addProduct(newProduct, getContext());
-                diaalog.dismiss();
+                if (null == AddProductId.getText().toString() || null == AddProductName.getText().toString() || null == AddProductDescription.getText().toString() || null == AddProductPrice.getText().toString() || AddProductCategorySpinner.getSelectedItem().toString().equals("Select Category")) {
+                    Toast.makeText(getActivity(), "Please insert product detail.", Toast.LENGTH_SHORT).show();
+                } else {
+                    productAddImage.buildDrawingCache();
+                    Bitmap bmap = productAddImage.getDrawingCache();
+                    String xx = getEncodeImage(bmap);
+                    String x = "";
+                    //Toast.makeText(getActivity(),xx,Toast.LENGTH_LONG).show();
+                    Product newProduct = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), x);
+                    addProduct(newProduct, getContext());
+                    diaalog.dismiss();
+                }
             });
 
             image.setOnClickListener(y -> {
@@ -273,6 +287,7 @@ public class fragment_products extends Fragment {
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                productList.clear();
                 if (!response.isSuccessful()) {
                     //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
                 } else {
@@ -418,5 +433,30 @@ public class fragment_products extends Fragment {
                 }
             }
         }
+    }
+
+    public void getProductListByCategory(Product product, Context context) {
+        Call<List<Product>> call = RetrofitClient.getInstance().getApi().findAllProductByFilter(product);
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                productList.clear();
+                if (!response.isSuccessful()) {
+                    //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    List<Product> products = response.body();
+                    for (Product currentProduct : products) {
+                        productList.add(currentProduct);
+                    }
+                    //Toast.makeText(getActivity(), productList.get(1).getProductsId(), Toast.LENGTH_SHORT).show();
+                    recyclerView.setAdapter(ProductListAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

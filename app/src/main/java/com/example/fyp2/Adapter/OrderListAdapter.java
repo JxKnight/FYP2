@@ -31,7 +31,7 @@ public class OrderListAdapter extends ArrayAdapter<Order> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        String orderID = getItem(position).getOrdersId();
+        String orderID = getItem(position).getOrdersDate();
         String orderDescription = getItem(position).getOrdersDescription();
         String customerID = getItem(position).getBuyerId();
 

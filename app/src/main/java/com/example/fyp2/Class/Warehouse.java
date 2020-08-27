@@ -3,7 +3,7 @@ package com.example.fyp2.Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Storage {
+public class Warehouse {
     @SerializedName("productsId")
     @Expose
     private String productsId;
@@ -16,30 +16,19 @@ public class Storage {
     @SerializedName("productsQuantity")
     @Expose
     private String productsQuantity;
+    @SerializedName("userUpdate")
+    @Expose
+    private String userUpdate;
 
-    public Storage(String productsId) {
-        this.productsId = productsId;
-    }
-
-    //get Warehouse
-    public Storage(String productsName, String productsCategory, String productsQuantity) {
-        this.productsName = productsName;
+    public Warehouse(String productsCategory) {
         this.productsCategory = productsCategory;
-        this.productsQuantity = productsQuantity;
     }
 
     //update Warehouse
-    public Storage(String productsId, String productsQuantity) {
+    public Warehouse(String productsId, String productsQuantity, String userUpdate) {
         this.productsId = productsId;
         this.productsQuantity = productsQuantity;
-    }
-
-    //create Warehouse
-    public Storage(String productsId, String productsName, String productsCategory, String productsQuantity) {
-        this.productsId = productsId;
-        this.productsName = productsName;
-        this.productsCategory = productsCategory;
-        this.productsQuantity = productsQuantity;
+        this.userUpdate = userUpdate;
     }
 
     public String getProductsId() {
@@ -72,5 +61,13 @@ public class Storage {
 
     public void setProductsQuantity(String productsQuantity) {
         this.productsQuantity = productsQuantity;
+    }
+
+    public String getUserUpdate() {
+        return userUpdate;
+    }
+
+    public void setUserUpdate(String userUpdate) {
+        this.userUpdate = userUpdate;
     }
 }
