@@ -3,6 +3,7 @@ package com.example.fyp2.BackEndServer;
 import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.Product;
+import com.example.fyp2.Class.Task;
 import com.example.fyp2.Class.User;
 import com.example.fyp2.Class.Warehouse;
 
@@ -75,6 +76,9 @@ public interface Api {
     @POST("/productFilter")
     Call<List<Product>> findAllProductByFilter(@Body Product product);
 
+    @POST("/buyerHistoryList")
+    Call<List<Order>> findAllBuyerOrderHistoryList(@Body Order order);
+
     //warehouse
     @GET("/warehouse")
     Call<List<Warehouse>> findAllWareHouseProduct();
@@ -84,4 +88,8 @@ public interface Api {
 
     @POST("/warehouseFilter")
     Call<List<Warehouse>> findAllWareHouseByFilter(@Body Warehouse warehouse);
+
+    //task
+    @POST("/createTask")
+    Call<Void> addTask(@Body Task task);
 }

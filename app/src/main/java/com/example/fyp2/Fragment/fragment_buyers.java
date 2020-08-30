@@ -20,8 +20,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.fyp2.Adapter.BuyerListAdapter;
+import com.example.fyp2.Adapter.BuyerOrderHistoryListAdapter;
+import com.example.fyp2.Adapter.ProductOrderListAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Buyer;
+import com.example.fyp2.Class.Order;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -38,9 +41,10 @@ public class fragment_buyers extends Fragment {
     View v;
     FloatingActionButton filter, add;
     ArrayList<Buyer> buyerList;
+    ArrayList<Order> currentBuyerOrderHistoryList;
     ListView buyerListView;
     String userIc, roles;
-
+    ListView buyerOrderHistoryLV;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class fragment_buyers extends Fragment {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
         userIc = sharedPreferences.getString("USERIC", "");
         roles = sharedPreferences.getString("ROLE", "");
+
+        currentBuyerOrderHistoryList = new ArrayList<>();
 
         buyerList = new ArrayList<>();
         buyerListView = (ListView) v.findViewById(R.id.buyersList);
@@ -102,6 +108,7 @@ public class fragment_buyers extends Fragment {
                 TextView address = (TextView) mmView.findViewById(R.id.fragment_buyer_detail_address);
                 ImageView check = (ImageView) mmView.findViewById(R.id.buyer_detail_check_n_uncheck);
                 Button confirmCheck = (Button) mmView.findViewById(R.id.buyer_detail_confirm_check);
+                Button buyerHistory = (Button) mmView.findViewById(R.id.Buyer_Order_List_History);
                 name.setText(buyerList.get(i).getBuyerName());
                 contact.setText(buyerList.get(i).getBuyerContact());
                 location.setText(buyerList.get(i).getBuyerLocation());
@@ -133,11 +140,24 @@ public class fragment_buyers extends Fragment {
                         dialogCheck.dismiss();
                         dialogDetail.dismiss();
                         buyerList.clear();
+                        buyerListView.setAdapter(null);
                         getBuyerList(getContext());
                     });
                     checkNo.setOnClickListener(p -> {
                         dialogCheck.dismiss();
                     });
+                });
+                buyerHistory.setOnClickListener(k -> {
+                    AlertDialog.Builder mBBuilder = new AlertDialog.Builder(getActivity());
+                    View mVView = getLayoutInflater().inflate(R.layout.dialog_buyer_detail_order_history, null);
+                    buyerOrderHistoryLV = mVView.findViewById(R.id.buyer_order_history_list);
+
+                    Order order = new Order(buyerList.get(i).getBuyerId());
+                    getCurrentBuyerOrderHistoryList(order, getContext());
+
+                    mBBuilder.setView(mVView);
+                    AlertDialog dialogCheck = mBBuilder.create();
+                    dialogCheck.show();
                 });
             }
         });
@@ -178,13 +198,12 @@ public class fragment_buyers extends Fragment {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
                     Toast.makeText(context, "Add Buyer Successfully", Toast.LENGTH_SHORT).show();
-
                 } else {
                     Toast.makeText(context, "Add Buyer Fail", Toast.LENGTH_LONG).show();
                 }
                 buyerList.clear();
+                buyerListView.setAdapter(null);
                 getBuyerList(getContext());
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_buyers.this.getId(), new fragment_buyers()).commit();
             }
 
             @Override
@@ -214,5 +233,29 @@ public class fragment_buyers extends Fragment {
         });
     }
 
+    private void getCurrentBuyerOrderHistoryList(Order order, Context context) {
+        Call<List<Order>> call = RetrofitClient.getInstance().getApi().findAllBuyerOrderHistoryList(order);
+        call.enqueue(new Callback<List<Order>>() {
+            @Override
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                currentBuyerOrderHistoryList.clear();
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Get Order History Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    List<Order> orders = response.body();
+                    for (Order currentOrder : orders) {
+                        currentBuyerOrderHistoryList.add(currentOrder);
+                    }
+                    final BuyerOrderHistoryListAdapter orderHistoryList = new BuyerOrderHistoryListAdapter(getActivity(), R.layout.adapter_buyer_order_history_list, currentBuyerOrderHistoryList);
+                    orderHistoryList.notifyDataSetChanged();
+                    buyerOrderHistoryLV.setAdapter(orderHistoryList);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

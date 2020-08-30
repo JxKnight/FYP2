@@ -161,11 +161,11 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/Product_Add_Product_Btn"
+                android:id="@+id/Product_Add_Product_Next_Btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="30"
-                android:text="Add Product" />
+                android:text="Next" />
         </LinearLayout>
 
 

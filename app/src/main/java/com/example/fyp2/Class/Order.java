@@ -25,6 +25,9 @@ public class Order {
     @SerializedName("userIc")
     @Expose
     private String userIc;
+    @SerializedName("ordersStatus")
+    @Expose
+    private String ordersStatus;
 
     public Order(String ordersId, String ordersDescription, String buyerId) {
         this.ordersId = ordersId;
@@ -44,6 +47,10 @@ public class Order {
         this.productsId = productsId;
         this.productsQuantity = productsQuantity;
         this.userIc = userIc;
+    }
+
+    public Order(String buyerId) {
+        this.buyerId = buyerId;
     }
 
     public String getOrdersId() {
@@ -100,5 +107,13 @@ public class Order {
 
     public void setUserIc(String userIc) {
         this.userIc = userIc;
+    }
+
+    public String getOrdersStatus() {
+        return ordersStatus;
+    }
+
+    public void setOrdersStatus(String ordersStatus) {
+        this.ordersStatus = ordersStatus;
     }
 }

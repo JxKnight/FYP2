@@ -6,10 +6,6 @@
             android:id="@+id/nav_home"
             android:title="Home" />
         <item
-            android:icon="@drawable/icon_customer"
-            android:id="@+id/nav_Users"
-            android:title="Users" />
-        <item
             android:icon="@drawable/icon_attendance"
             android:id="@+id/nav_attendance"
             android:title="Attendance" />
@@ -26,9 +22,13 @@
             android:id="@+id/nav_products"
             android:title="Products" />
         <item
-            android:icon="@drawable/icon_orders"
+            android:icon="@drawable/icon_tasks"
             android:id="@+id/nav_orders"
             android:title="Orders" />
+        <item
+            android:icon="@drawable/icon_orders"
+            android:id="@+id/nav_tasks"
+            android:title="Tasks" />
     </group>
     <group android:checkableBehavior="single">
         <item

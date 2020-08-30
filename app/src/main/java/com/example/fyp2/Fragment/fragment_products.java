@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +42,7 @@ import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.OrderCartSession;
 import com.example.fyp2.Class.Product;
+import com.example.fyp2.Class.Task;
 import com.example.fyp2.Class.Warehouse;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -61,16 +65,21 @@ public class fragment_products extends Fragment {
     View v;
     Spinner CategoryFilter;
     FloatingActionButton floatFilterBtn, floatCartBtn, floatAddProduct;
-
+    int x;
     ArrayList<Product> productList;
     ArrayList<Buyer> buyerList = new ArrayList<>();
     ArrayList<OrderCartSession> cartList = new ArrayList<>();
     ListView orderBuyerList;
-    String userIc, roles;
+    String userIc, roles, taskTxt;
     GridLayoutManager gridLayoutManager;
     RecyclerView recyclerView;
     ProductListAdapter ProductListAdapter;
     ImageView productAddImage;
+    ArrayList<EditText> editText = new ArrayList<>();
+    EditText eT;
+    EditText AddProductId;
+    int i = 0;
+    //Handler mHandler = new Handler();
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
     private String date;
@@ -117,9 +126,15 @@ public class fragment_products extends Fragment {
             AlertDialog dialog = mBuilder.create();
             dialog.show();
             productFilterBtn.setOnClickListener(o -> {
-                Product product = new Product(CategoryFilter.getSelectedItem().toString());
-                getProductListByCategory(product, getContext());
-                dialog.dismiss();
+                if (CategoryFilter.getSelectedItem().toString().equals("Select Category")) {
+                    getProductList();
+                    dialog.dismiss();
+                } else {
+                    Product product = new Product(CategoryFilter.getSelectedItem().toString());
+                    getProductListByCategory(product, getContext());
+                    dialog.dismiss();
+                }
+
             });
 
         });
@@ -233,10 +248,11 @@ public class fragment_products extends Fragment {
             EditText AddProductName = mVieww.findViewById(R.id.Product_Add_Name);
             EditText AddProductDescription = mVieww.findViewById(R.id.Product_Add_Description);
             EditText AddProductPrice = mVieww.findViewById(R.id.Product_Add_Price);
-            EditText AddProductId = mVieww.findViewById(R.id.Product_Add_ID);
+            AddProductId = mVieww.findViewById(R.id.Product_Add_ID);
             ImageView image = mVieww.findViewById(R.id.Product_Add_Photo);
-            Button AddProductBtn = mVieww.findViewById(R.id.Product_Add_Product_Btn);
+            Button AddProductBtn = mVieww.findViewById(R.id.Product_Add_Product_Next_Btn);
             productAddImage = mVieww.findViewById(R.id.Product_Add_Picture);
+
             ArrayAdapter<CharSequence> aadapter = ArrayAdapter.createFromResource(getActivity(), R.array.category, android.R.layout.simple_spinner_item);
             aadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             AddProductCategorySpinner.setAdapter(aadapter);
@@ -246,18 +262,55 @@ public class fragment_products extends Fragment {
             diaalog.show();
 
             AddProductBtn.setOnClickListener(r -> {
-                if (null == AddProductId.getText().toString() || null == AddProductName.getText().toString() || null == AddProductDescription.getText().toString() || null == AddProductPrice.getText().toString() || AddProductCategorySpinner.getSelectedItem().toString().equals("Select Category")) {
-                    Toast.makeText(getActivity(), "Please insert product detail.", Toast.LENGTH_SHORT).show();
-                } else {
-                    productAddImage.buildDrawingCache();
-                    Bitmap bmap = productAddImage.getDrawingCache();
-                    String xx = getEncodeImage(bmap);
-                    String x = "";
-                    //Toast.makeText(getActivity(),xx,Toast.LENGTH_LONG).show();
-                    Product newProduct = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), x);
-                    addProduct(newProduct, getContext());
-                    diaalog.dismiss();
-                }
+                x = 1;
+                AlertDialog.Builder Builder = new AlertDialog.Builder(getActivity());
+                View View = getLayoutInflater().inflate(R.layout.dialog_product_add_product_task, null);
+                ImageView addET = View.findViewById(R.id.Product_add_Product_Task_EdiText);
+                LinearLayout linearLayoutAddTask = View.findViewById(R.id.Product_Add_Task);
+                Button button = View.findViewById(R.id.Product_Add_Product_Btn);
+                Builder.setView(View);
+                AlertDialog diialog = Builder.create();
+                diialog.show();
+                addET.setOnClickListener(k -> {
+
+                    ScrollView sv = new ScrollView(getActivity());
+                    sv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+                    LinearLayout ll = new LinearLayout(getActivity());
+                    ll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    ll.setOrientation(LinearLayout.VERTICAL);
+
+                    eT = new EditText(getActivity());
+                    eT.setHint("Task" + x);
+                    eT.setId(x);
+                    ll.addView(eT);
+                    editText.add(eT);
+                    //Toast.makeText(getActivity(),Integer.toString(editText.get(x-1).getId()),Toast.LENGTH_LONG).show();
+                    sv.addView(ll);
+                    x++;
+                    linearLayoutAddTask.addView(sv);
+
+                });
+                button.setOnClickListener(e -> {
+                    i = 1;
+                    taskTxt = "";
+                    String seq = "";
+                    String roles = "";
+//                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), "");
+//                    addProduct(product, getContext());
+                    for (EditText var : editText) {
+                        taskTxt = taskTxt + var.getText().toString() + "/";
+                        //mHandler.postDelayed(mAddTaskRunnable,5000);
+                        seq = seq + i + "/";
+                        roles = roles + i + "/";
+                        i++;
+                        //Toast.makeText(getActivity(), var.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                    //Toast.makeText(getActivity(), taskTxt, Toast.LENGTH_SHORT).show();
+                    Task task = new Task(taskTxt, date, "", seq, roles, AddProductId.getText().toString());
+                    storeTask(task, getContext());
+                    // Toast.makeText(getActivity(), seq, Toast.LENGTH_LONG).show();
+                });
             });
 
             image.setOnClickListener(y -> {
@@ -299,6 +352,7 @@ public class fragment_products extends Fragment {
                     recyclerView.setAdapter(ProductListAdapter);
                 }
             }
+
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 //Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
@@ -459,4 +513,31 @@ public class fragment_products extends Fragment {
             }
         });
     }
+
+    public void storeTask(Task task, Context context) {
+        Call<Void> call = RetrofitClient.getInstance().getApi().addTask(task);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Add Product Completed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Add Product Fail", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+//    private Runnable mAddTaskRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            Task task = new Task(tasktxt, date, "", Integer.toString(i), "", AddProductId.getText().toString());
+//            storeTask(task, getContext());
+//        }
+//    };
 }

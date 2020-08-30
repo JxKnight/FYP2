@@ -85,9 +85,15 @@ public class fragment_warehouse extends Fragment {
             dialog.show();
 
             WarehouseSpinner.setOnClickListener(p -> {
-                Warehouse warehouse = new Warehouse(State.getSelectedItem().toString());
-                findWarehouseByFilter(warehouse, getContext());
-                dialog.dismiss();
+                if (State.getSelectedItem().toString().equals("Select Category")) {
+                    getWarehouseProductList();
+                    dialog.dismiss();
+                } else {
+                    Warehouse warehouse = new Warehouse(State.getSelectedItem().toString());
+                    findWarehouseByFilter(warehouse, getContext());
+                    dialog.dismiss();
+                }
+
             });
         });
         warehouseListAdapter.setOnItemClickListener(new WarehouseListAdapter.OnItemClickListener() {

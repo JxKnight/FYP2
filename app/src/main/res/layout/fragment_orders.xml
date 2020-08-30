@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/order_frameLayout">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/filter_orders"
@@ -34,10 +35,59 @@
                 android:textSize="30sp" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/fragment_orders_new_completed_order_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintTop_toBottomOf="@id/fragment_orders_relativeLayout">
+
+            <com.addisonelliott.segmentedbutton.SegmentedButtonGroup
+                android:id="@+id/segmentedBtnGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@android:color/white"
+                android:elevation="3dp"
+                app:position="0"
+                app:radius="4dp"
+                app:ripple="true"
+                app:rippleColor="#7D0552"
+                app:selectedBackground="#8E35EF">
+
+                <com.addisonelliott.segmentedbutton.SegmentedButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:padding="8dp"
+                    app:selectedTextColor="@android:color/white"
+                    app:text="New Order"
+                    app:textColor="#289deb"
+                    app:textStyle="bold" />
+
+                <com.addisonelliott.segmentedbutton.SegmentedButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:padding="4dp"
+                    app:selectedTextColor="@android:color/white"
+                    app:text="Order Completed"
+                    app:textColor="#289deb"
+                    app:textStyle="bold" />
+
+            </com.addisonelliott.segmentedbutton.SegmentedButtonGroup>
+
+        </RelativeLayout>
+
         <ListView
             android:id="@+id/ordersList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/fragment_orders_relativeLayout" />
+            app:layout_constraintTop_toBottomOf="@id/fragment_orders_new_completed_order_layout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

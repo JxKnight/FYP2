@@ -41,4 +41,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-vision:15.0.0'
     compileOnly 'com.google.android.wearable:wearable:2.5.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //Add Library
+    //implementation 'com.github.baoyachi:StepView:1.9'
+    implementation 'com.github.addisonelliott:SegmentedButton:3.1.9'
 }

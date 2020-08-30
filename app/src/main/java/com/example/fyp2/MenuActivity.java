@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.fyp2.Fragment.fragment_admin;
 import com.example.fyp2.Fragment.fragment_attendance;
 import com.example.fyp2.Fragment.fragment_buyers;
 import com.example.fyp2.Fragment.fragment_home;
@@ -100,6 +101,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
+                break;
+            case R.id.nav_admin:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_admin()).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
