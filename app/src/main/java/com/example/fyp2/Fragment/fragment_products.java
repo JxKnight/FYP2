@@ -70,7 +70,7 @@ public class fragment_products extends Fragment {
     ArrayList<Buyer> buyerList = new ArrayList<>();
     ArrayList<OrderCartSession> cartList = new ArrayList<>();
     ListView orderBuyerList;
-    String userIc, roles, taskTxt;
+    String userIc, orderPermission, taskTxt, role;
     GridLayoutManager gridLayoutManager;
     RecyclerView recyclerView;
     ProductListAdapter ProductListAdapter;
@@ -106,7 +106,9 @@ public class fragment_products extends Fragment {
 
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
         userIc = sharedPreferences.getString("USERIC", "");
-        roles = sharedPreferences.getString("ROLE", "");
+        orderPermission = sharedPreferences.getString("role-orders", "");
+        role = sharedPreferences.getString("ROLE", "");
+
 
         floatAddProduct = (FloatingActionButton) v.findViewById(R.id.product_add_product);
         floatFilterBtn = (FloatingActionButton) v.findViewById(R.id.product_filter);
@@ -151,6 +153,11 @@ public class fragment_products extends Fragment {
                 TextView productName = (TextView) mView.findViewById(R.id.Product_Detail_Name);
                 TextView productPrice = (TextView) mView.findViewById(R.id.Product_Detail_Price);
                 Button order2Cart = (Button) mView.findViewById(R.id.Product_Detail_Add_2_Cart);
+                if (orderPermission.equals("true") || role.equals("1")) {
+                    order2Cart.setVisibility(View.VISIBLE);
+                } else {
+                    order2Cart.setVisibility(View.GONE);
+                }
                 productDetailCategory.setText(productList.get(position).getProductsCategory());
                 productDetailID.setText(productList.get(position).getProductsId());
                 productDescription.setText(productList.get(position).getProductsDescription());
@@ -178,6 +185,11 @@ public class fragment_products extends Fragment {
             }
         });
         floatCartBtn = (FloatingActionButton) v.findViewById(R.id.product_order_list);
+        if (orderPermission.equals("true")) {
+            floatCartBtn.show();
+        } else {
+            floatCartBtn.hide();
+        }
         floatCartBtn.setOnClickListener(e -> {
             if (cartList.size() == 0) {
                 Toast.makeText(getActivity(), "Please order at least one product!", Toast.LENGTH_LONG).show();
@@ -200,11 +212,13 @@ public class fragment_products extends Fragment {
                     View mVieww = getLayoutInflater().inflate(R.layout.dialog_product_order_cart_buyer_list, null);
 
                     orderBuyerList = mVieww.findViewById(R.id.Product_Order_Cart_Buyer_List_View);
-                    Spinner orderCartBuyerLocationSpinner = mVieww.findViewById(R.id.Product_Order_Cart_Buyer_List_Location_Spinner);
                     getBuyerList(getContext());
+
+                    Spinner orderCartBuyerLocationSpinner = mVieww.findViewById(R.id.Product_Order_Cart_Buyer_List_Location_Spinner);
                     ArrayAdapter<CharSequence> aadapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
                     aadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     orderCartBuyerLocationSpinner.setAdapter(aadapter);
+
                     EditText orderDescription = (EditText) mVieww.findViewById(R.id.Product_order_Cart_Buyer_Description);
                     ImageView filterBuyerList = (ImageView) mVieww.findViewById(R.id.product_order_cart_buyer_list_search);
                     mBuilderr.setView(mVieww);
@@ -226,7 +240,7 @@ public class fragment_products extends Fragment {
                                 productQuantity = productQuantity + product.getOrderQuantity() + "/";
                             }
                             //Toast.makeText(getActivity(),productId,Toast.LENGTH_LONG).show();
-                            Order order = new Order(orderDescription.getText().toString(), date, buyerList.get(position).getBuyerId(), productId, productQuantity, userIc);
+                            Order order = new Order(orderDescription.getText().toString(), date, buyerList.get(position).getBuyerId(), productId, productQuantity, userIc, "true");
                             createOrder(order, getContext());
                             diaalog.dismiss();
                         }
@@ -234,7 +248,7 @@ public class fragment_products extends Fragment {
                 });
             }
         });
-        if (roles.equals("5")) {
+        if (orderPermission.equals("true") || role.equals("1")) {
             floatAddProduct.show();
         } else {
             floatAddProduct.hide();
@@ -296,8 +310,8 @@ public class fragment_products extends Fragment {
                     taskTxt = "";
                     String seq = "";
                     String roles = "";
-//                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), "");
-//                    addProduct(product, getContext());
+                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), "");
+                    addProduct(product, getContext());
                     for (EditText var : editText) {
                         taskTxt = taskTxt + var.getText().toString() + "/";
                         //mHandler.postDelayed(mAddTaskRunnable,5000);

@@ -147,11 +147,11 @@ public class fragment_profile extends Fragment {
             //Toast.makeText(getActivity(), x, Toast.LENGTH_LONG).show();
             String Roles = null;
             if (State.getSelectedItem().toString().equals("Select Location")) {
-                User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), null, Roles, x);
+                User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), null, Roles, x, "false");
                 updateProfile(newUser, getContext());
                 //Toast.makeText(getContext(),State.getSelectedItem().toString(),Toast.LENGTH_SHORT).show();
             } else {
-                User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), State.getSelectedItem().toString(), Roles, x);
+                User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), State.getSelectedItem().toString(), Roles, x, "false");
                 updateProfile(newUser, getContext());
             }
             ViewProfile(currentUser);

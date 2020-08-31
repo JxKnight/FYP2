@@ -1,6 +1,7 @@
 package com.example.fyp2.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class fragment_orders extends Fragment {
     View v;
@@ -41,7 +44,7 @@ public class fragment_orders extends Fragment {
     ArrayList<Order> orderCompletedList = new ArrayList<>();
     ArrayList<Order> orderList = new ArrayList<>();
     ListView listView;
-    String orderDetailsBuyerName, A;
+    String orderDetailsBuyerName, userIc, orderPermission, role;
     TextView buyerName;
 
     @Override
@@ -49,6 +52,11 @@ public class fragment_orders extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_orders, container, false);
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
+        userIc = sharedPreferences.getString("USERIC", "");
+        orderPermission = sharedPreferences.getString("role-orders", "");
+        role = sharedPreferences.getString("role", "");
+
         getOrderList("true", getContext());
         listView = (ListView) v.findViewById(R.id.ordersList);
         SegmentedButtonGroup sbg = v.findViewById(R.id.segmentedBtnGroup);

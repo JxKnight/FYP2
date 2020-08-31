@@ -43,8 +43,9 @@ public class fragment_buyers extends Fragment {
     ArrayList<Buyer> buyerList;
     ArrayList<Order> currentBuyerOrderHistoryList;
     ListView buyerListView;
-    String userIc, roles;
+    String userIc, roles, buyerPermission;
     ListView buyerOrderHistoryLV;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class fragment_buyers extends Fragment {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
         userIc = sharedPreferences.getString("USERIC", "");
         roles = sharedPreferences.getString("ROLE", "");
-
+        buyerPermission = sharedPreferences.getString("role-customers", "");
         currentBuyerOrderHistoryList = new ArrayList<>();
 
         buyerList = new ArrayList<>();

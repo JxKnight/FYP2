@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/admin_roles_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:text="Name: "
+                            android:textSize="15dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/admin_roles_rate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Role Rate: "
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Description: " />
+
+                        <TextView
+                            android:id="@+id/admin_roles_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/admin_roles_adapter_warehouse"
+                            android:layout_width="65dp"
+                            android:textSize="13sp"
+                            android:textAlignment="center"
+                            android:layout_height="match_parent"
+                            android:textColor="#D1D0CE"
+                            android:text="Warehouse" />
+
+                        <TextView
+                            android:id="@+id/admin_roles_adapter_order"
+                            android:layout_width="65dp"
+                            android:textSize="13sp"
+                            android:textAlignment="center"
+                            android:text="Orders"
+                            android:textColor="#D1D0CE"
+                            android:layout_height="match_parent" />
+
+                        <TextView
+                            android:id="@+id/admin_roles_adapter_customer"
+                            android:layout_width="65dp"
+                            android:textSize="13sp"
+                            android:textAlignment="center"
+                            android:text="Customers"
+                            android:textColor="#D1D0CE"
+                            android:layout_height="match_parent" />
+
+                        <TextView
+                            android:id="@+id/admin_roles_adapter_reports"
+                            android:layout_width="65dp"
+                            android:textSize="13sp"
+                            android:textAlignment="center"
+                            android:text="Reports"
+                            android:textColor="#D1D0CE"
+                            android:layout_height="match_parent" />
+
+                        <TextView
+                            android:id="@+id/admin_roles_adapter_Tasks"
+                            android:layout_width="65dp"
+                            android:textSize="13sp"
+                            android:textAlignment="center"
+                            android:text="Tasks"
+                            android:textColor="#D1D0CE"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

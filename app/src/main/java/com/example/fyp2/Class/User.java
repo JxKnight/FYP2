@@ -38,7 +38,7 @@ public class User {
     @Expose
     private String firstEntry;
 
-    public User(String password, String contact, String userIc, String firstName, String lastName, String address, String postCode, String state, String role, String picture) {
+    public User(String password, String contact, String userIc, String firstName, String lastName, String address, String postCode, String state, String role, String picture, String firstEntry) {
         this.password = password;
         this.contact = contact;
         this.userIc = userIc;
@@ -49,6 +49,7 @@ public class User {
         this.state = state;
         this.role = role;
         this.picture = picture;
+        this.firstEntry = firstEntry;
     }
 
     public User(String password, String userIc) {

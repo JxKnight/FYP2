@@ -3,6 +3,7 @@ package com.example.fyp2.BackEndServer;
 import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.Product;
+import com.example.fyp2.Class.Role;
 import com.example.fyp2.Class.Task;
 import com.example.fyp2.Class.User;
 import com.example.fyp2.Class.Warehouse;
@@ -92,4 +93,14 @@ public interface Api {
     //task
     @POST("/createTask")
     Call<Void> addTask(@Body Task task);
+
+    //Role
+    @GET("/roles")
+    Call<List<Role>> findAllRoles();
+
+    @POST("/createRoles")
+    Call<Void> createRole(@Body Role role);
+
+    @POST("/currentRole")
+    Call<Role> currentRole(@Body Role role);
 }

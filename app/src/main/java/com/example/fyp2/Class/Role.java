@@ -7,6 +7,9 @@ public class Role {
     @SerializedName("roleName")
     @Expose
     private String roleName;
+    @SerializedName("roleNum")
+    @Expose
+    private String roleNum;
     @SerializedName("roleDescription")
     @Expose
     private String roleDescription;
@@ -29,23 +32,15 @@ public class Role {
     @Expose
     private String tasks;
 
-    public Role(String roleName) {
-        this.roleName = roleName;
+    public Role(String roleNum) {
+        this.roleNum = roleNum;
     }
 
-    public Role(String roleName, String roleDescription, String roleRate, String warehouse, String orders, String customers, String reports, String tasks) {
+    public Role(String roleName, String roleNum, String roleDescription, String roleRate, String warehouse, String orders, String customers, String reports, String tasks) {
         this.roleName = roleName;
+        this.roleNum = roleNum;
         this.roleDescription = roleDescription;
         this.roleRate = roleRate;
-        this.warehouse = warehouse;
-        this.orders = orders;
-        this.customers = customers;
-        this.reports = reports;
-        this.tasks = tasks;
-    }
-
-    public Role(String roleName, String warehouse, String orders, String customers, String reports, String tasks) {
-        this.roleName = roleName;
         this.warehouse = warehouse;
         this.orders = orders;
         this.customers = customers;
@@ -115,5 +110,13 @@ public class Role {
 
     public void setTasks(String tasks) {
         this.tasks = tasks;
+    }
+
+    public String getRoleNum() {
+        return roleNum;
+    }
+
+    public void setRoleNum(String roleNum) {
+        this.roleNum = roleNum;
     }
 }

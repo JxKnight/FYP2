@@ -48,7 +48,7 @@ public class fragment_warehouse extends Fragment {
     GridLayoutManager gridLayoutManager;
     RecyclerView WarehouseRecyclerView;
     WarehouseListAdapter warehouseListAdapter;
-    String userIc, roles;
+    String userIc, roles, warehousePermission;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -68,6 +68,7 @@ public class fragment_warehouse extends Fragment {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
         userIc = sharedPreferences.getString("USERIC", "");
         roles = sharedPreferences.getString("ROLE", "");
+        warehousePermission = sharedPreferences.getString("role-warehouse", "");
 
         filter = (ImageView) v.findViewById(R.id.filter_warehouse);
         filter.setOnClickListener(e -> {

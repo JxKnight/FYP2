@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     User user = response.body();
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                    saveData(user.getUserIc(), user.getFirstEntry());
+                    saveData(user.getUserIc(), user.getFirstEntry(), user.getRole());
 //                    intent.putExtra("userIc", user.getUserIc());
 //                    intent.putExtra("firstEntry",user.getFirstEntry());
                     startActivity(intent);
@@ -144,13 +144,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void saveData(String userIc, String firstEntry) {
+    public void saveData(String userIc, String firstEntry, String roles) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putString("USERIC", userIc);
         editor.putString("FIRSTENTRY", firstEntry);
-        editor.putString("ROLE", "5");
+        editor.putString("ROLE", roles);
         editor.commit();
         //Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_LONG).show();
     }

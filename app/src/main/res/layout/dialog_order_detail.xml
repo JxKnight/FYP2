@@ -25,22 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/Product_Detail_Picture"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
-                android:layout_marginStart="100dp"
-                android:layout_marginEnd="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -117,7 +101,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
@@ -126,12 +110,12 @@
                 android:textSize="18sp"
                 android:textColor="#FFFFFF"
                 android:layout_width="140dp"
-                android:layout_height="300dp" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/order_list_productQuantity"
                 android:layout_width="140dp"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
