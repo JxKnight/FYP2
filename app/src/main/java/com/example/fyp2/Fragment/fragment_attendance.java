@@ -2,6 +2,7 @@ package com.example.fyp2.Fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -12,12 +13,14 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -26,6 +29,12 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class fragment_attendance extends Fragment {
     private SurfaceView surfaceView;
@@ -33,7 +42,8 @@ public class fragment_attendance extends Fragment {
     private TextView textView;
     private BarcodeDetector barcodeDetector;
     final int RequestCameraPermissionID = 1001;
-    View v;
+    private View v;
+    private String userIc;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -66,7 +76,9 @@ public class fragment_attendance extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_attendance, container, false);
-
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
+        userIc = sharedPreferences.getString("USERIC", "");
+        //requestAttendance(userIc,getContext());
         surfaceView = (SurfaceView) v.findViewById(R.id.Camera_attendance);
         textView = (TextView) v.findViewById(R.id.CameraOutput_attendance);
 
@@ -95,17 +107,7 @@ public class fragment_attendance extends Fragment {
                     @Override
                     public void receiveDetections(Detector.Detections<Barcode> detections) {
                         SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-
-                        if (qrCodes.size() != 0) {
-                            textView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                                    vibrator.vibrate(1000);
-                                    textView.setText(qrCodes.valueAt(0).displayValue);
-                                }
-                            });
-                        }
+                        textView.setText(qrCodes.valueAt(0).displayValue);
                     }
                 });
             }
@@ -121,5 +123,24 @@ public class fragment_attendance extends Fragment {
             }
         });
         return v;
+    }
+
+    public void requestAttendance(String userIc, Context context) {
+        Call<String> call = RetrofitClient.getInstance().getApi().requestAttendance(userIc);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Scan the QR Code", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Request Attendance Fail", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

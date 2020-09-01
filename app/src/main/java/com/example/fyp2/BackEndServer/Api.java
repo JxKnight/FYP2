@@ -12,6 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -103,4 +104,8 @@ public interface Api {
 
     @POST("/currentRole")
     Call<Role> currentRole(@Body Role role);
+
+    //Attendance
+    @GET("/requestAttendance")
+    Call<String> requestAttendance(@Query("userIc") String userIc);
 }
