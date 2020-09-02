@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"
         android:layout_margin="16dp"
+        android:backgroundTint="#17eb49"
         android:onClick="handleEditProfile"
         android:src="@drawable/icon_edit" />
 
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"
         android:layout_margin="16dp"
+        android:backgroundTint="#e82525"
         android:onClick="handleEditProfile"
         android:src="@drawable/icon_remove" />
 
@@ -227,12 +229,14 @@
 
                     <Button
                         android:id="@+id/profile_save"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="@string/save"
-                        android:textSize="25dp"
-                        android:background="@drawable/button_profile_save"
-                        android:shadowColor="#FFFFFF"
+                        android:text="Login"
+                        android:textColor="#FFFFFF"
+                        android:textAllCaps="false"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_main"
+                        android:shadowColor="#A8A8A8"
                         android:shadowDx="0"
                         android:shadowDy="0"
                         android:shadowRadius="5" />

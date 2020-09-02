@@ -1,6 +1,8 @@
 package com.example.fyp2.BackEndServer;
 
+import com.example.fyp2.Class.Attendance;
 import com.example.fyp2.Class.Buyer;
+import com.example.fyp2.Class.OTP;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.Product;
 import com.example.fyp2.Class.Role;
@@ -106,6 +108,10 @@ public interface Api {
     Call<Role> currentRole(@Body Role role);
 
     //Attendance
-    @GET("/requestAttendance")
-    Call<String> requestAttendance(@Query("userIc") String userIc);
+    @POST("/requestAttendance")
+    Call<Void> requestAttendance(@Body Attendance attendance);
+
+    //OTP
+    @POST("/createAttendance")
+    Call<Void> createAttendance(@Body OTP otp);
 }

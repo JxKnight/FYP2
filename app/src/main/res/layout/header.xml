@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/background_header"
     android:gravity="bottom"
@@ -13,29 +15,37 @@
     <!--        android:layout_height="100dp"-->
     <!--        android:src="@drawable/icon_profile"-->
     <!--        android:layout_marginLeft="50dp"/>-->
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/HeaderProfilePic"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/icon_profile"
         app:civ_border_color="#FFFFFF"
-        android:layout_marginLeft="50dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/username_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:layout_marginStart="73dp"
         android:hint="Username"
-        android:layout_marginLeft="50dp"
-        android:textSize="25sp" />
+        android:text=""
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/HeaderProfilePic" />
 
     <TextView
         android:id="@+id/role_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:layout_marginStart="110dp"
         android:hint="Role"
+        android:text=""
         android:textSize="20sp"
-        android:layout_marginLeft="50dp" />
-</LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_header" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,14 +9,14 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:layout_marginLeft="130dp"
+        android:layout_marginLeft="150dp"
         android:layout_marginTop="50dp"
         android:text="BOM"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="36sp"
+        android:textSize="50sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -97,13 +97,16 @@
 
             <Button
                 android:id="@+id/userLogIn"
-                android:layout_width="130dp"
-                android:layout_height="match_parent"
+
                 android:layout_marginLeft="140dp"
-                android:text="LOGIN"
+                android:text="Login"
+                android:textColor="#FFFFFF"
                 android:textAllCaps="false"
                 android:textSize="20sp"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
                 android:background="@drawable/button_main"
+                android:shadowColor="#A8A8A8"
                 android:shadowDx="0"
                 android:shadowDy="0"
                 android:shadowRadius="5" />
@@ -122,12 +125,15 @@
 
             <Button
                 android:id="@+id/Register"
-                android:layout_width="130dp"
-                android:layout_height="match_parent"
                 android:layout_marginLeft="140dp"
                 android:text="Register"
-                android:textSize="15dp"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
                 android:background="@drawable/button_main"
+                android:shadowColor="#A8A8A8"
                 android:shadowDx="0"
                 android:shadowDy="0"
                 android:shadowRadius="5" />

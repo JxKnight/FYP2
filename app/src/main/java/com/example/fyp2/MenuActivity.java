@@ -100,7 +100,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
         });
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
         menu = navigationView.getMenu();
         navWarehouse = menu.findItem(R.id.nav_warehouse);
         navOrders = menu.findItem(R.id.nav_orders);

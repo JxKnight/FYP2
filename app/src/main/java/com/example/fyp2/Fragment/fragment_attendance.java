@@ -12,22 +12,29 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.fyp2.BackEndServer.RetrofitClient;
+import com.example.fyp2.Class.Attendance;
+import com.example.fyp2.Class.OTP;
 import com.example.fyp2.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,11 +46,14 @@ import static android.content.Context.MODE_PRIVATE;
 public class fragment_attendance extends Fragment {
     private SurfaceView surfaceView;
     private CameraSource cameraSource;
-    private TextView textView;
+    private Button button;
     private BarcodeDetector barcodeDetector;
     final int RequestCameraPermissionID = 1001;
+    private FloatingActionButton adminCheck;
     private View v;
     private String userIc;
+    private Calendar calendar;
+    private SimpleDateFormat simpleDateFormat;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -78,10 +88,15 @@ public class fragment_attendance extends Fragment {
         v = inflater.inflate(R.layout.fragment_attendance, container, false);
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
         userIc = sharedPreferences.getString("USERIC", "");
-        //requestAttendance(userIc,getContext());
-        surfaceView = (SurfaceView) v.findViewById(R.id.Camera_attendance);
-        textView = (TextView) v.findViewById(R.id.CameraOutput_attendance);
 
+        surfaceView = (SurfaceView) v.findViewById(R.id.Camera_attendance);
+        button = (Button) v.findViewById(R.id.Request_attendance);
+        adminCheck = (FloatingActionButton) v.findViewById(R.id.fragment_attendance_admin_check);
+
+        button.setOnClickListener(q -> {
+            Attendance attendance = new Attendance(userIc);
+            requestAttendance(attendance, getContext());
+        });
         barcodeDetector = new BarcodeDetector.Builder(getActivity()).setBarcodeFormats(Barcode.QR_CODE).build();
 
         cameraSource = new CameraSource.Builder(getActivity(), barcodeDetector).setRequestedPreviewSize(640, 480).build();
@@ -107,7 +122,8 @@ public class fragment_attendance extends Fragment {
                     @Override
                     public void receiveDetections(Detector.Detections<Barcode> detections) {
                         SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-                        textView.setText(qrCodes.valueAt(0).displayValue);
+//                        textView.setText(qrCodes.valueAt(0).displayValue);
+                        decryptData(qrCodes.valueAt(0).displayValue, getContext());
                     }
                 });
             }
@@ -122,14 +138,24 @@ public class fragment_attendance extends Fragment {
                 cameraSource.stop();
             }
         });
+
+        adminCheck.setOnClickListener(q -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            View view = getLayoutInflater().inflate(R.layout.dialog_admin_users, null);
+            lvUsers = view.findViewById(R.id.fragment_admin_users_list_view);
+            getUsers(getContext());
+            builder.setView(view);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
         return v;
     }
 
-    public void requestAttendance(String userIc, Context context) {
-        Call<String> call = RetrofitClient.getInstance().getApi().requestAttendance(userIc);
-        call.enqueue(new Callback<String>() {
+    public void requestAttendance(Attendance attendance, Context context) {
+        Call<Void> call = RetrofitClient.getInstance().getApi().requestAttendance(attendance);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
                     Toast.makeText(context, "Scan the QR Code", Toast.LENGTH_SHORT).show();
                 } else {
@@ -138,7 +164,38 @@ public class fragment_attendance extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void decryptData(String text, Context context) {
+        String[] encryptData = text.split("/");
+        String decryptData = "";
+        for (String var : encryptData) {
+            long x = Long.valueOf(var) - Long.valueOf(userIc);
+            decryptData = decryptData + x;
+        }
+        OTP otp = new OTP(userIc, decryptData);
+        checkAttendance(otp, getContext());
+        Toast.makeText(context, decryptData, Toast.LENGTH_SHORT).show();
+    }
+
+    public void checkAttendance(OTP x, Context context) {
+        Call<Void> call = RetrofitClient.getInstance().getApi().createAttendance(x);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Signed Attendance", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Sign Attendance Fail", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });

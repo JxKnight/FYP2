@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"
         android:layout_margin="5dp"
+        android:backgroundTint="#c72bff"
         android:onClick="handleEditProfile"
         android:src="@drawable/icon_filter" />
 
@@ -19,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
         android:layout_margin="5dp"
+        android:backgroundTint="#5c007d"
         android:onClick="handleEditProfile"
         android:src="@drawable/icon_order_cart" />
 
@@ -27,6 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
+        android:backgroundTint="#17eb49"
         android:layout_margin="5dp"
         android:onClick="handleEditProfile"
         android:src="@drawable/icon_add" />
