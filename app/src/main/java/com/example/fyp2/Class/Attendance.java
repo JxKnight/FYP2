@@ -13,6 +13,15 @@ public class Attendance {
     @SerializedName("time")
     @Expose
     private String time;
+    @SerializedName("date")
+    @Expose
+    private String date;
+    @SerializedName("userName")
+    @Expose
+    private String userName;
+    @SerializedName("day")
+    @Expose
+    private String day;
 
     public Attendance(String userIc) {
         this.userIc = userIc;
@@ -48,4 +57,27 @@ public class Attendance {
         this.time = time;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
 }

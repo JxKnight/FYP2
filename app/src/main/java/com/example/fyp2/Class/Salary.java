@@ -4,33 +4,40 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Salary {
-    @SerializedName("salaryID")
+    @SerializedName("salaryId")
     @Expose
-    private String salaryID;
-    @SerializedName("salaryMonth")
+    private String salaryId;
+    @SerializedName("month")
     @Expose
-    private String salaryMonth;
+    private String month;
     @SerializedName("userIc")
     @Expose
     private String userIc;
-    @SerializedName("salaryAmount")
+    @SerializedName("amount")
     @Expose
-    private String salaryAmount;
+    private String amount;
+    @SerializedName("totalHours")
+    @Expose
+    private String totalHours;
+    @SerializedName("year")
+    @Expose
+    private String year;
 
-    public String getSalaryID() {
-        return salaryID;
+
+    public String getSalaryId() {
+        return salaryId;
     }
 
-    public void setSalaryID(String salaryID) {
-        this.salaryID = salaryID;
+    public void setSalaryId(String salaryId) {
+        this.salaryId = salaryId;
     }
 
-    public String getSalaryMonth() {
-        return salaryMonth;
+    public String getMonth() {
+        return month;
     }
 
-    public void setSalaryMonth(String salaryMonth) {
-        this.salaryMonth = salaryMonth;
+    public void setMonth(String month) {
+        this.month = month;
     }
 
     public String getUserIc() {
@@ -41,11 +48,27 @@ public class Salary {
         this.userIc = userIc;
     }
 
-    public String getSalaryAmount() {
-        return salaryAmount;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setSalaryAmount(String salaryAmount) {
-        this.salaryAmount = salaryAmount;
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getTotalHours() {
+        return totalHours;
+    }
+
+    public void setTotalHours(String totalHours) {
+        this.totalHours = totalHours;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 }

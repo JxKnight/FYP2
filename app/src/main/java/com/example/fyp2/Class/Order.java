@@ -29,6 +29,7 @@ public class Order {
     @Expose
     private String ordersStatus;
 
+
     public Order(String ordersId, String ordersDescription, String buyerId) {
         this.ordersId = ordersId;
         this.ordersDescription = ordersDescription;

@@ -236,14 +236,14 @@ public class fragment_profile extends Fragment {
                 Address.setText(postResponse.getAddress());
                 PostCode.setText(postResponse.getPostCode());
                 Password.setText(postResponse.getPassword());
-                String state[] = getResources().getStringArray(R.array.locations);
-                for (int i = 0; i < state.length; i++) {
-                    if (state[i] == postResponse.getState()) {
-                        State.setSelection(i);
-                    } else if (null == postResponse.getState()) {
-
-                    }
-                }
+//                String[] state =getResources().getStringArray(R.array.locations);
+//                for (int i = 0; i < state.length; i++) {
+//                    if (state[i].equals(postResponse.getState())) {
+//                        State.setSelection(i);
+//                    } else if (null == postResponse.getState()) {
+//
+//                    }
+//                }
                 if (null == postResponse.getPicture()) {
 
                 } else {

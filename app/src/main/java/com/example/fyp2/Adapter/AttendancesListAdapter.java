@@ -5,26 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.fyp2.Class.Buyer;
-import com.example.fyp2.Class.Salary;
+import com.example.fyp2.Class.Attendance;
 import com.example.fyp2.R;
 
 import java.util.ArrayList;
 
-public class SalaryListAdapter extends ArrayAdapter<Salary> {
+public class AttendancesListAdapter extends ArrayAdapter<Attendance> {
 
-    private static final String TAG = "BuyerListAdapter";
-
+    private static final String TAG = "AdminRoleAdapter";
     private Context mContext;
     int mResource;
 
-    public SalaryListAdapter(Context context, int resource, ArrayList<Salary> objects) {
+    public AttendancesListAdapter(Context context, int resource, ArrayList<Attendance> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
@@ -34,22 +31,18 @@ public class SalaryListAdapter extends ArrayAdapter<Salary> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         // String productID = getItem(position).getProductId();
-        String userIc = getItem(position).getUserIc();
-        String salaryAmount = getItem(position).getAmount();
-        String salaryMonth = getItem(position).getMonth();
+        String userName = getItem(position).getUserName();
+        String userTime = getItem(position).getTime();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
-
-        TextView ic = convertView.findViewById(R.id.Salary_list_View_Ic);
-        TextView month = convertView.findViewById(R.id.Salary_list_View_Month);
-        TextView amount = convertView.findViewById(R.id.Salary_list_View_Amount);
-
+        TextView name = convertView.findViewById(R.id.fragment_attendance_admin_check_name);
+        TextView time = convertView.findViewById(R.id.fragment_attendance_admin_check_time);
 
         //productsID.append(productID);
-        ic.setText(userIc);
-        month.setText(salaryMonth);
-        amount.setText(salaryAmount);
+        name.setText(userName);
+        time.setText(userTime);
+
 
         return convertView;
     }

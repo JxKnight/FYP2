@@ -67,19 +67,26 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
         SharedPreferences sharedPreferences = getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
         userIc = sharedPreferences.getString("USERIC", "");
         firstEntry = sharedPreferences.getString("FIRSTENTRY", "");
         role = sharedPreferences.getString("ROLE", "");
+
+        if (firstEntry.equals("true")) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
+        }
+
         User user = new User(userIc);
         ViewProfile(user);
         saveData(role);
         t = getSupportFragmentManager().beginTransaction();
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_open, R.string.nav_close);
         navigationView.bringToFront(); // light up effect
@@ -87,10 +94,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (firstEntry.equals("true")) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
-        }
 
         View v = navigationView.getHeaderView(0);
         name = v.findViewById(R.id.username_header);
@@ -100,7 +103,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_profile()).commit();
         });
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
+
         menu = navigationView.getMenu();
         navWarehouse = menu.findItem(R.id.nav_warehouse);
         navOrders = menu.findItem(R.id.nav_orders);

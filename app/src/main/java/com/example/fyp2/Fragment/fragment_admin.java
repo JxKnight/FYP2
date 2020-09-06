@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,11 +22,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.fyp2.Adapter.AdminRoleAdapter;
+import com.example.fyp2.Adapter.AdminSalaryAdapter;
 import com.example.fyp2.Adapter.AdminUserAdapter;
 import com.example.fyp2.Adapter.BuyerListAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
+import com.example.fyp2.Class.Attendance;
 import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.Role;
+import com.example.fyp2.Class.Salary;
 import com.example.fyp2.Class.User;
 import com.example.fyp2.R;
 
@@ -40,6 +46,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class fragment_admin extends Fragment {
     View v;
     ArrayList<Role> rolesList = new ArrayList<>();
+    ArrayList<Attendance> MonthlyAttendancesList = new ArrayList<>();
     ArrayList<User> usersList = new ArrayList<>();
     ListView lvRoles, lvUsers;
     String userIc, role;
@@ -56,7 +63,6 @@ public class fragment_admin extends Fragment {
         Toast.makeText(getActivity(), "Welcome Admin", Toast.LENGTH_LONG).show();
         Button adminRole = v.findViewById(R.id.admin_roles);
         Button adminUsers = v.findViewById(R.id.admin_users);
-        Button adminSalaryLists = v.findViewById(R.id.admin_salary);
         adminRole.setOnClickListener(q -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             View view = getLayoutInflater().inflate(R.layout.dialog_admin_roles, null);
@@ -124,17 +130,78 @@ public class fragment_admin extends Fragment {
             builder.setView(view);
             AlertDialog dialog = builder.create();
             dialog.show();
+            lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    AlertDialog.Builder builderr = new AlertDialog.Builder(getActivity());
+                    View vieww = getLayoutInflater().inflate(R.layout.dialog_admin_salary, null);
+
+                    Spinner selectMonthSpinner = vieww.findViewById(R.id.admin_salary_month_spinner);
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.month, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    selectMonthSpinner.setAdapter(adapter);
+
+
+                    ImageView searchMonth = vieww.findViewById(R.id.admin_salary_month_search);
+                    TextView totalHours = vieww.findViewById(R.id.admin_salary_month_total_hours);
+                    TextView totalAmount = vieww.findViewById(R.id.admin_salary_month_total_salary);
+                    ListView currentUserSalaryList = vieww.findViewById(R.id.admin_salary_all_salary_list_view);
+                    final AdminSalaryAdapter adapterr = new AdminSalaryAdapter(getActivity(), R.layout.adapter_admin_user_attendance_list, MonthlyAttendancesList);
+                    adapterr.notifyDataSetChanged();
+                    getUsers(getContext());
+                    builderr.setView(vieww);
+                    AlertDialog dialog = builderr.create();
+                    dialog.show();
+
+                    searchMonth.setOnClickListener(e -> {
+                        MonthlyAttendancesList.clear();
+                        currentUserSalaryList.setAdapter(null);
+                        Call<Salary> call = RetrofitClient.getInstance().getApi().monthlySalary(selectMonthSpinner.getSelectedItem().toString(), usersList.get(position).getUserIc());
+                        call.enqueue(new Callback<Salary>() {
+                            @Override
+                            public void onResponse(Call<Salary> call, Response<Salary> response) {
+                                if (!response.isSuccessful()) {
+                                    Toast.makeText(getContext(), "No Record Found", Toast.LENGTH_LONG).show();
+                                    totalHours.setText("0");
+                                    totalAmount.setText("0");
+                                } else {
+                                    totalHours.setText(response.body().getTotalHours());
+                                    totalAmount.setText(response.body().getAmount());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Salary> call, Throwable t) {
+                                Toast.makeText(getContext(), "Fail to connect to server", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        Call<List<Attendance>> call1 = RetrofitClient.getInstance().getApi().MonthlyAttendance(selectMonthSpinner.getSelectedItem().toString(), usersList.get(position).getUserIc());
+                        call1.enqueue(new Callback<List<Attendance>>() {
+                            @Override
+                            public void onResponse(Call<List<Attendance>> call, Response<List<Attendance>> response) {
+                                if (!response.isSuccessful()) {
+                                    Toast.makeText(getContext(), "No Record Found", Toast.LENGTH_LONG).show();
+                                } else {
+                                    List<Attendance> attendances = response.body();
+                                    for (Attendance current : attendances) {
+                                        MonthlyAttendancesList.add(current);
+                                    }
+
+                                    currentUserSalaryList.setAdapter(adapterr);
+                                    //Toast.makeText(context,buyerList.get(0).getBuyerId(),Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<Attendance>> call, Throwable t) {
+                                Toast.makeText(getContext(), "Fail to connect to server", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    });
+                }
+            });
         });
 
-        adminSalaryLists.setOnClickListener(e -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            View view = getLayoutInflater().inflate(R.layout.dialog_admin_users, null);
-            lvUsers = view.findViewById(R.id.fragment_admin_users_list_view);
-            getUsers(getContext());
-            builder.setView(view);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        });
         return v;
     }
 
@@ -210,5 +277,9 @@ public class fragment_admin extends Fragment {
                 Toast.makeText(context, "Fail To Connect To Server", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void searchMonthSalary(Context context) {
+
     }
 }

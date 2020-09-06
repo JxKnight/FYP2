@@ -6,6 +6,7 @@ import com.example.fyp2.Class.OTP;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.Product;
 import com.example.fyp2.Class.Role;
+import com.example.fyp2.Class.Salary;
 import com.example.fyp2.Class.Task;
 import com.example.fyp2.Class.User;
 import com.example.fyp2.Class.Warehouse;
@@ -17,7 +18,9 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface Api {
 
@@ -71,8 +74,6 @@ public interface Api {
     @POST("/createProduct")
     Call<Product> createProduct(@Body Product product);
 
-    @GET("/orders")
-    Call<List<Order>> findAllOrder();
 
     @POST("/createOrder")
     Call<Order> createOrder(@Body Order order);
@@ -82,6 +83,13 @@ public interface Api {
 
     @POST("/buyerHistoryList")
     Call<List<Order>> findAllBuyerOrderHistoryList(@Body Order order);
+
+    //order
+    @GET("/orders")
+    Call<List<Order>> findAllOrder();
+
+    @GET("/ordersByStatus")
+    Call<List<Order>> ordersByStatus(@Query("ordersStatus") String text);
 
     //warehouse
     @GET("/warehouse")
@@ -111,7 +119,17 @@ public interface Api {
     @POST("/requestAttendance")
     Call<Void> requestAttendance(@Body Attendance attendance);
 
+    @GET("/getCurrentDayAttendance")
+    Call<List<Attendance>> currentDayAttendance(@Query("day") String text);
+
+    @GET("/MonthlyAttendance")
+    Call<List<Attendance>> MonthlyAttendance(@Query("month") String month, @Query("userIc") String userIc);
+
     //OTP
     @POST("/createAttendance")
     Call<Void> createAttendance(@Body OTP otp);
+
+    //Salary
+    @GET("/monthlySalary")
+    Call<Salary> monthlySalary(@Query("month") String month, @Query("userIc") String userIc);
 }

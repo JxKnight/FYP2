@@ -46,14 +46,15 @@ public class MainActivity extends AppCompatActivity {
         //rmbMe = (CheckBox)findViewById(R.id.checkBox);
 
         login.setOnClickListener(e -> {
-            User user = new User("0123456", "951219015471");
+            User user = new User("123456", "951219025471");
+
+
             //User user = new User(password.getText().toString(), useric.getText().toString());
-            login(user, this);
-            //Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+//            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
 //            intent.putExtra("userIc", user.getUserIc());
 //            intent.putExtra("userFirstName", user.getFirstName());
-            //intent.putExtra("userFirstName", "test");
-            // startActivity(intent);
+//             startActivity(intent);
+            login(user, this);
         });
         register.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);

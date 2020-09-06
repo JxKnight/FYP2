@@ -40,8 +40,6 @@ public class fragment_orders extends Fragment {
     View v;
     Spinner State;
     FloatingActionButton floatfilterbtn;
-    ArrayList<Order> orderNewList = new ArrayList<>();
-    ArrayList<Order> orderCompletedList = new ArrayList<>();
     ArrayList<Order> orderList = new ArrayList<>();
     ListView listView;
     String orderDetailsBuyerName, userIc, orderPermission, role;
@@ -99,12 +97,12 @@ public class fragment_orders extends Fragment {
                 TextView orderProductQuantity = (TextView) mView.findViewById(R.id.order_list_productQuantity);
 
                 //Toast.makeText(getActivity(),orderList.get(i).getOrdersId(),Toast.LENGTH_LONG).show();
-                orderID.setText(orderNewList.get(i).getOrdersId());
-                orderDescription.setText(orderNewList.get(i).getOrdersDescription());
-                getBuyerName(orderNewList.get(i).getBuyerId(), getContext());
+                orderID.setText(orderList.get(i).getOrdersId());
+                orderDescription.setText(orderList.get(i).getOrdersDescription());
+                getBuyerName(orderList.get(i).getBuyerId(), getContext());
 
-                String[] productList = orderNewList.get(i).getProductsId().split("/");
-                String[] quantityList = orderNewList.get(i).getProductsQuantity().split("/");
+                String[] productList = orderList.get(i).getProductsId().split("/");
+                String[] quantityList = orderList.get(i).getProductsQuantity().split("/");
                 for (String a : productList) {
                     orderProductList.append(a + "\n");
                 }
@@ -120,28 +118,17 @@ public class fragment_orders extends Fragment {
     }
 
     public void getOrderList(String Order, Context context) {
-        Call<List<Order>> call = RetrofitClient.getInstance().getApi().findAllOrder();
+        Call<List<Order>> call = RetrofitClient.getInstance().getApi().ordersByStatus(Order);
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                orderNewList.clear();
-                orderCompletedList.clear();
                 orderList.clear();
                 if (!response.isSuccessful()) {
                     //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
                 } else {
                     List<Order> orders = response.body();
                     for (Order currentOrder : orders) {
-                        if (currentOrder.getOrdersStatus().equals("true")) {
-                            orderNewList.add(currentOrder);
-                        } else {
-                            orderCompletedList.add(currentOrder);
-                        }
-                    }
-                    if (Order.equals("true")) {
-                        orderList = orderNewList;
-                    } else {
-                        orderList = orderCompletedList;
+                        orderList.add(currentOrder);
                     }
                     final OrderListAdapter adapter = new OrderListAdapter(getActivity(), R.layout.adapter_order_list, orderList);
                     adapter.notifyDataSetChanged();
