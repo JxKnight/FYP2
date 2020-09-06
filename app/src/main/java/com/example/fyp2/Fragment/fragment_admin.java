@@ -62,7 +62,8 @@ public class fragment_admin extends Fragment {
 
         Toast.makeText(getActivity(), "Welcome Admin", Toast.LENGTH_LONG).show();
         Button adminRole = v.findViewById(R.id.admin_roles);
-        Button adminUsers = v.findViewById(R.id.admin_users);
+        Button adminSalaryList = v.findViewById(R.id.admin_salary_list);
+        Button adminUser = v.findViewById(R.id.admin_users);
         adminRole.setOnClickListener(q -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             View view = getLayoutInflater().inflate(R.layout.dialog_admin_roles, null);
@@ -122,7 +123,7 @@ public class fragment_admin extends Fragment {
             });
         });
 
-        adminUsers.setOnClickListener(w -> {
+        adminSalaryList.setOnClickListener(w -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             View view = getLayoutInflater().inflate(R.layout.dialog_admin_users, null);
             lvUsers = view.findViewById(R.id.fragment_admin_users_list_view);
@@ -186,7 +187,6 @@ public class fragment_admin extends Fragment {
                                     for (Attendance current : attendances) {
                                         MonthlyAttendancesList.add(current);
                                     }
-
                                     currentUserSalaryList.setAdapter(adapterr);
                                     //Toast.makeText(context,buyerList.get(0).getBuyerId(),Toast.LENGTH_LONG).show();
                                 }
@@ -279,7 +279,4 @@ public class fragment_admin extends Fragment {
         });
     }
 
-    public void searchMonthSalary(Context context) {
-
-    }
 }

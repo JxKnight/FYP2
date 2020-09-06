@@ -19,9 +19,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.addisonelliott.segmentedbutton.SegmentedButtonGroup;
+import com.example.fyp2.Adapter.CalculateOrdersListAdapter;
 import com.example.fyp2.Adapter.OrderListAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Buyer;
+import com.example.fyp2.Class.CalculateOrders;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,9 +41,10 @@ import static android.content.Context.MODE_PRIVATE;
 public class fragment_orders extends Fragment {
     View v;
     Spinner State;
-    FloatingActionButton floatfilterbtn;
+    FloatingActionButton floatFilterBtn, floatCalculateBtn;
     ArrayList<Order> orderList = new ArrayList<>();
-    ListView listView;
+    ArrayList<CalculateOrders> CalculateOrders = new ArrayList<>();
+    ListView listView, COListView;
     String orderDetailsBuyerName, userIc, orderPermission, role;
     TextView buyerName;
 
@@ -71,8 +74,8 @@ public class fragment_orders extends Fragment {
             }
         });
 
-        floatfilterbtn = (FloatingActionButton) v.findViewById(R.id.filter_orders);
-        floatfilterbtn.setOnClickListener(e -> {
+        floatFilterBtn = (FloatingActionButton) v.findViewById(R.id.filter_orders);
+        floatFilterBtn.setOnClickListener(e -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
             View mView = getLayoutInflater().inflate(R.layout.dialog_orders_filter, null);
             State = (Spinner) mView.findViewById(R.id.location_spinner);
@@ -84,7 +87,16 @@ public class fragment_orders extends Fragment {
             dialog.show();
         });
 
-
+        floatCalculateBtn = (FloatingActionButton) v.findViewById(R.id.calculate_orders);
+        floatCalculateBtn.setOnClickListener(p -> {
+            AlertDialog.Builder mBuilderr = new AlertDialog.Builder(getActivity());
+            View mVieww = getLayoutInflater().inflate(R.layout.dialog_order_calculate_order, null);
+            COListView = mVieww.findViewById(R.id.fragment_calculate_orders);
+            getCalculateOrders(getContext());
+            mBuilderr.setView(mVieww);
+            AlertDialog dialogg = mBuilderr.create();
+            dialogg.show();
+        });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -157,6 +169,32 @@ public class fragment_orders extends Fragment {
 
             @Override
             public void onFailure(Call<Buyer> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void getCalculateOrders(Context context) {
+        CalculateOrders.clear();
+        Call<List<CalculateOrders>> call = RetrofitClient.getInstance().getApi().calculationOrders();
+        call.enqueue(new Callback<List<CalculateOrders>>() {
+            @Override
+            public void onResponse(Call<List<CalculateOrders>> call, Response<List<CalculateOrders>> response) {
+                if (!response.isSuccessful()) {
+                    //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    List<CalculateOrders> orders = response.body();
+                    for (CalculateOrders currentOrder : orders) {
+                        CalculateOrders.add(currentOrder);
+                    }
+                    final CalculateOrdersListAdapter adapter = new CalculateOrdersListAdapter(getActivity(), R.layout.adapter_calculate_orders, CalculateOrders);
+                    adapter.notifyDataSetChanged();
+                    COListView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CalculateOrders>> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });
