@@ -2,6 +2,7 @@ package com.example.fyp2.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,6 +86,7 @@ public class fragment_admin extends Fragment {
             builder.setView(view);
             AlertDialog dialog = builder.create();
             dialog.show();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             submit.setOnClickListener(w -> {
                 String wh, od, ctm, t, rp;
                 if (warehouse.isChecked()) {

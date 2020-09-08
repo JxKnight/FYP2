@@ -61,19 +61,19 @@ public class AdminRoleAdapter extends ArrayAdapter<Role> {
         roleDesc.setText(desc);
         roleRate.append("RM" + rate + "/hour");
         if (warehouse.equals("1")) {
-            roleWarehouse.setTextColor(Color.parseColor("#FF0000"));
+            roleWarehouse.setTextColor(Color.parseColor("#00e329"));
         }
         if (order.equals("1")) {
-            roleOrder.setTextColor(Color.parseColor("#FF0000"));
+            roleOrder.setTextColor(Color.parseColor("#00e329"));
         }
         if (customer.equals("1")) {
-            roleCustomer.setTextColor(Color.parseColor("#FF0000"));
+            roleCustomer.setTextColor(Color.parseColor("#00e329"));
         }
         if (reports.equals("1")) {
-            roleReports.setTextColor(Color.parseColor("#FF0000"));
+            roleReports.setTextColor(Color.parseColor("#00e329"));
         }
         if (tasks.equals("1")) {
-            roleTasks.setTextColor(Color.parseColor("#FF0000"));
+            roleTasks.setTextColor(Color.parseColor("#00e329"));
         }
 
         return convertView;

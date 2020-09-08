@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
-        android:backgroundTint="#17eb49"
+        android:backgroundTint="#5796fa"
         android:layout_margin="5dp"
         android:onClick="handleEditProfile"
         android:src="@drawable/icon_add" />
@@ -17,7 +17,7 @@
         android:id="@+id/fragment_buyers_filter_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#c72bff"
+        android:backgroundTint="#5796fa"
         android:layout_gravity="right|top"
         android:layout_margin="5dp"
         android:onClick="handleEditProfile"

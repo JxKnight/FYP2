@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fyp2.BackEndServer.RetrofitClient;
@@ -56,6 +57,7 @@ public class fragment_profile extends Fragment {
     CircleImageView ProfilePic;
     ImageView resetPassword, selectPic;
     String userIc, firstEntry;
+    TextView ResetPasswordTxt;
     private FloatingActionButton btnEditProfileEnable, getBtnEditProfileCancel;
     static final int IMAGE_PICK_CODE = 1000;
     static final int PERMISSION_CODE = 1001;
@@ -89,6 +91,7 @@ public class fragment_profile extends Fragment {
         getBtnEditProfileCancel = (FloatingActionButton) v.findViewById(R.id.BtnEditProfileCancel);
         resetPassword = (ImageView) v.findViewById(R.id.ResetPassword);
         selectPic = (ImageView) v.findViewById(R.id.SelectProfilePic);
+        ResetPasswordTxt = (TextView) v.findViewById(R.id.ResetPasswordTxt);
         FName.setEnabled(false);
         LName.setEnabled(false);
         Ic.setEnabled(false);
@@ -125,6 +128,7 @@ public class fragment_profile extends Fragment {
                 btnEditProfileEnable.setVisibility(View.GONE);
                 getBtnEditProfileCancel.setVisibility(View.VISIBLE);
                 resetPassword.setVisibility(View.GONE);
+                ResetPasswordTxt.setVisibility(View.GONE);
                 submit.setVisibility(View.VISIBLE);
             });
             getBtnEditProfileCancel.setOnClickListener(f -> {
@@ -137,6 +141,7 @@ public class fragment_profile extends Fragment {
                 getBtnEditProfileCancel.setVisibility(View.GONE);
                 submit.setVisibility(View.GONE);
                 resetPassword.setVisibility(View.VISIBLE);
+                ResetPasswordTxt.setVisibility(View.VISIBLE);
             });
         }
         submit.setOnClickListener(e -> {
@@ -160,6 +165,7 @@ public class fragment_profile extends Fragment {
             PostCode.setEnabled(false);
             State.setEnabled(false);
             resetPassword.setVisibility(View.VISIBLE);
+            ResetPasswordTxt.setVisibility(View.VISIBLE);
             submit.setVisibility(View.GONE);
             btnEditProfileEnable.setVisibility(View.VISIBLE);
             getBtnEditProfileCancel.setVisibility(View.GONE);

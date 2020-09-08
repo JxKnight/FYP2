@@ -11,6 +11,7 @@
         android:layout_gravity="right|top"
         android:layout_margin="5dp"
         android:onClick="handleEditProfile"
+        android:backgroundTint="#5796fa"
         android:src="@drawable/icon_filter" />
 
 

@@ -20,10 +20,10 @@
         android:id="@+id/HeaderProfilePic"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="80dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/icon_profile"
         app:civ_border_color="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,10 +31,11 @@
         android:id="@+id/username_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="73dp"
         android:hint="Username"
         android:text=""
+        android:textColor="#FFFFFF"
         android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/HeaderProfilePic" />
 
@@ -42,10 +43,11 @@
         android:id="@+id/role_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="110dp"
         android:hint="Role"
         android:text=""
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username_header" />
 </androidx.constraintlayout.widget.ConstraintLayout>

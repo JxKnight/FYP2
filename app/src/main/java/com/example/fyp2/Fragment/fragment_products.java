@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -240,7 +242,7 @@ public class fragment_products extends Fragment {
                                 productQuantity = productQuantity + product.getOrderQuantity() + "/";
                             }
                             //Toast.makeText(getActivity(),productId,Toast.LENGTH_LONG).show();
-                            Order order = new Order(orderDescription.getText().toString(), date, buyerList.get(position).getBuyerId(), productId, productQuantity, userIc, "true");
+                            Order order = new Order(orderDescription.getText().toString(), buyerList.get(position).getBuyerId(), productId, productQuantity, userIc, "true");
                             createOrder(order, getContext());
                             diaalog.dismiss();
                         }
@@ -258,7 +260,7 @@ public class fragment_products extends Fragment {
             AlertDialog.Builder mBuilderr = new AlertDialog.Builder(getActivity());
             View mVieww = getLayoutInflater().inflate(R.layout.dialog_product_add_product, null);
 
-            Spinner AddProductCategorySpinner = mVieww.findViewById(R.id.Product_Add_Category);
+
             EditText AddProductName = mVieww.findViewById(R.id.Product_Add_Name);
             EditText AddProductDescription = mVieww.findViewById(R.id.Product_Add_Description);
             EditText AddProductPrice = mVieww.findViewById(R.id.Product_Add_Price);
@@ -267,6 +269,12 @@ public class fragment_products extends Fragment {
             Button AddProductBtn = mVieww.findViewById(R.id.Product_Add_Product_Next_Btn);
             productAddImage = mVieww.findViewById(R.id.Product_Add_Picture);
 
+            Spinner AddProductPackagingSpinner = mVieww.findViewById(R.id.Product_Add_Packaging);
+            ArrayAdapter<CharSequence> aaadapter = ArrayAdapter.createFromResource(getActivity(), R.array.numbers, android.R.layout.simple_spinner_item);
+            aaadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            AddProductPackagingSpinner.setAdapter(aaadapter);
+
+            Spinner AddProductCategorySpinner = mVieww.findViewById(R.id.Product_Add_Category);
             ArrayAdapter<CharSequence> aadapter = ArrayAdapter.createFromResource(getActivity(), R.array.category, android.R.layout.simple_spinner_item);
             aadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             AddProductCategorySpinner.setAdapter(aadapter);
@@ -310,7 +318,7 @@ public class fragment_products extends Fragment {
                     taskTxt = "";
                     String seq = "";
                     String roles = "";
-                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), "");
+                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductPackagingSpinner.getSelectedItem().toString(), AddProductCategorySpinner.getSelectedItem().toString(), "");
                     addProduct(product, getContext());
                     for (EditText var : editText) {
                         taskTxt = taskTxt + var.getText().toString() + "/";
