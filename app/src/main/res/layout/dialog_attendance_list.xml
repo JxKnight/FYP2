@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#2b2b2b"
-    android:orientation="vertical">
+    app:cardBackgroundColor="#2b2b2b"
+    app:cardCornerRadius="14dp">
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
@@ -32,34 +32,40 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/fragment_attendance_morning"
-                android:textSize="16sp"
-                android:text="Morning"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/fragment_attendance_evening"
-                android:textSize="16sp"
-                android:text="Evening"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/fragment_attendance_morning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Morning"
+                    android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/fragment_attendance_ot"
-                android:textSize="16sp"
-                android:text="OT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/fragment_attendance_evening"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Evening"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/fragment_attendance_ot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OT"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ListView
@@ -70,4 +76,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

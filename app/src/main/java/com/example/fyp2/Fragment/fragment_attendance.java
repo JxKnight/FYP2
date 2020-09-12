@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.SparseArray;
@@ -168,6 +169,7 @@ public class fragment_attendance extends Fragment {
             builder.setView(view);
             AlertDialog dialog = builder.create();
             dialog.show();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         });
         return v;
     }

@@ -103,8 +103,14 @@ public interface Api {
     Call<List<Warehouse>> findAllWareHouseByFilter(@Body Warehouse warehouse);
 
     //task
+    @GET("/task")
+    Call<List<Task>> findAllTask();
+
     @POST("/createTask")
     Call<Void> addTask(@Body Task task);
+
+    @POST("/updateRole")
+    Call<Task> updateRole(@Body Task task);
 
     //Role
     @GET("/roles")

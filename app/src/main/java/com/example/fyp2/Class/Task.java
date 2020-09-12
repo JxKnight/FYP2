@@ -35,6 +35,11 @@ public class Task {
         this.productsId = productsId;
     }
 
+    public Task(String taskId, String userRole) {
+        this.taskId = taskId;
+        this.userRole = userRole;
+    }
+
     public String getTaskId() {
         return taskId;
     }

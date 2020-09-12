@@ -36,6 +36,7 @@ import com.example.fyp2.Fragment.fragment_home;
 import com.example.fyp2.Fragment.fragment_orders;
 import com.example.fyp2.Fragment.fragment_products;
 import com.example.fyp2.Fragment.fragment_profile;
+import com.example.fyp2.Fragment.fragment_tasks;
 import com.example.fyp2.Fragment.fragment_warehouse;
 import com.google.android.material.navigation.NavigationView;
 
@@ -143,6 +144,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_home()).commit();
+                break;
+            case R.id.nav_tasks:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_tasks()).commit();
                 break;
             case R.id.nav_admin:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_admin()).commit();

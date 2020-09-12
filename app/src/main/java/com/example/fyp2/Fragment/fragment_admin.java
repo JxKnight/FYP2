@@ -64,7 +64,6 @@ public class fragment_admin extends Fragment {
         Toast.makeText(getActivity(), "Welcome Admin", Toast.LENGTH_LONG).show();
         Button adminRole = v.findViewById(R.id.admin_roles);
         Button adminSalaryList = v.findViewById(R.id.admin_salary_list);
-        Button adminUser = v.findViewById(R.id.admin_users);
         adminRole.setOnClickListener(q -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             View view = getLayoutInflater().inflate(R.layout.dialog_admin_roles, null);

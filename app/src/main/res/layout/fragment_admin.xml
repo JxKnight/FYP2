@@ -41,7 +41,7 @@
 
 
             <Button
-                android:id="@+id/admin_users"
+                android:id="@+id/admin_salary_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="150dp"
@@ -52,32 +52,6 @@
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/admin_roles" />
-
-            <Button
-                android:id="@+id/admin_salary_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="150dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="150dp"
-                android:text="Salary List"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/admin_users" />
-
-            <Button
-                android:id="@+id/admin_calculate_orders"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="150dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="150dp"
-                android:text="Calculate Orders"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/admin_salary_list" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
