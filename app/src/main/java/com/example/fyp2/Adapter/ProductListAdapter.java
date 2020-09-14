@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fyp2.Class.Product;
 import com.example.fyp2.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -71,10 +72,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productArrayList.get(position);
-//        byte[] decodeString = Base64.decode(product.getProductsImage().getBytes(), Base64.DEFAULT);
-//        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
         holder.title.setText(product.getProductsId());
-        //holder.gridImage.setImageBitmap(decodedByte);
+        String imageURL = "http://192.168.0.146:9999/image/Products?imgPath=" + product.getProductsImage();
+        Picasso.get().load(imageURL).into(holder.gridImage);
         holder.price.setText("RM " + product.getProductsPrice());
     }
 

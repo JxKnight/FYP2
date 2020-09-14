@@ -101,6 +101,7 @@ public class fragment_profile extends Fragment {
         btnEditProfileEnable.setVisibility(View.VISIBLE);
         getBtnEditProfileCancel.setVisibility(View.GONE);
         submit.setVisibility(View.GONE);
+        selectPic.setVisibility(View.GONE);
         currentUser = new User(userIc);
         ViewProfile(currentUser, getContext());
         if (firstEntry.equals("true")) {
@@ -114,6 +115,7 @@ public class fragment_profile extends Fragment {
             btnEditProfileEnable.setVisibility(View.GONE);
             getBtnEditProfileCancel.setVisibility(View.GONE);
             submit.setVisibility(View.VISIBLE);
+            selectPic.setVisibility(View.VISIBLE);
         } else {
             btnEditProfileEnable.setOnClickListener(e -> {
                 Contact.setEnabled(true);
@@ -126,6 +128,7 @@ public class fragment_profile extends Fragment {
                 resetPassword.setVisibility(View.GONE);
                 ResetPasswordTxt.setVisibility(View.GONE);
                 submit.setVisibility(View.VISIBLE);
+                selectPic.setVisibility(View.VISIBLE);
             });
             getBtnEditProfileCancel.setOnClickListener(f -> {
                 Contact.setEnabled(false);
@@ -138,6 +141,7 @@ public class fragment_profile extends Fragment {
                 submit.setVisibility(View.GONE);
                 resetPassword.setVisibility(View.VISIBLE);
                 ResetPasswordTxt.setVisibility(View.VISIBLE);
+                selectPic.setVisibility(View.GONE);
             });
         }
         submit.setOnClickListener(e -> {
@@ -159,6 +163,7 @@ public class fragment_profile extends Fragment {
             resetPassword.setVisibility(View.VISIBLE);
             ResetPasswordTxt.setVisibility(View.VISIBLE);
             submit.setVisibility(View.GONE);
+            selectPic.setVisibility(View.VISIBLE);
             btnEditProfileEnable.setVisibility(View.VISIBLE);
             getBtnEditProfileCancel.setVisibility(View.GONE);
             getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_profile.this.getId(), new fragment_profile()).commit();

@@ -73,7 +73,7 @@ public interface Api {
     Call<List<Product>> findAllProduct();
 
     @POST("/createProduct")
-    Call<Product> createProduct(@Body Product product);
+    Call<Void> createProduct(@Body Product product);
 
 
     @POST("/createOrder")

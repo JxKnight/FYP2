@@ -19,6 +19,9 @@ public class Warehouse {
     @SerializedName("userUpdate")
     @Expose
     private String userUpdate;
+    @SerializedName("productsImage")
+    @Expose
+    private String productsImage;
 
     public Warehouse(String productsCategory) {
         this.productsCategory = productsCategory;
@@ -69,5 +72,13 @@ public class Warehouse {
 
     public void setUserUpdate(String userUpdate) {
         this.userUpdate = userUpdate;
+    }
+
+    public String getProductsImage() {
+        return productsImage;
+    }
+
+    public void setProductsImage(String productsImage) {
+        this.productsImage = productsImage;
     }
 }

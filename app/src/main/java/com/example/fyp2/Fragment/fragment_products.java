@@ -95,7 +95,7 @@ public class fragment_products extends Fragment {
         v = inflater.inflate(R.layout.fragment_products, container, false);
         gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
         productList = new ArrayList<>();
-        getProductList();
+        getProductList(getContext());
 
         recyclerView = v.findViewById(R.id.productsList);
 
@@ -131,7 +131,7 @@ public class fragment_products extends Fragment {
             dialog.show();
             productFilterBtn.setOnClickListener(o -> {
                 if (CategoryFilter.getSelectedItem().toString().equals("Select Category")) {
-                    getProductList();
+                    getProductList(getContext());
                     dialog.dismiss();
                 } else {
                     Product product = new Product(CategoryFilter.getSelectedItem().toString());
@@ -318,10 +318,10 @@ public class fragment_products extends Fragment {
                     taskTxt = "";
                     String seq = "";
                     String roles = "";
-//                    productAddImage.buildDrawingCache();
-//                    Bitmap bmap = productAddImage.getDrawingCache();
-//                    String x = getEncodeImage(bmap);
-                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductPackagingSpinner.getSelectedItem().toString(), AddProductCategorySpinner.getSelectedItem().toString(), "");
+                    productAddImage.buildDrawingCache();
+                    Bitmap bmap = productAddImage.getDrawingCache();
+                    String x = getEncodeImage(bmap);
+                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductPackagingSpinner.getSelectedItem().toString(), AddProductCategorySpinner.getSelectedItem().toString(), x);
                     addProduct(product, getContext());
                     for (EditText var : editText) {
                         taskTxt = taskTxt + var.getText().toString() + "/";
@@ -329,12 +329,11 @@ public class fragment_products extends Fragment {
                         seq = seq + i + "/";
                         roles = roles + i + "/";
                         i++;
-                        //Toast.makeText(getActivity(), var.getText().toString(), Toast.LENGTH_SHORT).show();
                     }
-                    //Toast.makeText(getActivity(), taskTxt, Toast.LENGTH_SHORT).show();
                     Task task = new Task(taskTxt, date, "", seq, roles, AddProductId.getText().toString());
                     storeTask(task, getContext());
-                    // Toast.makeText(getActivity(), seq, Toast.LENGTH_LONG).show();
+                    diaalog.dismiss();
+                    diialog.dismiss();
                 });
             });
 
@@ -360,7 +359,7 @@ public class fragment_products extends Fragment {
         return v;
     }
 
-    public void getProductList() {
+    public void getProductList(Context context) {
         Call<List<Product>> call = RetrofitClient.getInstance().getApi().findAllProduct();
         call.enqueue(new Callback<List<Product>>() {
             @Override
@@ -380,26 +379,27 @@ public class fragment_products extends Fragment {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                //Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     public void addProduct(Product product, Context context) {
-        Call<Product> call = RetrofitClient.getInstance().getApi().createProduct(product);
-        call.enqueue(new Callback<Product>() {
+        Call<Void> call = RetrofitClient.getInstance().getApi().createProduct(product);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(context, "Add Product Fail", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(context, "Add Product Successfully", Toast.LENGTH_LONG).show();
                     productList.clear();
-                    getProductList();
+                    getProductList(getContext());
                 }
             }
+
             @Override
-            public void onFailure(Call<Product> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Fail To Connect To Server", Toast.LENGTH_LONG).show();
             }
         });
@@ -555,12 +555,4 @@ public class fragment_products extends Fragment {
             }
         });
     }
-
-//    private Runnable mAddTaskRunnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            Task task = new Task(tasktxt, date, "", Integer.toString(i), "", AddProductId.getText().toString());
-//            storeTask(task, getContext());
-//        }
-//    };
 }

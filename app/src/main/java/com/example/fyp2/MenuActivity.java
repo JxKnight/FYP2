@@ -39,6 +39,7 @@ import com.example.fyp2.Fragment.fragment_profile;
 import com.example.fyp2.Fragment.fragment_tasks;
 import com.example.fyp2.Fragment.fragment_warehouse;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -237,9 +238,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 if (null == postResponse.getPicture()) {
 
                 } else {
-                    byte[] decodeString = Base64.decode(postResponse.getPicture().getBytes(), Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
-                    profile.setImageBitmap(decodedByte);
+                    String imageURL = "http://192.168.0.146:9999/image/Users?imgPath=" + postResponse.getPicture();
+                    Picasso.get().load(imageURL).into(profile);
                 }
             }
 
