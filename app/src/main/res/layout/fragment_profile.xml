@@ -46,12 +46,10 @@
                 android:orientation="horizontal"
                 android:gravity="center_horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/ProfilePic"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:civ_border_width="5dp"
-                    app:civ_border_color="#000000" />
+                    android:layout_height="100dp" />
 
                 <ImageView
                     android:id="@+id/SelectProfilePic"
@@ -202,12 +200,14 @@
 
                     <EditText
                         android:id="@+id/Ic"
+                        android:inputType="number"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:textColor="#FFFFFF" />
 
                     <EditText
                         android:id="@+id/Contact"
+                        android:inputType="number"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:textColor="#FFFFFF" />
@@ -220,6 +220,8 @@
 
                     <EditText
                         android:id="@+id/PostCode"
+                        android:inputType="number"
+                        android:maxLength="5"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:textColor="#FFFFFF" />
@@ -242,6 +244,7 @@
                         android:id="@+id/CPassword"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:inputType="textPassword"
                         android:textColor="#FFFFFF" />
 
                     <Button

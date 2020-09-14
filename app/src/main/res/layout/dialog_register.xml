@@ -53,7 +53,8 @@
             <EditText
                 android:id="@+id/register_ic"
                 android:layout_width="12dp"
-                android:hint="XXXXXX-XX-XXXX"
+                android:hint="XXXXXXXXXXXX"
+                android:inputType="number"
                 android:layout_height="match_parent"
                 android:layout_weight="70" />
         </LinearLayout>
@@ -81,6 +82,7 @@
                 android:id="@+id/register_password"
                 android:hint="No more than 12"
                 android:maxLength="12"
+                android:inputType="textPassword"
                 android:textColor="#FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -108,8 +110,9 @@
             <EditText
                 android:id="@+id/register_contact"
                 android:hint="No -"
-                android:maxLength="10"
+                android:inputType="number"
                 android:textColor="#FFFFFF"
+                android:maxLength="11"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

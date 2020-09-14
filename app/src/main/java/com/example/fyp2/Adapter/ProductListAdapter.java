@@ -71,10 +71,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productArrayList.get(position);
-//        byte[] decodeString = Base64.decode(images.get(position).getBytes(), Base64.DEFAULT);
+//        byte[] decodeString = Base64.decode(product.getProductsImage().getBytes(), Base64.DEFAULT);
 //        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
         holder.title.setText(product.getProductsId());
-        // holder.gridImage.setImageBitmap(decodedByte);
+        //holder.gridImage.setImageBitmap(decodedByte);
         holder.price.setText("RM " + product.getProductsPrice());
     }
 

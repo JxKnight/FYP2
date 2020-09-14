@@ -318,6 +318,9 @@ public class fragment_products extends Fragment {
                     taskTxt = "";
                     String seq = "";
                     String roles = "";
+//                    productAddImage.buildDrawingCache();
+//                    Bitmap bmap = productAddImage.getDrawingCache();
+//                    String x = getEncodeImage(bmap);
                     Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductPackagingSpinner.getSelectedItem().toString(), AddProductCategorySpinner.getSelectedItem().toString(), "");
                     addProduct(product, getContext());
                     for (EditText var : editText) {
@@ -394,9 +397,7 @@ public class fragment_products extends Fragment {
                     productList.clear();
                     getProductList();
                 }
-
             }
-
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
                 Toast.makeText(context, "Fail To Connect To Server", Toast.LENGTH_LONG).show();

@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:hint="hh:mm:ss"
-                android:text="08:01:30"
+                android:text=""
                 android:textColor="@android:color/holo_green_light"
                 android:textSize="17sp"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -91,7 +91,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
                 android:hint="hh:mm:ss"
-                android:text="13:01:50"
+                android:text=""
                 android:textColor="@android:color/holo_green_light"
                 android:textSize="17sp"
                 app:layout_constraintStart_toEndOf="@+id/home_attendance_morning_1" />
@@ -104,7 +104,6 @@
             android:layout_height="40dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="20dp"
-            android:tint="@android:color/holo_green_light"
             android:src="@drawable/icon_uncheck"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_current_date" />
@@ -153,7 +152,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView9">
 
             <TextView
-                android:id="@+id/home_attendance_evening_1"
+                android:id="@+id/home_attendance_OT_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -162,7 +161,7 @@
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/home_attendance_evening_2"
+                android:id="@+id/home_attendance_OT_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -195,7 +194,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView8">
 
             <TextView
-                android:id="@+id/home_attendance_OT_1"
+                android:id="@+id/home_attendance_evening_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -204,7 +203,7 @@
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/home_attendance_OT_2"
+                android:id="@+id/home_attendance_evening_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"

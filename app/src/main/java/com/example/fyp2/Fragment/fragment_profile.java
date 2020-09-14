@@ -35,6 +35,7 @@ import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.User;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -49,22 +50,18 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class fragment_profile extends Fragment {
-    Button submit;
-    View v;
-    EditText FName, LName, Ic, Contact, Address, PostCode, Password, CPassword;
-    Spinner State;
-    User currentUser;
-    CircleImageView ProfilePic;
-    ImageView resetPassword, selectPic;
-    String userIc, firstEntry;
-    TextView ResetPasswordTxt;
+    private Button submit;
+    private View v;
+    private EditText FName, LName, Ic, Contact, Address, PostCode, Password, CPassword;
+    private Spinner State;
+    private User currentUser;
+    private CircleImageView ProfilePic;
+    private ImageView resetPassword, selectPic;
+    private String userIc, firstEntry;
+    private TextView ResetPasswordTxt;
     private FloatingActionButton btnEditProfileEnable, getBtnEditProfileCancel;
     static final int IMAGE_PICK_CODE = 1000;
     static final int PERMISSION_CODE = 1001;
-
-    public fragment_profile() {
-
-    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -105,8 +102,7 @@ public class fragment_profile extends Fragment {
         getBtnEditProfileCancel.setVisibility(View.GONE);
         submit.setVisibility(View.GONE);
         currentUser = new User(userIc);
-        ViewProfile(currentUser);
-
+        ViewProfile(currentUser, getContext());
         if (firstEntry.equals("true")) {
             FName.setEnabled(true);
             LName.setEnabled(true);
@@ -145,21 +141,17 @@ public class fragment_profile extends Fragment {
             });
         }
         submit.setOnClickListener(e -> {
-
             ProfilePic.buildDrawingCache();
             Bitmap bmap = ProfilePic.getDrawingCache();
             String x = getEncodeImage(bmap);
-            //Toast.makeText(getActivity(), x, Toast.LENGTH_LONG).show();
             String Roles = null;
             if (State.getSelectedItem().toString().equals("Select Location")) {
                 User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), null, Roles, x, "false");
                 updateProfile(newUser, getContext());
-                //Toast.makeText(getContext(),State.getSelectedItem().toString(),Toast.LENGTH_SHORT).show();
             } else {
                 User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), State.getSelectedItem().toString(), Roles, x, "false");
                 updateProfile(newUser, getContext());
             }
-            ViewProfile(currentUser);
             Contact.setEnabled(false);
             Address.setEnabled(false);
             PostCode.setEnabled(false);
@@ -169,6 +161,7 @@ public class fragment_profile extends Fragment {
             submit.setVisibility(View.GONE);
             btnEditProfileEnable.setVisibility(View.VISIBLE);
             getBtnEditProfileCancel.setVisibility(View.GONE);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_profile.this.getId(), new fragment_profile()).commit();
         });
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -228,7 +221,7 @@ public class fragment_profile extends Fragment {
         }
     }
 
-    public void ViewProfile(User user) {
+    public void ViewProfile(User user, Context context) {
         Call<User> call = RetrofitClient.getInstance().getApi().searchCurrentUser(user);
         call.enqueue(new Callback<User>() {
             @Override
@@ -242,25 +235,12 @@ public class fragment_profile extends Fragment {
                 Address.setText(postResponse.getAddress());
                 PostCode.setText(postResponse.getPostCode());
                 Password.setText(postResponse.getPassword());
-//                String[] state =getResources().getStringArray(R.array.locations);
-//                for (int i = 0; i < state.length; i++) {
-//                    if (state[i].equals(postResponse.getState())) {
-//                        State.setSelection(i);
-//                    } else if (null == postResponse.getState()) {
-//
-//                    }
-//                }
-                if (null == postResponse.getPicture()) {
-
-                } else {
-                    byte[] decodeString = Base64.decode(postResponse.getPicture().getBytes(), Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
-                    ProfilePic.setImageBitmap(decodedByte);
-                }
+                String imageURL = "http://192.168.0.146:9999/image/Users?imgPath=" + postResponse.getPicture();
+                Picasso.get().load(imageURL).into(ProfilePic);
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -276,6 +256,7 @@ public class fragment_profile extends Fragment {
                     Toast.makeText(context, "Update Fail", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_SHORT).show();

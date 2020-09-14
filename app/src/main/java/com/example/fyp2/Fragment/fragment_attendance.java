@@ -59,8 +59,6 @@ public class fragment_attendance extends Fragment {
     private FloatingActionButton adminCheck;
     private View v;
     private String userIc;
-    private Calendar calendar;
-    private SimpleDateFormat simpleDateFormat;
     private ListView attendanceList;
     ArrayList<Attendance> attendancesArrayList;
 

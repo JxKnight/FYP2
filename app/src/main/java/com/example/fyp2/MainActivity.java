@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         //rmbMe = (CheckBox)findViewById(R.id.checkBox);
 
         login.setOnClickListener(e -> {
-            User user = new User("123456", "951219025471");
+            User user = new User("123456", "951219035471");
 
 
             //User user = new User(password.getText().toString(), useric.getText().toString());
