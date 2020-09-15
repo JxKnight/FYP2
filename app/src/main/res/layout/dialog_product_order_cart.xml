@@ -27,7 +27,7 @@
             android:layout_height="265dp"
             android:orientation="horizontal">
 
-            <ListView
+            <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:id="@+id/Product_Order_Cart_ListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

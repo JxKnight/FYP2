@@ -1,8 +1,14 @@
 package com.example.fyp2.Fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.fyp2.Adapter.BuyerListAdapter;
@@ -27,7 +34,9 @@ import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 public class fragment_buyers extends Fragment {
@@ -44,7 +54,10 @@ public class fragment_buyers extends Fragment {
     ArrayList<Order> currentBuyerOrderHistoryList;
     ListView buyerListView;
     String userIc, roles, buyerPermission;
+    static final int IMAGE_PICK_CODE = 1000;
     ListView buyerOrderHistoryLV;
+    static final int PERMISSION_CODE = 1001;
+    ImageView image;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -83,6 +96,8 @@ public class fragment_buyers extends Fragment {
             TextView contact = (TextView) mView.findViewById(R.id.fragment_buyer_add_buyer_contact);
             Spinner location = (Spinner) mView.findViewById(R.id.fragment_buyer_add_buyer_location_spinner);
             TextView address = (TextView) mView.findViewById(R.id.fragment_buyer_add_buyer_address);
+            image = (ImageView) mView.findViewById(R.id.fragment_buyer_List_Buyer_Pic);
+            ImageView selectPic = (ImageView) mView.findViewById(R.id.buyer_add_buyer_camera);
             Button submit = (Button) mView.findViewById(R.id.Buyer_Add_Buyer_Btn);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -92,9 +107,28 @@ public class fragment_buyers extends Fragment {
             dialogAdd.show();
             //b3.getString("userIc")
             submit.setOnClickListener(e -> {
-                Buyer addBuyer = new Buyer(name.getText().toString(), contact.getText().toString(), location.getSelectedItem().toString(), address.getText().toString(), userIc);
+                image.buildDrawingCache();
+                Bitmap bmap = image.getDrawingCache();
+                String x = getEncodeImage(bmap);
+                Buyer addBuyer = new Buyer(name.getText().toString(), contact.getText().toString(), location.getSelectedItem().toString(), address.getText().toString(), userIc, x);
                 addBuyer(addBuyer, getContext());
                 dialogAdd.dismiss();
+            });
+            selectPic.setOnClickListener(e -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                        //permission not granted,request it.
+                        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                        //show popup for runtime permission
+                        requestPermissions(permissions, PERMISSION_CODE);
+                    } else {
+                        //permission already granted
+                        pickImageFromGallery();
+                    }
+                } else {
+                    //system os is less than marshmallow
+                    pickImageFromGallery();
+                }
             });
         });
         buyerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -110,15 +144,18 @@ public class fragment_buyers extends Fragment {
                 ImageView check = (ImageView) mmView.findViewById(R.id.buyer_detail_check_n_uncheck);
                 Button confirmCheck = (Button) mmView.findViewById(R.id.buyer_detail_confirm_check);
                 Button buyerHistory = (Button) mmView.findViewById(R.id.Buyer_Order_List_History);
+                ImageView picture = (ImageView) mmView.findViewById(R.id.buyer_Detail_Picture);
                 name.setText(buyerList.get(i).getBuyerName());
                 contact.setText(buyerList.get(i).getBuyerContact());
                 location.setText(buyerList.get(i).getBuyerLocation());
                 address.setText(buyerList.get(i).getBuyerAddress());
+                String imageURL = "http://192.168.0.146:9999/image/Customers?imgPath=" + buyerList.get(i).getBuyerImage();
+                Picasso.get().load(imageURL).into(picture);
                 if (buyerList.get(i).getAdminCheck().equals("true")) {
                     check.setImageResource(R.drawable.icon_check);
                     confirmCheck.setVisibility(View.GONE);
                 } else {
-                    if (roles.equals("5")) {
+                    if (roles.equals("1")) {
                         confirmCheck.setVisibility(View.VISIBLE);
                     } else {
                         confirmCheck.setVisibility(View.GONE);
@@ -160,6 +197,7 @@ public class fragment_buyers extends Fragment {
                     AlertDialog dialogCheck = mBBuilder.create();
                     dialogCheck.show();
                 });
+
             }
         });
         return v;
@@ -258,5 +296,27 @@ public class fragment_buyers extends Fragment {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public String getEncodeImage(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        byte[] byeformat = stream.toByteArray();
+        String imgString = Base64.encodeToString(byeformat, Base64.NO_WRAP);
+        return imgString;
+    }
+
+    private void pickImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            //set image to image view
+            image.setImageURI(data.getData());
+        }
     }
 }

@@ -20,10 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.addisonelliott.segmentedbutton.SegmentedButtonGroup;
 import com.example.fyp2.Adapter.CalculateOrdersListAdapter;
+import com.example.fyp2.Adapter.OrderListAAdapter;
 import com.example.fyp2.Adapter.OrderListAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.CalculateOrders;
+import com.example.fyp2.Class.CheckOrder;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,7 +44,8 @@ public class fragment_orders extends Fragment {
     View v;
     Spinner State;
     FloatingActionButton floatFilterBtn, floatCalculateBtn;
-    ArrayList<Order> orderList = new ArrayList<>();
+    ArrayList<CheckOrder> orderList = new ArrayList<>();
+    ArrayList<Order> OrderList = new ArrayList<>();
     ArrayList<CalculateOrders> CalculateOrders = new ArrayList<>();
     ListView listView, COListView;
     String orderDetailsBuyerName, userIc, orderPermission, role;
@@ -59,6 +62,7 @@ public class fragment_orders extends Fragment {
         role = sharedPreferences.getString("role", "");
 
         getOrderList("true", getContext());
+        getOrdersList("true", getContext());
         listView = (ListView) v.findViewById(R.id.ordersList);
         SegmentedButtonGroup sbg = v.findViewById(R.id.segmentedBtnGroup);
         sbg.setOnPositionChangedListener(new SegmentedButtonGroup.OnPositionChangedListener() {
@@ -66,6 +70,7 @@ public class fragment_orders extends Fragment {
             public void onPositionChanged(int position) {
                 if (position == 0) {
                     listView.setAdapter(null);
+                    getOrdersList("true", getContext());
                     getOrderList("true", getContext());
                 } else if (position == 1) {
                     listView.setAdapter(null);
@@ -113,8 +118,8 @@ public class fragment_orders extends Fragment {
                 orderDescription.setText(orderList.get(i).getOrdersDescription());
                 getBuyerName(orderList.get(i).getBuyerId(), getContext());
 
-                String[] productList = orderList.get(i).getProductsId().split("/");
-                String[] quantityList = orderList.get(i).getProductsQuantity().split("/");
+                String[] productList = OrderList.get(i).getProductsId().split("/");
+                String[] quantityList = OrderList.get(i).getProductsQuantity().split("/");
                 for (String a : productList) {
                     orderProductList.append(a + "\n");
                 }
@@ -129,17 +134,17 @@ public class fragment_orders extends Fragment {
         return v;
     }
 
-    public void getOrderList(String Order, Context context) {
-        Call<List<Order>> call = RetrofitClient.getInstance().getApi().ordersByStatus(Order);
-        call.enqueue(new Callback<List<Order>>() {
+    public void getOrdersList(String Order, Context context) {
+        Call<List<CheckOrder>> call = RetrofitClient.getInstance().getApi().ordersByCheck(Order);
+        call.enqueue(new Callback<List<CheckOrder>>() {
             @Override
-            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+            public void onResponse(Call<List<CheckOrder>> call, Response<List<CheckOrder>> response) {
                 orderList.clear();
                 if (!response.isSuccessful()) {
                     //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
                 } else {
-                    List<Order> orders = response.body();
-                    for (Order currentOrder : orders) {
+                    List<CheckOrder> orders = response.body();
+                    for (CheckOrder currentOrder : orders) {
                         orderList.add(currentOrder);
                     }
                     final OrderListAdapter adapter = new OrderListAdapter(getActivity(), R.layout.adapter_order_list, orderList);
@@ -147,6 +152,33 @@ public class fragment_orders extends Fragment {
                     listView.setAdapter(adapter);
                 }
             }
+
+            @Override
+            public void onFailure(Call<List<CheckOrder>> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void getOrderList(String Order, Context context) {
+        Call<List<Order>> call = RetrofitClient.getInstance().getApi().ordersByStatus(Order);
+        call.enqueue(new Callback<List<Order>>() {
+            @Override
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                OrderList.clear();
+                if (!response.isSuccessful()) {
+                    //Toast.makeText(context, "Get Buyers Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    List<Order> orders = response.body();
+                    for (Order currentOrder : orders) {
+                        OrderList.add(currentOrder);
+                    }
+                    final OrderListAAdapter adapter = new OrderListAAdapter(getActivity(), R.layout.adapter_order_list, OrderList);
+                    adapter.notifyDataSetChanged();
+                    listView.setAdapter(adapter);
+                }
+            }
+
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();

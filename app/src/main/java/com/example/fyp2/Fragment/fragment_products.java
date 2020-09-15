@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +38,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.fyp2.Adapter.BuyerListAdapter;
 import com.example.fyp2.Adapter.ProductListAdapter;
 import com.example.fyp2.Adapter.ProductOrderListAdapter;
@@ -48,6 +54,7 @@ import com.example.fyp2.Class.Task;
 import com.example.fyp2.Class.Warehouse;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -154,6 +161,7 @@ public class fragment_products extends Fragment {
                 TextView productDescription = (TextView) mView.findViewById(R.id.Product_Detail_Description);
                 TextView productName = (TextView) mView.findViewById(R.id.Product_Detail_Name);
                 TextView productPrice = (TextView) mView.findViewById(R.id.Product_Detail_Price);
+                ImageView productImage = (ImageView) mView.findViewById(R.id.Product_Detail_Picture);
                 Button order2Cart = (Button) mView.findViewById(R.id.Product_Detail_Add_2_Cart);
                 if (orderPermission.equals("true") || role.equals("1")) {
                     order2Cart.setVisibility(View.VISIBLE);
@@ -166,6 +174,9 @@ public class fragment_products extends Fragment {
                 productName.setText(productList.get(position).getProductsName());
                 productPrice.setText(productList.get(position).getProductsPrice());
                 mBuilder.setView(mView);
+
+                String imageURL = "http://192.168.0.146:9999/image/Products?imgPath=" + productList.get(position).getProductsImage();
+                Picasso.get().load(imageURL).into(productImage);
 
                 AlertDialog diialog = mBuilder.create();
                 diialog.show();
@@ -198,7 +209,7 @@ public class fragment_products extends Fragment {
             } else {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                 View mView = getLayoutInflater().inflate(R.layout.dialog_product_order_cart, null);
-                ListView orderCartList = mView.findViewById(R.id.Product_Order_Cart_ListView);
+                SwipeMenuListView orderCartList = mView.findViewById(R.id.Product_Order_Cart_ListView);
                 Button saveOrderCart = mView.findViewById(R.id.CompleteOrderCart);
 
                 final ProductOrderListAdapter orderListAdapter = new ProductOrderListAdapter(getActivity(), R.layout.adapter_product_order_list, cartList);
@@ -208,6 +219,28 @@ public class fragment_products extends Fragment {
                 mBuilder.setView(mView);
                 AlertDialog ddialog = mBuilder.create();
                 ddialog.show();
+                SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+                    @Override
+                    public void create(SwipeMenu menu) {
+                        // create "open" item
+                        SwipeMenuItem openItem = new SwipeMenuItem(
+                                getActivity());
+                        // create "delete" item
+                        SwipeMenuItem deleteItem = new SwipeMenuItem(
+                                getActivity());
+                        // set item background
+                        deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                                0x3F, 0x25)));
+                        // set item width
+                        deleteItem.setWidth(170);
+                        // set a icon
+                        deleteItem.setIcon(R.drawable.icon_delete);
+                        // add to menu
+                        menu.addMenuItem(deleteItem);
+                    }
+                };
+                orderCartList.setMenuCreator(creator);
                 saveOrderCart.setOnClickListener(x -> {
                     ddialog.dismiss();
                     AlertDialog.Builder mBuilderr = new AlertDialog.Builder(getActivity());
@@ -247,6 +280,19 @@ public class fragment_products extends Fragment {
                             diaalog.dismiss();
                         }
                     });
+                });
+                orderCartList.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                        switch (index) {
+                            case 0:
+                                cartList.remove(index);
+                                ddialog.dismiss();
+                                break;
+                        }
+                        // false : close the menu; true : not close the menu
+                        return false;
+                    }
                 });
             }
         });
@@ -321,7 +367,7 @@ public class fragment_products extends Fragment {
                     productAddImage.buildDrawingCache();
                     Bitmap bmap = productAddImage.getDrawingCache();
                     String x = getEncodeImage(bmap);
-                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductPackagingSpinner.getSelectedItem().toString(), AddProductCategorySpinner.getSelectedItem().toString(), x);
+                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), AddProductPackagingSpinner.getSelectedItem().toString(), x);
                     addProduct(product, getContext());
                     for (EditText var : editText) {
                         taskTxt = taskTxt + var.getText().toString() + "/";

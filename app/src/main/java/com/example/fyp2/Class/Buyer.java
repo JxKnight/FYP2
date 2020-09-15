@@ -22,6 +22,9 @@ public class Buyer {
     @SerializedName("userIc")
     @Expose
     private String userIc;
+    @SerializedName("buyerImage")
+    @Expose
+    private String buyerImage;
     @SerializedName("adminCheck")
     @Expose
     private String adminCheck;
@@ -32,12 +35,13 @@ public class Buyer {
         this.adminCheck = adminCheck;
     }
 
-    public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress, String userIc) {
+    public Buyer(String buyerName, String buyerContact, String buyerLocation, String buyerAddress, String userIc, String buyerImage) {
         this.buyerName = buyerName;
         this.buyerContact = buyerContact;
         this.buyerLocation = buyerLocation;
         this.buyerAddress = buyerAddress;
         this.userIc = userIc;
+        this.buyerImage = buyerImage;
     }
 
     public Buyer(String buyerLocation) {
@@ -105,4 +109,11 @@ public class Buyer {
         this.adminCheck = adminCheck;
     }
 
+    public String getBuyerImage() {
+        return buyerImage;
+    }
+
+    public void setBuyerImage(String buyerImage) {
+        this.buyerImage = buyerImage;
+    }
 }

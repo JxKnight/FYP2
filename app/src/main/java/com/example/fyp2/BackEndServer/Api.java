@@ -3,6 +3,7 @@ package com.example.fyp2.BackEndServer;
 import com.example.fyp2.Class.Attendance;
 import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.CalculateOrders;
+import com.example.fyp2.Class.CheckOrder;
 import com.example.fyp2.Class.OTP;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.Product;
@@ -38,6 +39,9 @@ public interface Api {
 
     @POST("/registerUser")
     Call<User> createUser(@Body User user);
+
+    @POST("/reNewUserPassword")
+    Call<Void> reNewUserPassword(@Body User user);
 
     @POST("/updateUser")
     Call<User> updateUser(@Body User user);
@@ -88,6 +92,9 @@ public interface Api {
     //order
     @GET("/orders")
     Call<List<Order>> findAllOrder();
+
+    @GET("/checkOrder")
+    Call<List<CheckOrder>> ordersByCheck(@Query("ordersStatus") String text);
 
     @GET("/ordersByStatus")
     Call<List<Order>> ordersByStatus(@Query("ordersStatus") String text);

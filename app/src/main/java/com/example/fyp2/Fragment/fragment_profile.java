@@ -74,15 +74,15 @@ public class fragment_profile extends Fragment {
         firstEntry = sharedPreferences.getString("FIRSTENTRY", "");
 
         submit = (Button) v.findViewById(R.id.profile_save);
-        FName = (EditText) v.findViewById(R.id.FName);
-        LName = (EditText) v.findViewById(R.id.LName);
-        Ic = (EditText) v.findViewById(R.id.Ic);
-        Contact = (EditText) v.findViewById(R.id.Contact);
-        Address = (EditText) v.findViewById(R.id.Address);
-        PostCode = (EditText) v.findViewById(R.id.PostCode);
-        State = (Spinner) v.findViewById(R.id.State);
-        Password = (EditText) v.findViewById(R.id.Password);
-        CPassword = (EditText) v.findViewById(R.id.CPassword);
+        FName = (EditText) v.findViewById(R.id.profile_first_name);
+        LName = (EditText) v.findViewById(R.id.profile_last_name);
+        Ic = (EditText) v.findViewById(R.id.profile_ic);
+        Contact = (EditText) v.findViewById(R.id.profile_contact);
+        Address = (EditText) v.findViewById(R.id.profile_address);
+        PostCode = (EditText) v.findViewById(R.id.profile_post_code);
+        State = (Spinner) v.findViewById(R.id.profile_state);
+        Password = (EditText) v.findViewById(R.id.profile_password);
+        CPassword = (EditText) v.findViewById(R.id.profile_confirm_password);
         ProfilePic = (CircleImageView) v.findViewById(R.id.ProfilePic);
         btnEditProfileEnable = (FloatingActionButton) v.findViewById(R.id.BtnEditProfileEnable);
         getBtnEditProfileCancel = (FloatingActionButton) v.findViewById(R.id.BtnEditProfileCancel);
@@ -145,28 +145,37 @@ public class fragment_profile extends Fragment {
             });
         }
         submit.setOnClickListener(e -> {
-            ProfilePic.buildDrawingCache();
-            Bitmap bmap = ProfilePic.getDrawingCache();
-            String x = getEncodeImage(bmap);
-            String Roles = null;
-            if (State.getSelectedItem().toString().equals("Select Location")) {
-                User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), null, Roles, x, "false");
-                updateProfile(newUser, getContext());
+            if (FName.getText().toString().isEmpty() || LName.getText().toString().isEmpty() || Ic.getText().toString().isEmpty() || Contact.getText().toString().isEmpty() || Address.getText().toString().isEmpty() || PostCode.getText().toString().isEmpty() || State.getSelectedItem().toString().equals("Select Location")) {
+                Toast.makeText(getActivity(), "Please complete your profile detail", Toast.LENGTH_SHORT).show();
             } else {
-                User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), State.getSelectedItem().toString(), Roles, x, "false");
-                updateProfile(newUser, getContext());
+                if (CPassword.getText().toString() != Password.getText().toString()) {
+                    Toast.makeText(getActivity(), "Please Input Correct Password", Toast.LENGTH_SHORT).show();
+                } else {
+                    ProfilePic.buildDrawingCache();
+                    Bitmap bmap = ProfilePic.getDrawingCache();
+                    String x = getEncodeImage(bmap);
+                    String Roles = null;
+                    if (State.getSelectedItem().toString().equals("Select Location")) {
+                        User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), null, Roles, x, "false");
+                        updateProfile(newUser, getContext());
+                    } else {
+                        User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), State.getSelectedItem().toString(), Roles, x, "false");
+                        updateProfile(newUser, getContext());
+                    }
+                    Contact.setEnabled(false);
+                    Address.setEnabled(false);
+                    PostCode.setEnabled(false);
+                    State.setEnabled(false);
+                    resetPassword.setVisibility(View.VISIBLE);
+                    ResetPasswordTxt.setVisibility(View.VISIBLE);
+                    submit.setVisibility(View.GONE);
+                    selectPic.setVisibility(View.VISIBLE);
+                    btnEditProfileEnable.setVisibility(View.VISIBLE);
+                    getBtnEditProfileCancel.setVisibility(View.GONE);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_profile.this.getId(), new fragment_profile()).commit();
+                }
             }
-            Contact.setEnabled(false);
-            Address.setEnabled(false);
-            PostCode.setEnabled(false);
-            State.setEnabled(false);
-            resetPassword.setVisibility(View.VISIBLE);
-            ResetPasswordTxt.setVisibility(View.VISIBLE);
-            submit.setVisibility(View.GONE);
-            selectPic.setVisibility(View.VISIBLE);
-            btnEditProfileEnable.setVisibility(View.VISIBLE);
-            getBtnEditProfileCancel.setVisibility(View.GONE);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_profile.this.getId(), new fragment_profile()).commit();
+
         });
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -191,10 +200,28 @@ public class fragment_profile extends Fragment {
 
         resetPassword.setOnClickListener(k -> {
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-            View mView = getLayoutInflater().inflate(R.layout.dialog_profile_change_password, null);
-            mBuilder.setView(mView);
+            View mVieew = getLayoutInflater().inflate(R.layout.dialog_profile_change_password, null);
+            EditText oldPassword = mVieew.findViewById(R.id.old_password_profile);
+            EditText newPassword = mVieew.findViewById(R.id.new_password_profile);
+            EditText confirmNewPassword = mVieew.findViewById(R.id.confirm_new_password_profile);
+            Button confirmChangePassword = mVieew.findViewById(R.id.confirm_change_password_btn);
+            mBuilder.setView(mVieew);
             AlertDialog dialog = mBuilder.create();
             dialog.show();
+            confirmChangePassword.setOnClickListener(q -> {
+                if (oldPassword.getText().toString().equals(Password.getText().toString())) {
+                    if (newPassword.getText().toString().equals(confirmNewPassword.getText().toString())) {
+                        User reNewPassword = new User(confirmNewPassword.getText().toString(), userIc);
+                        reNewUserPassword(reNewPassword, getContext());
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(getActivity(), "Please input correct new password", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Please input correct old password", Toast.LENGTH_SHORT).show();
+                }
+                //Toast.makeText(getActivity(), Password.getText().toString(), Toast.LENGTH_SHORT).show();
+            });
         });
         return v;
     }
@@ -243,6 +270,7 @@ public class fragment_profile extends Fragment {
                 String imageURL = "http://192.168.0.146:9999/image/Users?imgPath=" + postResponse.getPicture();
                 Picasso.get().load(imageURL).into(ProfilePic);
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_SHORT).show();
@@ -256,7 +284,7 @@ public class fragment_profile extends Fragment {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.code() == 200) {
-                    Toast.makeText(context, "Update Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Update Successful", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "Update Fail", Toast.LENGTH_SHORT).show();
                 }
@@ -275,5 +303,24 @@ public class fragment_profile extends Fragment {
         byte[] byeformat = stream.toByteArray();
         String imgString = Base64.encodeToString(byeformat, Base64.NO_WRAP);
         return imgString;
+    }
+
+    public void reNewUserPassword(User user, Context context) {
+        Call<Void> call = RetrofitClient.getInstance().getApi().reNewUserPassword(user);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 200) {
+                    Toast.makeText(context, "Reset Password Successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Reset Password Fail", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

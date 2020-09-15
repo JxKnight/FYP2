@@ -62,7 +62,7 @@ public class fragment_tasks extends Fragment {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
         userIc = sharedPreferences.getString("USERIC", "");
         roles = sharedPreferences.getString("ROLE", "");
-
+        getRoles(getContext());
         LV = v.findViewById(R.id.task_product_list);
         getTaskList(getContext());
         LV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -89,7 +89,7 @@ public class fragment_tasks extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, android.view.View view, int k, long id) {
                         if (roles.equals("1")) {
-                            getRoles(getContext());
+
                             AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                             View mView = getLayoutInflater().inflate(R.layout.dialog_task_details_assign_roles_list, null);
                             ListView lv = mView.findViewById(R.id.fragment_task_details_roles_list);
