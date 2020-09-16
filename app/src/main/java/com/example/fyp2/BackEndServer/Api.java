@@ -46,6 +46,9 @@ public interface Api {
     @POST("/updateUser")
     Call<User> updateUser(@Body User user);
 
+    @POST("/updateUserRole")
+    Call<User> updateUserRole(@Body User user);
+
     @POST("/deleteUser")
     Call<User> deleteUser(@Body User user);
 
@@ -72,6 +75,9 @@ public interface Api {
     @POST("/getBuyerDetails")
     Call<Buyer> getBuyerDetails(@Query("buyerID") String buyerID);
 
+    @POST("/deleteBuyer")
+    Call<Buyer> deleteBuyer(@Query("buyerID") String buyerID);
+
     //product
     @GET("/products")
     Call<List<Product>> findAllProduct();
@@ -88,6 +94,9 @@ public interface Api {
 
     @POST("/buyerHistoryList")
     Call<List<Order>> findAllBuyerOrderHistoryList(@Body Order order);
+
+    @GET("/deleteProduct")
+    Call<Product> deleteProduct(@Query("productsId") String x);
 
     //order
     @GET("/orders")
@@ -109,6 +118,9 @@ public interface Api {
     @POST("/warehouseFilter")
     Call<List<Warehouse>> findAllWareHouseByFilter(@Body Warehouse warehouse);
 
+    @GET("/deleteWarehouse")
+    Call<Warehouse> deleteWarehouse(@Query("productsId") String x);
+
     //task
     @GET("/task")
     Call<List<Task>> findAllTask();
@@ -119,6 +131,9 @@ public interface Api {
     @POST("/updateRole")
     Call<Task> updateRole(@Body Task task);
 
+    @GET("/deleteTask")
+    Call<Task> deleteTask(@Query("taskId") String x);
+
     //Role
     @GET("/roles")
     Call<List<Role>> findAllRoles();
@@ -128,6 +143,9 @@ public interface Api {
 
     @POST("/currentRole")
     Call<Role> currentRole(@Body Role role);
+
+    @GET("/deleteRole")
+    Call<Role> deleteRoles(@Query("roleNum") String x);
 
     //Attendance
     @POST("/requestAttendance")

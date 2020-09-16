@@ -192,6 +192,7 @@ public class fragment_products extends Fragment {
                     btn.setOnClickListener(f -> {
                         OrderCartSession order = new OrderCartSession(productList.get(position).getProductsId(), quantity.getText().toString());
                         cartList.add(order);
+                        Toast.makeText(getActivity(), "Placed Order Completed", Toast.LENGTH_SHORT).show();
                         dialogg.dismiss();
                     });
                 });
@@ -330,59 +331,66 @@ public class fragment_products extends Fragment {
             diaalog.show();
 
             AddProductBtn.setOnClickListener(r -> {
-                x = 1;
-                AlertDialog.Builder Builder = new AlertDialog.Builder(getActivity());
-                View View = getLayoutInflater().inflate(R.layout.dialog_product_add_product_task, null);
-                ImageView addET = View.findViewById(R.id.Product_add_Product_Task_EdiText);
-                LinearLayout linearLayoutAddTask = View.findViewById(R.id.Product_Add_Task);
-                Button button = View.findViewById(R.id.Product_Add_Product_Btn);
-                Builder.setView(View);
-                AlertDialog diialog = Builder.create();
-                diialog.show();
-                addET.setOnClickListener(k -> {
+                if (AddProductName.getText().toString().isEmpty() || AddProductDescription.getText().toString().isEmpty() || AddProductPrice.getText().toString().isEmpty() || AddProductPackagingSpinner.getSelectedItem().toString().equals("Select Number") || AddProductCategorySpinner.getSelectedItem().toString().equals("Select Category")) {
+                    Toast.makeText(getActivity(), "Please complete all product details", Toast.LENGTH_SHORT).show();
+                } else {
+                    x = 1;
+                    AlertDialog.Builder Builder = new AlertDialog.Builder(getActivity());
+                    View View = getLayoutInflater().inflate(R.layout.dialog_product_add_product_task, null);
+                    ImageView addET = View.findViewById(R.id.Product_add_Product_Task_EdiText);
+                    LinearLayout linearLayoutAddTask = View.findViewById(R.id.Product_Add_Task);
+                    Button button = View.findViewById(R.id.Product_Add_Product_Btn);
+                    Builder.setView(View);
+                    AlertDialog diialog = Builder.create();
+                    diialog.show();
+                    addET.setOnClickListener(k -> {
 
-                    ScrollView sv = new ScrollView(getActivity());
-                    sv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        ScrollView sv = new ScrollView(getActivity());
+                        sv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-                    LinearLayout ll = new LinearLayout(getActivity());
-                    ll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    ll.setOrientation(LinearLayout.VERTICAL);
+                        LinearLayout ll = new LinearLayout(getActivity());
+                        ll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        ll.setOrientation(LinearLayout.VERTICAL);
 
-                    eT = new EditText(getActivity());
-                    eT.setHint("Task" + x);
-                    eT.setId(x);
-                    ll.addView(eT);
-                    editText.add(eT);
-                    //Toast.makeText(getActivity(),Integer.toString(editText.get(x-1).getId()),Toast.LENGTH_LONG).show();
-                    sv.addView(ll);
-                    x++;
-                    linearLayoutAddTask.addView(sv);
+                        eT = new EditText(getActivity());
+                        eT.setHint("Task" + x);
+                        eT.setId(x);
+                        ll.addView(eT);
+                        editText.add(eT);
+                        //Toast.makeText(getActivity(),Integer.toString(editText.get(x-1).getId()),Toast.LENGTH_LONG).show();
+                        sv.addView(ll);
+                        x++;
+                        linearLayoutAddTask.addView(sv);
 
-                });
-                button.setOnClickListener(e -> {
-                    i = 1;
-                    taskTxt = "";
-                    String seq = "";
-                    String roles = "";
-                    productAddImage.buildDrawingCache();
-                    Bitmap bmap = productAddImage.getDrawingCache();
-                    String x = getEncodeImage(bmap);
-                    Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), AddProductPackagingSpinner.getSelectedItem().toString(), x);
-                    addProduct(product, getContext());
-                    for (EditText var : editText) {
-                        taskTxt = taskTxt + var.getText().toString() + "/";
-                        //mHandler.postDelayed(mAddTaskRunnable,5000);
-                        seq = seq + i + "/";
-                        roles = roles + i + "/";
-                        i++;
-                    }
-                    Task task = new Task(taskTxt, date, "", seq, roles, AddProductId.getText().toString());
-                    storeTask(task, getContext());
-                    diaalog.dismiss();
-                    diialog.dismiss();
-                });
+                    });
+                    button.setOnClickListener(e -> {
+                        if (editText.size() == 0) {
+                            Toast.makeText(getActivity(), "Please complete all product task row", Toast.LENGTH_SHORT).show();
+                        } else {
+                            i = 1;
+                            taskTxt = "";
+                            String seq = "";
+                            String roles = "";
+                            productAddImage.buildDrawingCache();
+                            Bitmap bmap = productAddImage.getDrawingCache();
+                            String x = getEncodeImage(bmap);
+                            Product product = new Product(AddProductId.getText().toString(), AddProductName.getText().toString(), AddProductDescription.getText().toString(), AddProductPrice.getText().toString(), AddProductCategorySpinner.getSelectedItem().toString(), AddProductPackagingSpinner.getSelectedItem().toString(), x);
+                            addProduct(product, getContext());
+                            for (EditText var : editText) {
+                                taskTxt = taskTxt + var.getText().toString() + "/";
+                                //mHandler.postDelayed(mAddTaskRunnable,5000);
+                                seq = seq + i + "/";
+                                roles = roles + i + "/";
+                                i++;
+                            }
+                            Task task = new Task(taskTxt, date, "", seq, roles, AddProductId.getText().toString());
+                            storeTask(task, getContext());
+                            diaalog.dismiss();
+                            diialog.dismiss();
+                        }
+                    });
+                }
             });
-
             image.setOnClickListener(y -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -510,9 +518,9 @@ public class fragment_products extends Fragment {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(context, "Place Order Fail", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Order placed Fail", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(context, "Place Order Success", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Order placed complete", Toast.LENGTH_LONG).show();
                 }
             }
 

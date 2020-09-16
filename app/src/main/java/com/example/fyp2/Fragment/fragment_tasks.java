@@ -1,6 +1,7 @@
 package com.example.fyp2.Fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.Order;
 import com.example.fyp2.Class.Role;
 import com.example.fyp2.Class.Task;
+import com.example.fyp2.Class.Warehouse;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -135,6 +137,27 @@ public class fragment_tasks extends Fragment {
                 });
             }
         });
+        LV.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder alertbox = new AlertDialog.Builder(v.getRootView().getContext());
+                alertbox.setTitle("Warning");
+                alertbox.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteTasks(TaskList.get(position).getTaskId(), v.getContext());
+                    }
+                });
+                alertbox.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertbox.show();
+                return false;
+            }
+        });
         return v;
     }
 
@@ -190,6 +213,25 @@ public class fragment_tasks extends Fragment {
 
             @Override
             public void onFailure(Call<List<Role>> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void deleteTasks(String x, Context context) {
+        Call<Task> call = RetrofitClient.getInstance().getApi().deleteTask(x);
+        call.enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Delete Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Delete Successful", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });

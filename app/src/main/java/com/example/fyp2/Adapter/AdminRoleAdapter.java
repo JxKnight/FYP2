@@ -43,6 +43,7 @@ public class AdminRoleAdapter extends ArrayAdapter<Role> {
         String customer = getItem(position).getCustomers();
         String reports = getItem(position).getReports();
         String tasks = getItem(position).getTasks();
+        String num = getItem(position).getRoleNum();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -55,6 +56,7 @@ public class AdminRoleAdapter extends ArrayAdapter<Role> {
         TextView roleCustomer = (TextView) convertView.findViewById(R.id.admin_roles_adapter_customer);
         TextView roleReports = (TextView) convertView.findViewById(R.id.admin_roles_adapter_reports);
         TextView roleTasks = (TextView) convertView.findViewById(R.id.admin_roles_adapter_Tasks);
+        TextView roleNum = (TextView) convertView.findViewById(R.id.admin_roles_role_num);
 
         //productsID.append(productID);
         roleName.append(name);
@@ -75,6 +77,7 @@ public class AdminRoleAdapter extends ArrayAdapter<Role> {
         if (tasks.equals("1")) {
             roleTasks.setTextColor(Color.parseColor("#00e329"));
         }
+        roleNum.append(num);
 
         return convertView;
     }

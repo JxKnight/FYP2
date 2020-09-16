@@ -38,6 +38,13 @@ public class User {
     @Expose
     private String firstEntry;
 
+    public User(String userIc, String firstName, String lastName, String role) {
+        this.userIc = userIc;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
+
     public User(String password, String contact, String userIc, String firstName, String lastName, String address, String postCode, String state, String role, String picture, String firstEntry) {
         this.password = password;
         this.contact = contact;

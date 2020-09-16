@@ -2,6 +2,7 @@ package com.example.fyp2.Fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -32,6 +33,7 @@ import com.example.fyp2.Adapter.ProductOrderListAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Buyer;
 import com.example.fyp2.Class.Order;
+import com.example.fyp2.Class.Warehouse;
 import com.example.fyp2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
@@ -107,12 +109,16 @@ public class fragment_buyers extends Fragment {
             dialogAdd.show();
             //b3.getString("userIc")
             submit.setOnClickListener(e -> {
-                image.buildDrawingCache();
-                Bitmap bmap = image.getDrawingCache();
-                String x = getEncodeImage(bmap);
-                Buyer addBuyer = new Buyer(name.getText().toString(), contact.getText().toString(), location.getSelectedItem().toString(), address.getText().toString(), userIc, x);
-                addBuyer(addBuyer, getContext());
-                dialogAdd.dismiss();
+                if (name.getText().toString().isEmpty() || contact.getText().toString().isEmpty() || location.getSelectedItem().toString().equals("Select Location") || address.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Please complete customer information", Toast.LENGTH_SHORT).show();
+                } else {
+                    image.buildDrawingCache();
+                    Bitmap bmap = image.getDrawingCache();
+                    String x = getEncodeImage(bmap);
+                    Buyer addBuyer = new Buyer(name.getText().toString(), contact.getText().toString(), location.getSelectedItem().toString(), address.getText().toString(), userIc, x);
+                    addBuyer(addBuyer, getContext());
+                    dialogAdd.dismiss();
+                }
             });
             selectPic.setOnClickListener(e -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -198,6 +204,28 @@ public class fragment_buyers extends Fragment {
                     dialogCheck.show();
                 });
 
+            }
+        });
+
+        buyerListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder alertbox = new AlertDialog.Builder(v.getRootView().getContext());
+                alertbox.setTitle("Warning");
+                alertbox.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteBuyer(buyerList.get(position).getBuyerId(), v.getContext());
+                    }
+                });
+                alertbox.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertbox.show();
+                return false;
             }
         });
         return v;
@@ -318,5 +346,24 @@ public class fragment_buyers extends Fragment {
             //set image to image view
             image.setImageURI(data.getData());
         }
+    }
+
+    public void deleteBuyer(String x, Context context) {
+        Call<Buyer> call = RetrofitClient.getInstance().getApi().deleteBuyer(x);
+        call.enqueue(new Callback<Buyer>() {
+            @Override
+            public void onResponse(Call<Buyer> call, Response<Buyer> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Delete Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Delete Successful", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Buyer> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

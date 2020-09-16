@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp">
 
-            <ListView
+            <com.baoyz.swipemenulistview.SwipeMenuListView
                 android:id="@+id/fragment_admin_roles_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -182,7 +182,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -191,8 +191,18 @@
                 android:id="@+id/fragment_admin_role_submit_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Roles" />
-        </LinearLayout>
+                android:text="Add Roles"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/fragment_admin_role_update_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update Roles"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>

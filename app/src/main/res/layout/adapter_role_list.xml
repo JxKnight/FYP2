@@ -127,6 +127,23 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/admin_roles_role_num"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:text="RoleNum: "
+                                android:textColor="#808080" />
+                        </RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
