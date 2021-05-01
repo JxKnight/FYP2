@@ -35,7 +35,7 @@ public interface Api {
     Call<User> searchUser(@Body User user);
 
     @POST("/currentUser")
-    Call<User> searchCurrentUser(@Body User user);
+    Call<User> currentUser(@Body User user);
 
     @POST("/registerUser")
     Call<User> createUser(@Body User user);
@@ -75,7 +75,8 @@ public interface Api {
     @POST("/getBuyerDetails")
     Call<Buyer> getBuyerDetails(@Query("buyerID") String buyerID);
 
-    @POST("/deleteBuyer")
+    @GET("/deleteBuyer")
+
     Call<Buyer> deleteBuyer(@Query("buyerID") String buyerID);
 
     //product
@@ -107,6 +108,12 @@ public interface Api {
 
     @GET("/ordersByStatus")
     Call<List<Order>> ordersByStatus(@Query("ordersStatus") String text);
+
+    @GET("/getOrderMonthReport")
+    Call<List<CalculateOrders>> getOrderMonthReport(@Query("month") String month);
+
+    @GET("/export")
+    Call <Order> performExports(@Query("ordersStatus") String x);
 
     //warehouse
     @GET("/warehouse")
@@ -151,8 +158,11 @@ public interface Api {
     @POST("/requestAttendance")
     Call<Void> requestAttendance(@Body Attendance attendance);
 
-    @GET("/getCurrentDayAttendance")
-    Call<List<Attendance>> currentDayAttendance(@Query("day") String text);
+    @POST("/getCurrentDayAttendance")
+    Call<List<Attendance>> currentDayAttendance(@Body Attendance attendance);
+
+    @GET("/getCurrentDayAdminAttendance")
+    Call<List<Attendance>> getCurrentDayAdminAttendance(@Query("day") String day);
 
     @GET("/MonthlyAttendance")
     Call<List<Attendance>> MonthlyAttendance(@Query("month") String month, @Query("userIc") String userIc);

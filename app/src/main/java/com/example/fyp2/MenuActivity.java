@@ -6,26 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.fyp2.Adapter.AdminRoleAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Role;
 import com.example.fyp2.Class.User;
@@ -41,15 +30,9 @@ import com.example.fyp2.Fragment.fragment_warehouse;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.example.fyp2.MainActivity.FIRSTENTRY;
-import static com.example.fyp2.MainActivity.USERIC;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -152,6 +135,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_admin:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new fragment_admin()).commit();
                 break;
+            case R.id.nav_logout:
+               finish();
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
@@ -226,7 +212,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void ViewProfile(User user) {
-        Call<User> call = RetrofitClient.getInstance().getApi().searchCurrentUser(user);
+        Call<User> call = RetrofitClient.getInstance().getApi().currentUser(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

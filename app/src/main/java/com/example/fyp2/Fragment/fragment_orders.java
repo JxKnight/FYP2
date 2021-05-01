@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -112,11 +113,11 @@ public class fragment_orders extends Fragment {
                 TextView orderDescription = (TextView) mView.findViewById(R.id.order_detail_description);
                 TextView orderProductList = (TextView) mView.findViewById(R.id.order_list_productId);
                 TextView orderProductQuantity = (TextView) mView.findViewById(R.id.order_list_productQuantity);
-
+                Button export = (Button)mView.findViewById(R.id.order_detail_export);
                 //Toast.makeText(getActivity(),orderList.get(i).getOrdersId(),Toast.LENGTH_LONG).show();
-                orderID.setText(orderList.get(i).getOrdersId());
-                orderDescription.setText(orderList.get(i).getOrdersDescription());
-                getBuyerName(orderList.get(i).getBuyerId(), getContext());
+                orderID.setText(OrderList.get(i).getOrdersId());
+                orderDescription.setText(OrderList.get(i).getOrdersDescription());
+                getBuyerName(OrderList.get(i).getBuyerId(), getContext());
 
                 String[] productList = OrderList.get(i).getProductsId().split("/");
                 String[] quantityList = OrderList.get(i).getProductsQuantity().split("/");
@@ -129,6 +130,9 @@ public class fragment_orders extends Fragment {
                 mBuilder.setView(mView);
                 AlertDialog dialog = mBuilder.create();
                 dialog.show();
+                export.setOnClickListener(q->{
+                    export(OrderList.get(i).getOrdersId(),getContext());
+                });
             }
         });
         return v;
@@ -227,6 +231,25 @@ public class fragment_orders extends Fragment {
 
             @Override
             public void onFailure(Call<List<CalculateOrders>> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void export(String order,Context context){
+        Call<Order> call = RetrofitClient.getInstance().getApi().performExports(order);
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Export Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Export Successful", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });

@@ -33,6 +33,11 @@ public class Attendance {
         this.time = time;
     }
 
+    public Attendance(String userIc, String day) {
+        this.userIc = userIc;
+        this.day = day;
+    }
+
     public String getAttendanceID() {
         return AttendanceID;
     }

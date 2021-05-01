@@ -22,10 +22,14 @@ public class OTP {
     @SerializedName("currentDate")
     @Expose
     private String currentDate;
+    @SerializedName("qrCodeString")
+    @Expose
+    private String qrCodeString;
 
-    public OTP(String userIc, String otpNum) {
+    public OTP(String userIc, String otpNum, String qrCodeString) {
         this.userIc = userIc;
         this.otpNum = otpNum;
+        this.qrCodeString = qrCodeString;
     }
 
     public String getOtpID() {
@@ -66,5 +70,21 @@ public class OTP {
 
     public void setOtpNum(String otpNum) {
         this.otpNum = otpNum;
+    }
+
+    public String getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(String currentDate) {
+        this.currentDate = currentDate;
+    }
+
+    public String getQrCodeString() {
+        return qrCodeString;
+    }
+
+    public void setQrCodeString(String qrCodeString) {
+        this.qrCodeString = qrCodeString;
     }
 }

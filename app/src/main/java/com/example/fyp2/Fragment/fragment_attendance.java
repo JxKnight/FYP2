@@ -2,6 +2,8 @@ package com.example.fyp2.Fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -30,12 +32,14 @@ import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Attendance;
 import com.example.fyp2.Class.OTP;
 import com.example.fyp2.Class.Order;
+import com.example.fyp2.Class.QRCode;
 import com.example.fyp2.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -60,6 +64,7 @@ public class fragment_attendance extends Fragment {
     private View v;
     private String userIc;
     private ListView attendanceList;
+    private TextView textView;
     ArrayList<Attendance> attendancesArrayList;
 
     @Override
@@ -105,10 +110,9 @@ public class fragment_attendance extends Fragment {
             Attendance attendance = new Attendance(userIc);
             requestAttendance(attendance, getContext());
         });
+        textView = v.findViewById(R.id.attendance_test);
         barcodeDetector = new BarcodeDetector.Builder(getActivity()).setBarcodeFormats(Barcode.QR_CODE).build();
-
         cameraSource = new CameraSource.Builder(getActivity(), barcodeDetector).setRequestedPreviewSize(640, 480).build();
-
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -124,21 +128,32 @@ public class fragment_attendance extends Fragment {
                 barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
                     @Override
                     public void release() {
-
                     }
 
                     @Override
                     public void receiveDetections(Detector.Detections<Barcode> detections) {
                         SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-//                        textView.setText(qrCodes.valueAt(0).displayValue);
-                        decryptData(qrCodes.valueAt(0).displayValue, getContext());
+
+                        if (qrCodes.size() != 0) {
+                            textView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+                                    vibrator.vibrate(1000);
+                                    Gson gson = new Gson();
+                                    QRCode json = gson.fromJson(qrCodes.valueAt(0).displayValue, QRCode.class);
+                                    //textView.setText(json.getQrCodeString());
+                                    decryptData(json.getQrCodeString(), getContext());
+                                    cameraSource.stop();
+                                }
+                            });
+                        }
                     }
                 });
             }
 
             @Override
             public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -155,13 +170,16 @@ public class fragment_attendance extends Fragment {
             Button ot = view.findViewById(R.id.fragment_attendance_ot);
             attendanceList = view.findViewById(R.id.fragment_attendance_list_view);
             morning.setOnClickListener(w -> {
+               // Attendance attendance = new Attendance(userIc,"morning");
                 getAttendance("morning", getContext());
             });
             evening.setOnClickListener(e -> {
+                //Attendance attendance = new Attendance(userIc,"evening");
                 getAttendance("evening", getContext());
             });
             ot.setOnClickListener(r -> {
-                getAttendance("ot", getContext());
+                //Attendance attendance = new Attendance(userIc,"OT");
+                getAttendance("OT", getContext());
             });
 
             builder.setView(view);
@@ -198,9 +216,9 @@ public class fragment_attendance extends Fragment {
             long x = Long.valueOf(var) - Long.valueOf(userIc);
             decryptData = decryptData + x;
         }
-        OTP otp = new OTP(userIc, decryptData);
+        OTP otp = new OTP(userIc, decryptData,text);
         checkAttendance(otp, getContext());
-        Toast.makeText(context, decryptData, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, decryptData, Toast.LENGTH_SHORT).show();
     }
 
     public void checkAttendance(OTP x, Context context) {
@@ -209,7 +227,9 @@ public class fragment_attendance extends Fragment {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-                    Toast.makeText(context, "Signed Attendance", Toast.LENGTH_SHORT).show();
+                    Intent intent = getActivity().getIntent();
+                    getActivity().finish();
+                    startActivity(intent);
                 } else {
                     Toast.makeText(context, "Sign Attendance Fail", Toast.LENGTH_LONG).show();
                 }
@@ -225,13 +245,13 @@ public class fragment_attendance extends Fragment {
     public void getAttendance(String text, Context context) {
         attendanceList.setAdapter(null);
         attendancesArrayList.clear();
-        Call<List<Attendance>> call = RetrofitClient.getInstance().getApi().currentDayAttendance(text);
+        Call<List<Attendance>> call = RetrofitClient.getInstance().getApi().getCurrentDayAdminAttendance(text);
         call.enqueue(new Callback<List<Attendance>>() {
             @Override
             public void onResponse(Call<List<Attendance>> call, Response<List<Attendance>> response) {
                 attendancesArrayList.clear();
                 if (!response.isSuccessful()) {
-                    Toast.makeText(context, "Get Order History Fail", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Get Data Fail", Toast.LENGTH_LONG).show();
                 } else {
                     List<Attendance> attendances = response.body();
                     for (Attendance current : attendances) {

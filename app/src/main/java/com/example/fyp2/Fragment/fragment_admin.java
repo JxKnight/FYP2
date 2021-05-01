@@ -24,6 +24,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Pie;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
@@ -36,6 +41,7 @@ import com.example.fyp2.Adapter.BuyerListAdapter;
 import com.example.fyp2.BackEndServer.RetrofitClient;
 import com.example.fyp2.Class.Attendance;
 import com.example.fyp2.Class.Buyer;
+import com.example.fyp2.Class.CalculateOrders;
 import com.example.fyp2.Class.Role;
 import com.example.fyp2.Class.Salary;
 import com.example.fyp2.Class.User;
@@ -55,11 +61,15 @@ import static android.content.Context.MODE_PRIVATE;
 public class fragment_admin extends Fragment {
     View v;
     ArrayList<Role> rolesList = new ArrayList<>();
+    ArrayList<Role> rolesNameList = new ArrayList<>();
     ArrayList<Attendance> MonthlyAttendancesList = new ArrayList<>();
     ArrayList<User> usersList = new ArrayList<>();
     SwipeMenuListView lvRoles;
     ListView lvUsers, lvUsersRolesList;
     String userIc, role;
+    AnyChartView anyChartView;
+    List<DataEntry> dataEntryList = new ArrayList<>();
+    Pie pie;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -73,10 +83,32 @@ public class fragment_admin extends Fragment {
         Toast.makeText(getActivity(), "Welcome Admin", Toast.LENGTH_LONG).show();
         Button adminRole = v.findViewById(R.id.admin_roles);
         Button adminSalaryList = v.findViewById(R.id.admin_salary_list);
+        Button adminReports = v.findViewById(R.id.admin_reports);
+
+        adminReports.setOnClickListener(q->{
+            AlertDialog.Builder reportsBuilder = new AlertDialog.Builder(getActivity());
+            View reportsView = getLayoutInflater().inflate(R.layout.dialog_report, null);
+            anyChartView = reportsView.findViewById(R.id.admin_reports_chart_view);
+            Spinner reportMonthSpinner = reportsView.findViewById(R.id.admin_reports_month_spinner);
+            ImageView reportMonthSearch = reportsView.findViewById(R.id.admin_reports_month_search);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.month, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            reportMonthSpinner.setAdapter(adapter);
+            pie = AnyChart.pie();
+            pie.background().fill("#2b2b2b");
+            reportsBuilder.setView(reportsView);
+            AlertDialog Dialog = reportsBuilder.create();
+            Dialog.show();
+            reportMonthSearch.setOnClickListener(w->{
+                dataEntryList.clear();
+                getMonthlyReport(getContext(),reportMonthSpinner.getSelectedItem().toString());
+                reportMonthSpinner.setSelection(0);
+            });
+        });
         adminRole.setOnClickListener(q -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             View view = getLayoutInflater().inflate(R.layout.dialog_admin_roles, null);
-            getRoles(getContext(), "roles");
+            getRoles(getContext(),"roles");
             EditText name = view.findViewById(R.id.fragment_admin_role_name);
             EditText num = view.findViewById(R.id.fragment_admin_role_num);
             EditText desc = view.findViewById(R.id.fragment_admin_role_description);
@@ -371,14 +403,14 @@ public class fragment_admin extends Fragment {
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                     View mView = getLayoutInflater().inflate(R.layout.dialog_admin_users_assign_role, null);
                     lvUsersRolesList = mView.findViewById(R.id.fragment_admin_users_assign_roles_list_view);
-                    getRoles(getContext(), "users");
                     mBuilder.setView(mView);
+                    getRoles(getContext(),"users");
                     AlertDialog assignUserDialog = mBuilder.create();
                     assignUserDialog.show();
                     lvUsersRolesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            User user = new User(usersList.get(position).getUserIc(), usersList.get(position).getFirstName(), usersList.get(position).getLastName(), rolesList.get(position).getRoleNum());
+                        public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                            User user = new User(usersList.get(position).getUserIc(), usersList.get(position).getFirstName(), usersList.get(position).getLastName(), rolesNameList.get(i).getRoleNum());
                             updateUserRoles(user, getContext());
                             assignUserDialog.dismiss();
                             dialog.dismiss();
@@ -424,8 +456,9 @@ public class fragment_admin extends Fragment {
         });
     }
 
-    public void getRoles(Context context, String x) {
+    public void getRoles(Context context,String x) {
         rolesList.clear();
+        rolesNameList.clear();
         Call<List<Role>> call = RetrofitClient.getInstance().getApi().findAllRoles();
         call.enqueue(new Callback<List<Role>>() {
             @Override
@@ -439,19 +472,21 @@ public class fragment_admin extends Fragment {
 
                         } else {
                             rolesList.add(currentRole);
+                            rolesNameList.add(currentRole);
                         }
                     }
-                    if (x.equals("roles")) {
+                    if(x.equals("roles")){
                         final AdminRoleAdapter adapter = new AdminRoleAdapter(getActivity(), R.layout.adapter_role_list, rolesList);
                         adapter.notifyDataSetChanged();
                         lvRoles.setAdapter(adapter);
-                    } else {
-                        final AdminUserRolesAdapter adapter = new AdminUserRolesAdapter(getActivity(), R.layout.adapter_admin_users_role_list, rolesList);
-                        adapter.notifyDataSetChanged();
-                        lvUsersRolesList.setAdapter(adapter);
+                    }else{
+                        final AdminUserRolesAdapter aadapter = new AdminUserRolesAdapter(getActivity(), R.layout.adapter_admin_users_role_list, rolesNameList);
+                        aadapter.notifyDataSetChanged();
+                        lvUsersRolesList.setAdapter(aadapter);
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<List<Role>> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
@@ -469,7 +504,7 @@ public class fragment_admin extends Fragment {
                 } else {
                     Toast.makeText(context, "Add Role Successfully", Toast.LENGTH_LONG).show();
                 }
-                getRoles(getContext(), "roles");
+                getRoles(getContext(),"roles");
             }
 
             @Override
@@ -489,7 +524,7 @@ public class fragment_admin extends Fragment {
                 } else {
                     Toast.makeText(context, "Add Role Successfully", Toast.LENGTH_LONG).show();
                 }
-                getRoles(getContext(), "roles");
+                getRoles(getContext(),"roles");
             }
 
             @Override
@@ -533,6 +568,30 @@ public class fragment_admin extends Fragment {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "Fail To Connect To Server", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void getMonthlyReport(Context context,String x) {
+        dataEntryList.clear();
+        Call<List<CalculateOrders>> call = RetrofitClient.getInstance().getApi().getOrderMonthReport(x);
+        call.enqueue(new Callback<List<CalculateOrders>>() {
+            @Override
+            public void onResponse(Call<List<CalculateOrders>> call, Response<List<CalculateOrders>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, "Get Data Fail", Toast.LENGTH_LONG).show();
+                } else {
+                    List<CalculateOrders> calculateOrders = response.body();
+                    for (CalculateOrders currentRole : calculateOrders) {
+                        dataEntryList.add(new ValueDataEntry(currentRole.getProductID(),Integer.parseInt(currentRole.getQuantity())));
+                    }
+                    pie.data(dataEntryList);
+                    anyChartView.setChart(pie);
+                }
+            }
+            @Override
+            public void onFailure(Call<List<CalculateOrders>> call, Throwable t) {
+                Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_LONG).show();
             }
         });
     }

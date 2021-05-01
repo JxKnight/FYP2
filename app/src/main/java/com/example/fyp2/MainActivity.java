@@ -25,11 +25,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText useric, password, phone, registeric, registerpassword, registercontact;
+    private EditText useric, password, registeric, registerpassword, registercontact;
     private TextView tv;
     private Button login, register, registerButton;
-    private Switch aSwitch;
-    // private CheckBox rmbMe;
     public static final String SHARED_PREFS = "BOM_PREFS";
     public static final String USERIC = "text";
     public static final String FIRSTENTRY = "text";
@@ -44,17 +42,9 @@ public class MainActivity extends AppCompatActivity {
         tv = (TextView) findViewById(R.id.textView2);
         login = (Button) findViewById(R.id.userLogIn);
         register = (Button) findViewById(R.id.Register);
-        //rmbMe = (CheckBox)findViewById(R.id.checkBox);
-
         login.setOnClickListener(e -> {
-            User user = new User("123456", "951219035471");
-
-
-            //User user = new User(password.getText().toString(), useric.getText().toString());
-//            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-//            intent.putExtra("userIc", user.getUserIc());
-//            intent.putExtra("userFirstName", user.getFirstName());
-//             startActivity(intent);
+            //User user = new User("123456", "951219015471");
+            User user = new User(password.getText().toString(), useric.getText().toString());
             login(user, this);
         });
         register.setOnClickListener(e -> {
@@ -71,39 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
             registerButton.setOnClickListener(u -> {
                 User registerUser = new User(registerpassword.getText().toString(), registercontact.getText().toString(), registeric.getText().toString());
-                //Toast.makeText(getApplicationContext(), registercontact.getText().toString(), Toast.LENGTH_SHORT).show();
                 registerProfile(registerUser, this);
                 dialog.dismiss();
-                //finish();
             });
         });
     }
-//    private void getAllUsers(){
-//        Call<List<User>> call = RetrofitClient.getInstance().getApi()
-//                .findAllUser();
-//        call.enqueue(new Callback<List<User>>() {
-//            @Override
-//            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-//                if(!response.isSuccessful()){
-//                    tv.setText("Code:"+response.code());
-//                    return;
-//                }
-//                List<User> user = response.body();
-//                for(User currentuser: user){
-//                    String content="";
-//                    content+="IC:"+currentuser.getIC()+"\n";
-//                    tv.append(content);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<User>> call, Throwable t) {
-//                tv.setText(t.getMessage());
-//            }
-//        });
-//
-//    }
-
     public void registerProfile(User user, Context context) {
         Call<User> call = RetrofitClient.getInstance().getApi().createUser(user);
         call.enqueue(new Callback<User>() {
@@ -115,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(context, "Register Fail", Toast.LENGTH_LONG).show();
                 }
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "Unable to connect server", Toast.LENGTH_LONG).show();
@@ -133,13 +96,9 @@ public class MainActivity extends AppCompatActivity {
                     User user = response.body();
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                     saveData(user.getUserIc(), user.getFirstEntry(), user.getRole());
-//                    intent.putExtra("userIc", user.getUserIc());
-//                    intent.putExtra("firstEntry",user.getFirstEntry());
                     startActivity(intent);
-                    //Toast.makeText(getApplicationContext(),user.getFirstEntry(),Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "Unable to connect server", Toast.LENGTH_LONG).show();
@@ -155,6 +114,5 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("FIRSTENTRY", firstEntry);
         editor.putString("ROLE", roles);
         editor.commit();
-        //Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_LONG).show();
     }
 }

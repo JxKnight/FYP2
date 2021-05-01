@@ -1,6 +1,7 @@
 package com.example.fyp2.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +30,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class fragment_home extends Fragment {
     View v;
@@ -37,6 +40,7 @@ public class fragment_home extends Fragment {
     private String[] currentDate;
     private TextView morning1, morning2, evening1, evening2, ot1, ot2;
     private ImageView morning, evening, ot;
+    private String userIc,orderPermission,role;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,6 +48,10 @@ public class fragment_home extends Fragment {
         // Inflate the layout for this fragment
         String[] day = {"morning", "evening", "ot"};
         v = inflater.inflate(R.layout.fragment_home, container, false);
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
+        userIc = sharedPreferences.getString("USERIC", "");
+        orderPermission = sharedPreferences.getString("role-orders", "");
+        role = sharedPreferences.getString("role", "");
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("dd:MM:yyyy");
         currentDate = dateFormat.format(calendar.getTime()).split(":");
@@ -59,12 +67,13 @@ public class fragment_home extends Fragment {
         ot = v.findViewById(R.id.home_attendance_OT_check);
         date.setText((Integer.parseInt(currentDate[0]) + 1) + ":" + currentDate[1] + ":" + currentDate[2]);
         for (String var : day) {
-            getAttendance(var, getContext());
+            Attendance attendance = new Attendance(userIc,var);
+            getAttendance(attendance, getContext());
         }
         return v;
     }
 
-    public void getAttendance(String text, Context context) {
+    public void getAttendance(Attendance text, Context context) {
         Call<List<Attendance>> call = RetrofitClient.getInstance().getApi().currentDayAttendance(text);
         call.enqueue(new Callback<List<Attendance>>() {
             @Override

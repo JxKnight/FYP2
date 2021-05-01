@@ -70,6 +70,7 @@ public class User {
         this.userIc = userIc;
     }
 
+
     public User(String userIc) {
         this.userIc = userIc;
     }

@@ -17,6 +17,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:textColor="#FFFFFF"
                 android:id="@+id/admin_users_roles_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

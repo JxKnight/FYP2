@@ -47,6 +47,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
+import static com.example.fyp2.MenuActivity.SHARED_PREFS;
 
 
 public class fragment_profile extends Fragment {
@@ -66,9 +67,7 @@ public class fragment_profile extends Fragment {
     @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_profile, container, false);
-
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("BOM_PREFS", MODE_PRIVATE);
         userIc = sharedPreferences.getString("USERIC", "");
         firstEntry = sharedPreferences.getString("FIRSTENTRY", "");
@@ -148,19 +147,20 @@ public class fragment_profile extends Fragment {
             if (FName.getText().toString().isEmpty() || LName.getText().toString().isEmpty() || Ic.getText().toString().isEmpty() || Contact.getText().toString().isEmpty() || Address.getText().toString().isEmpty() || PostCode.getText().toString().isEmpty() || State.getSelectedItem().toString().equals("Select Location")) {
                 Toast.makeText(getActivity(), "Please complete your profile detail", Toast.LENGTH_SHORT).show();
             } else {
-                if (CPassword.getText().toString() != Password.getText().toString()) {
-                    Toast.makeText(getActivity(), "Please Input Correct Password", Toast.LENGTH_SHORT).show();
-                } else {
+                if (CPassword.getText().toString().equals(Password.getText().toString())) {
                     ProfilePic.buildDrawingCache();
                     Bitmap bmap = ProfilePic.getDrawingCache();
                     String x = getEncodeImage(bmap);
                     String Roles = null;
                     if (State.getSelectedItem().toString().equals("Select Location")) {
-                        User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), null, Roles, x, "false");
-                        updateProfile(newUser, getContext());
+                        Toast.makeText(getActivity(), "Please select Location", Toast.LENGTH_SHORT).show();
                     } else {
                         User newUser = new User(Password.getText().toString(), Contact.getText().toString(), Ic.getText().toString(), FName.getText().toString(), LName.getText().toString(), Address.getText().toString(), PostCode.getText().toString(), State.getSelectedItem().toString(), Roles, x, "false");
                         updateProfile(newUser, getContext());
+                        SharedPreferences sharedPreference = getActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreference.edit();
+                        editor.putString("FIRSTENTRY", "false");
+                        editor.apply();
                     }
                     Contact.setEnabled(false);
                     Address.setEnabled(false);
@@ -172,10 +172,14 @@ public class fragment_profile extends Fragment {
                     selectPic.setVisibility(View.VISIBLE);
                     btnEditProfileEnable.setVisibility(View.VISIBLE);
                     getBtnEditProfileCancel.setVisibility(View.GONE);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_profile.this.getId(), new fragment_profile()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_profile.this.getId(), new fragment_home()).commit();
+                    Intent intent = getActivity().getIntent();
+                    getActivity().finish();
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), "Please Input Correct Password", Toast.LENGTH_SHORT).show();
                 }
             }
-
         });
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.locations, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -211,8 +215,10 @@ public class fragment_profile extends Fragment {
             confirmChangePassword.setOnClickListener(q -> {
                 if (oldPassword.getText().toString().equals(Password.getText().toString())) {
                     if (newPassword.getText().toString().equals(confirmNewPassword.getText().toString())) {
-                        User reNewPassword = new User(confirmNewPassword.getText().toString(), userIc);
-                        reNewUserPassword(reNewPassword, getContext());
+                        User z = new User(confirmNewPassword.getText().toString(), userIc);
+                        reNewUserPassword(z, getContext());
+                        User user = new User(userIc);
+                        ViewProfile(user, getContext());
                         dialog.dismiss();
                     } else {
                         Toast.makeText(getActivity(), "Please input correct new password", Toast.LENGTH_SHORT).show();
@@ -220,7 +226,6 @@ public class fragment_profile extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "Please input correct old password", Toast.LENGTH_SHORT).show();
                 }
-                //Toast.makeText(getActivity(), Password.getText().toString(), Toast.LENGTH_SHORT).show();
             });
         });
         return v;
@@ -254,12 +259,11 @@ public class fragment_profile extends Fragment {
     }
 
     public void ViewProfile(User user, Context context) {
-        Call<User> call = RetrofitClient.getInstance().getApi().searchCurrentUser(user);
+        Call<User> call = RetrofitClient.getInstance().getApi().currentUser(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User postResponse = response.body();
-
                 FName.setText(postResponse.getFirstName());
                 LName.setText(postResponse.getLastName());
                 Ic.setText(postResponse.getUserIc());
@@ -270,7 +274,6 @@ public class fragment_profile extends Fragment {
                 String imageURL = "http://192.168.0.146:9999/image/Users?imgPath=" + postResponse.getPicture();
                 Picasso.get().load(imageURL).into(ProfilePic);
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_SHORT).show();
@@ -305,18 +308,18 @@ public class fragment_profile extends Fragment {
         return imgString;
     }
 
-    public void reNewUserPassword(User user, Context context) {
-        Call<Void> call = RetrofitClient.getInstance().getApi().reNewUserPassword(user);
+    public void reNewUserPassword(User x, Context context) {
+        Call<Void> call = RetrofitClient.getInstance().getApi().reNewUserPassword(x);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
                     Toast.makeText(context, "Reset Password Successfully", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(fragment_profile.this.getId(), new fragment_profile()).commit();
                 } else {
                     Toast.makeText(context, "Reset Password Fail", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Fail to connect to server", Toast.LENGTH_SHORT).show();
